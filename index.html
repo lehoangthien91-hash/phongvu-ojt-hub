@@ -222,7 +222,7 @@
 
       const progressPercent = Math.round((passedCount / OJT_CHECKLIST.length) * 100);
 
-      // HÀM GỬI DỮ LIỆU THẲNG VỀ GOOGLE SHEETS
+     // HÀM GỬI DỮ LIỆU TÁCH CỘT VỀ GOOGLE SHEETS
       const handleSendToGoogleSheet = async () => {
         if (!staffName.trim()) {
           alert("⚠️ Vui lòng nhập Họ tên Nhân viên bán hàng trước khi gửi!");
@@ -231,23 +231,25 @@
 
         const evaluatedCount = Object.keys(checklistState).length;
         if (evaluatedCount < OJT_CHECKLIST.length) {
-          const confirmSend = confirm(`Bạn mới đánh giá ${evaluatedCount}/${OJT_CHECKLIST.length} tiêu chí. Bạn có chắc chắn muốn gửi kết quả này về cho Giảng viên không?`);
+          const confirmSend = confirm(`Bạn mới đánh giá ${evaluatedCount}/${OJT_CHECKLIST.length} tiêu chí. Bạn có chắc chắn muốn gửi kết quả này không?`);
           if (!confirmSend) return;
         }
 
         if (!GOOGLE_SHEET_WEBAPP_URL || GOOGLE_SHEET_WEBAPP_URL.includes("...")) {
-          alert("⚠️ Bạn chưa dán link Web App Google Apps Script vào code. Vui lòng cấu hình GOOGLE_SHEET_WEBAPP_URL theo hướng dẫn!");
+          alert("⚠️ Bạn chưa cấu hình đúng GOOGLE_SHEET_WEBAPP_URL!");
           return;
         }
 
         setIsSendingSheet(true);
 
-        // Gom chi tiết từng tiêu chí kèm ghi chú
-        const detailResults = OJT_CHECKLIST.map(item => {
-          const status = checklistState[item.id] === "pass" ? "ĐẠT" : checklistState[item.id] === "fail" ? "CHƯA ĐẠT" : "CHƯA ĐÁNH GIÁ";
-          const note = notesState[item.id] ? ` (${notesState[item.id]})` : "";
-          return `[${item.id}: ${status}${note}]`;
-        }).join("; ");
+        // Đóng gói chi tiết từng tiêu chí thành Object theo mã tiêu chí
+        const itemsPayload = {};
+        OJT_CHECKLIST.forEach(item => {
+          itemsPayload[item.id] = {
+            status: checklistState[item.id] === "pass" ? "ĐẠT" : checklistState[item.id] === "fail" ? "CHƯA ĐẠT" : "Chưa đánh giá",
+            note: notesState[item.id] || ""
+          };
+        });
 
         const payload = {
           timestamp: new Date().toLocaleString("vi-VN"),
@@ -259,21 +261,20 @@
           totalCount: OJT_CHECKLIST.length,
           progressPercent: progressPercent,
           isPassed: progressPercent >= 80,
-          detailResults: detailResults
+          items: itemsPayload
         };
 
         try {
-          // Gửi dữ liệu qua fetch mode no-cors để tránh bị chặn trình duyệt
           await fetch(GOOGLE_SHEET_WEBAPP_URL, {
             method: "POST",
             mode: "no-cors",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
             body: JSON.stringify(payload)
           });
 
-          alert("✅ ĐÃ GỬI THÀNH CÔNG!\nKết quả đánh giá OJT của bạn đã được ghi nhận trực tiếp vào Google Sheet của Giảng viên.");
+          alert("✅ ĐÃ GỬI THÀNH CÔNG!\nKết quả đã được tách cột chi tiết vào Google Sheet của Giảng viên.");
         } catch (error) {
-          alert("❌ Có lỗi kết nối khi gửi dữ liệu về Sheet. Vui lòng kiểm tra lại mạng!");
+          alert("❌ Có lỗi kết nối khi gửi dữ liệu. Vui lòng kiểm tra lại mạng!");
         } finally {
           setIsSendingSheet(false);
         }
