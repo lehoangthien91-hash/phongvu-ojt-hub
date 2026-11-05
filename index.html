@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Phong Vũ OJT Coach & AI Assistant</title>
+  <title>Phong Vũ OJT Coach & Knowledge Hub</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
@@ -18,48 +18,20 @@
   <div id="root"></div>
 
   <script type="text/babel">
-    const { useState, useMemo, useEffect } = React;
+    const { useState, useMemo } = React;
 
     // ==========================================
-    // 💡 CHỖ DÁN GEMINI API KEY DÙNG CHUNG CHO TẤT CẢ HỌC VIÊN
-    // Nếu bạn muốn học viên mở ra là chat được ngay không cần nhập key,
-    // hãy dán chuỗi API Key của bạn vào giữa 2 dấu ngoặc kép dưới đây:
-    const DEFAULT_API_KEY = "AQ.Ab8RN6L8UHlXxkvLUvRw0zWHlAcOe__io4Ace-G2kNYkHdiZvA";
+    // 💡 DÁN LINK GOOGLE APPS SCRIPT WEB APP VÀO ĐÂY:
+    const GOOGLE_SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyGDnbGzLVxEWJiyJ8DHhf6HoEDoXlTpd0Q4yrTZdCZgk1D2NIdN4BnbPKjq7zlPfmNnQ/exec";
     // ==========================================
-
-    const SYSTEM_KNOWLEDGE = `
-Bạn là AI Coach - Chuyên gia Đào tạo Bán hàng & Kỹ thuật thuộc Phòng Đào Tạo Phong Vũ (phongvu.vn).
-Nhiệm vụ của bạn là giải đáp chính xác, thực tế cho nhân viên mới (NVBH) trong quá trình Onboarding OJT.
-
-KIẾN THỨC BẮT BUỘC NẮM RÕ:
-1. VĂN HÓA & TIÊU CHUẨN PHONG VŨ:
-- Thành lập 1997, thuộc hệ sinh thái Teko/VNLife. 4 giá trị cốt lõi: Khách hàng là số 1, Chính trực, Quan tâm, Đồng đội.
-- Quy tắc vàng Golden Rule: Chào khách 4 điểm chạm (Đứng thẳng, tay đặt ngực trái vị trí trái tim, cúi 15 độ, nói: "Dạ Phong Vũ xin chào!").
-- Quy chuẩn trưng bày: Bảng giá lồng mica đặt BÊN PHẢI sản phẩm. Laptop mở góc 110-120 độ. Màn hình không để tầng sát đất.
-- Tránh các mã lỗi SHR: SHR1 (sai đồng phục), SHR8 (tụ tập cười đùa), SHR17 (đưa đồ bằng 1 tay).
-
-2. KỸ NĂNG BÁN HÀNG:
-- 6 bước bán hàng: Chuẩn bị -> Tiếp cận -> Khai thác nhu cầu (SPIN) -> Trình bày FABE -> Xử lý từ chối (LAST) -> Chốt đơn & CSKH (mời quét Zalo OA Phong Vũ).
-- Xử lý giá: Áp dụng LAST. Không nói xấu đối thủ; nhấn mạnh hàng chính hãng 100% VAT, đổi mới 1-1, kỹ thuật ủy quyền sửa chữa không mất bảo hành hãng.
-
-3. KỸ THUẬT PC & LAPTOP (5 ĐIỂM ĐỎ TƯƠNG THÍCH):
-- Socket CPU & Bo mạch chủ: "Bác 67 Ham Zui" (Intel đi với main H, B đuôi 60/70, Z; LGA1700 cho Gen 12-14, LGA1851 cho Core Ultra). "Bác 50 Ăn Xài" (AMD: AM4 cho Ryzen 1000-5000 đi với A320/B450/B550; AM5 cho Ryzen 7000-9000 đi với B650/X670/B850).
-- KHÔNG BAO GIỜ gắn CPU AM4 (như Ryzen 5 5600) vào Main AM5 (như B650)! Nếu khách hỏi câu này, khẳng định ngay là KHÔNG ĐƯỢC vì lệch Socket và hướng dẫn đổi Main B550 hoặc đổi CPU sang Ryzen 7500F/7600.
-- RAM: Đúng chuẩn DDR4 hoặc DDR5 bo mạch chủ hỗ trợ; luôn cắm theo cặp để chạy Dual Channel.
-- Nguồn (PSU): Chuẩn 80 Plus, dư tải tối thiểu 15-20% (RTX 4070/5070 phải dùng nguồn từ 650W-750W trở lên). Cắt giảm giá thì giảm vỏ case/tản, cấm hạ chất lượng nguồn!
-- Laptop: Đuôi U/V tiết kiệm điện, đuôi H/HX hiệu năng cao; Laptop AI cần NPU >= 40 TOPS; làm đồ họa bắt buộc màn hình 100% sRGB/OLED.
-
-4. QUẢN LÝ TIỀN MẶT:
-- Thu tiền cho vào túi Zip, ghi mã NV, thả vào thùng Dropbox dưới sự giám sát của Camera CCTV.
-`;
 
     const Icons = {
       BookOpen: () => <svg className="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>,
       CheckSquare: () => <svg className="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>,
       Bot: () => <svg className="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>,
       Send: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>,
-      Download: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>,
-      Settings: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      SendCloud: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>,
+      Download: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
     };
 
     const OJT_CHECKLIST = [
@@ -142,6 +114,79 @@ KIẾN THỨC BẮT BUỘC NẮM RÕ:
       }
     };
 
+    function processAIQuery(query) {
+      const q = query.toLowerCase();
+
+      if ((q.includes("5600") || q.includes("5700") || q.includes("5800") || q.includes("3600") || q.includes("am4")) && 
+          (q.includes("b650") || q.includes("x670") || q.includes("a620") || q.includes("b850") || q.includes("am5"))) {
+        return "❌ KHÔNG ĐƯỢC BẠN NHÉ! Đây là lỗi xung đột Socket nghiêm trọng:\n\n" +
+          "• CPU AMD Ryzen 5 5600 dùng Socket AM4 và chuẩn RAM DDR4.\n" +
+          "• Mainboard Asus B650 dùng Socket AM5 và chuẩn RAM DDR5.\n\n" +
+          "👉 Hướng tư vấn thay thế cho khách:\n" +
+          "1. Giữ CPU Ryzen 5 5600: Đổi Main sang Asus Prime B550M hoặc B450M (Socket AM4) + RAM DDR4 (Tiết kiệm ngân sách).\n" +
+          "2. Giữ Main Asus B650: Đổi CPU lên AMD Ryzen 5 7500F hoặc 7600 (Socket AM5) + RAM DDR5 (Đón đầu công nghệ).";
+      }
+
+      if ((q.includes("12400") || q.includes("13400") || q.includes("14400")) && (q.includes("z890") || q.includes("b860") || q.includes("1851"))) {
+        return "❌ KHÔNG TƯƠNG THÍCH! CPU Intel thế hệ 12/13/14 chạy Socket LGA1700, không thể lắp vào bo mạch chủ mới Socket LGA1851 (Z890, B860). Hãy tư vấn khách dùng Mainboard H610, B760 hoặc Z790 nhé!";
+      }
+
+      if ((q.includes("intel") || q.includes("core i") || q.includes("ultra")) && (q.includes("b650") || q.includes("b550") || q.includes("x670") || q.includes("am4") || q.includes("am5"))) {
+        return "❌ LỖI NGHIÊM TRỌNG: Bạn đang gắn CPU Intel vào Mainboard của AMD! Nhớ câu thần chú đào tạo: 'Bác 67 Ham Zui' (Intel: H, B đuôi 60/70, Z) và 'Bác 50 Ăn Xài' (AMD: A, B đuôi 50, X).";
+      }
+      if ((q.includes("ryzen") || q.includes("amd")) && (q.includes("b760") || q.includes("z790") || q.includes("h610") || q.includes("b660"))) {
+        return "❌ KHÔNG TƯƠNG THÍCH: CPU AMD Ryzen không cắm vừa bo mạch chủ dành cho Intel (H610, B760, Z790).";
+      }
+
+      if ((q.includes("4070") || q.includes("4080") || q.includes("4090") || q.includes("5070")) && (q.includes("450w") || q.includes("500w") || q.includes("550w"))) {
+        return "⚠️ NGUY HIỂM / KHÔNG ĐẠT: Nguồn công suất quá yếu! Dòng VGA cao cấp như RTX 4070/5070 yêu cầu PSU tối thiểu từ 650W - 750W chuẩn 80 Plus Bronze/Gold để đảm bảo không bị sập nguồn khi tải nặng.";
+      }
+
+      if (q.includes("5 điểm đỏ") || q.includes("điểm đỏ") || (q.includes("lưu ý") && q.includes("build pc"))) {
+        return "📌 5 ĐIỂM ĐỎ KIỂM TRA TƯƠNG THÍCH PC:\n" +
+          "1. Socket CPU khớp Chipset Mainboard (Intel: LGA1700; AMD: AM4/AM5).\n" +
+          "2. RAM đúng chuẩn bo mạch hỗ trợ (DDR4 vs DDR5).\n" +
+          "3. Luôn lắp RAM theo cặp (2 thanh) để kích hoạt Dual Channel nhân đôi băng thông.\n" +
+          "4. Nguồn (PSU) chuẩn 80 Plus, tính dư tải an toàn 15 - 20%.\n" +
+          "5. Kích thước lắp vừa thùng case (chiều dài VGA và chiều cao tản nhiệt khí/rad nước).";
+      }
+
+      if (q.includes("chào") || q.includes("4 điểm") || q.includes("golden rule")) {
+        return "👋 NGHI THỨC CHÀO ĐÓN 4 ĐIỂM CHẠM (GOLDEN RULE):\n" +
+          "1. Đứng thẳng, ánh mắt hướng về phía khách hàng.\n" +
+          "2. Đặt bàn tay lên ngực trái (vị trí trái tim) thể hiện sự trân trọng.\n" +
+          "3. Cúi người khoảng 15 độ với nụ cười thân thiện.\n" +
+          "4. Nói rõ câu chào chuẩn mực: 'Dạ Phong Vũ xin chào!'.";
+      }
+
+      if (q.includes("chê đắt") || q.includes("giá cao") || q.includes("đối thủ") || q.includes("rẻ hơn")) {
+        return "💡 XỬ LÝ KHÁCH CHÊ GIÁ CAO (ÁP DỤNG LAST):\n" +
+          "• Lắng nghe và đồng cảm, tuyệt đối không đôi co tranh cãi.\n" +
+          "• Khách so sánh với sàn TMĐT: Giải thích chính sách trợ giá riêng của sàn, nhấn mạnh mua tại showroom được bảo hành 1 đổi 1 tận nơi, máy sẵn kiểm tra liền tay.\n" +
+          "• Khách so sánh với cửa hàng nhỏ lẻ: Nêu bật thế mạnh Phong Vũ là hàng chính hãng 100% có VAT, kỹ thuật viên ủy quyền nâng cấp linh kiện không bị mất bảo hành hãng, hỗ trợ trả góp 0%!";
+      }
+
+      if (q.includes("main amd") || q.includes("mainboard amd") || (q.includes("amd") && q.includes("mới nhất"))) {
+        return "⚡ DÒNG MAINBOARD AMD MỚI NHẤT:\n" +
+          "Hiện nay các dòng Bo mạch chủ mới nhất dành cho AMD là thế hệ Socket AM5:\n" +
+          "• Phân khúc cao cấp: X870E, X870, X670E (hỗ trợ ép xung, PCIe 5.0 toàn diện).\n" +
+          "• Phân khúc tầm trung/phổ biến: B850, B650 (cân bằng hiệu năng/giá thành tốt nhất cho Ryzen 7000/9000).\n" +
+          "• Phân khúc cơ bản: B840, A620.\n" +
+          "Tất cả đều bắt buộc chạy chuẩn RAM DDR5!";
+      }
+
+      if (q.includes("hôm nay") || q.includes("học gì") || q.includes("ngày 1") || q.includes("ngày 2") || q.includes("ngày 3") || q.includes("ngày 4") || q.includes("ngày 5")) {
+        return "📚 TÓM TẮT LỘ TRÌNH 5 NGÀY OJT:\n" +
+          "• Ngày 1: Hội nhập văn hóa (1997, 4 giá trị cốt lõi) & Tiêu chuẩn CH (HR_QĐ.01, Golden Rule, mã lỗi SHR).\n" +
+          "• Ngày 2: Kỹ năng 6 bước bán hàng, câu hỏi SPIN, mô hình FABE, xử lý phản bác LAST, 4 kỹ thuật chốt đơn.\n" +
+          "• Ngày 3: Kiến thức Laptop (CPU U/V vs H/HX, RAM, SSD NVMe, GPU rời vs Onboard, Màn hình, AI PC).\n" +
+          "• Ngày 4: Cấu tạo PC, 5 điểm đỏ tương thích, phân bổ ngân sách Gaming/Đồ họa/Văn phòng.\n" +
+          "• Ngày 5: Quy trình 7 bước quản lý tiền mặt, thao tác túi Zip/Dropbox dưới camera CCTV, các hình thức thanh toán POS/Trả góp.";
+      }
+
+      return "Dạ, về câu hỏi '" + query + "':\nBạn lưu ý luôn bám sát quy trình phục vụ chuẩn của Phong Vũ, tuân thủ 5 Điểm đỏ kỹ thuật khi tư vấn phần cứng và tham khảo chi tiết theo từng ngày trong tab 'Ôn Bài Học' nhé!";
+    }
+
     function App() {
       const [tab, setTab] = useState("checklist");
       const [selectedDay, setSelectedDay] = useState(1);
@@ -153,10 +198,7 @@ KIẾN THỨC BẮT BUỘC NẮM RÕ:
       const [evaluator, setEvaluator] = useState("");
       const [checklistState, setChecklistState] = useState({});
       const [notesState, setNotesState] = useState({});
-
-      const [apiKey, setApiKey] = useState(localStorage.getItem("GEMINI_API_KEY") || DEFAULT_API_KEY || "");
-      const [showSettings, setShowSettings] = useState(false);
-      const [isLoadingAI, setIsLoadingAI] = useState(false);
+      const [isSendingSheet, setIsSendingSheet] = useState(false);
 
       const [messages, setMessages] = useState([
         { sender: "bot", text: "Xin chào bạn! Mình là AI Trợ lý OJT Phong Vũ. Bạn có thể hỏi mình mọi thứ: Kiểm tra độ tương thích CPU/Main PC, phân tích cấu hình, cách chào khách chuẩn 4 bước hay nội dung học 5 ngày nhé!" }
@@ -180,12 +222,61 @@ KIẾN THỨC BẮT BUỘC NẮM RÕ:
 
       const progressPercent = Math.round((passedCount / OJT_CHECKLIST.length) * 100);
 
-      const handleSaveApiKey = (key) => {
-        const cleanKey = key.trim();
-        setApiKey(cleanKey);
-        localStorage.setItem("GEMINI_API_KEY", cleanKey);
-        setShowSettings(false);
-        alert("Đã lưu API Key thành công! Bây giờ bạn có thể chat trực tiếp với Gemini AI.");
+      // HÀM GỬI DỮ LIỆU THẲNG VỀ GOOGLE SHEETS
+      const handleSendToGoogleSheet = async () => {
+        if (!staffName.trim()) {
+          alert("⚠️ Vui lòng nhập Họ tên Nhân viên bán hàng trước khi gửi!");
+          return;
+        }
+
+        const evaluatedCount = Object.keys(checklistState).length;
+        if (evaluatedCount < OJT_CHECKLIST.length) {
+          const confirmSend = confirm(`Bạn mới đánh giá ${evaluatedCount}/${OJT_CHECKLIST.length} tiêu chí. Bạn có chắc chắn muốn gửi kết quả này về cho Giảng viên không?`);
+          if (!confirmSend) return;
+        }
+
+        if (!GOOGLE_SHEET_WEBAPP_URL || GOOGLE_SHEET_WEBAPP_URL.includes("...")) {
+          alert("⚠️ Bạn chưa dán link Web App Google Apps Script vào code. Vui lòng cấu hình GOOGLE_SHEET_WEBAPP_URL theo hướng dẫn!");
+          return;
+        }
+
+        setIsSendingSheet(true);
+
+        // Gom chi tiết từng tiêu chí kèm ghi chú
+        const detailResults = OJT_CHECKLIST.map(item => {
+          const status = checklistState[item.id] === "pass" ? "ĐẠT" : checklistState[item.id] === "fail" ? "CHƯA ĐẠT" : "CHƯA ĐÁNH GIÁ";
+          const note = notesState[item.id] ? ` (${notesState[item.id]})` : "";
+          return `[${item.id}: ${status}${note}]`;
+        }).join("; ");
+
+        const payload = {
+          timestamp: new Date().toLocaleString("vi-VN"),
+          staffName: staffName.trim(),
+          storeName: storeName.trim() || "Chưa nhập",
+          evalRound: evalRound,
+          evaluator: evaluator.trim() || "Chưa nhập",
+          passedCount: passedCount,
+          totalCount: OJT_CHECKLIST.length,
+          progressPercent: progressPercent,
+          isPassed: progressPercent >= 80,
+          detailResults: detailResults
+        };
+
+        try {
+          // Gửi dữ liệu qua fetch mode no-cors để tránh bị chặn trình duyệt
+          await fetch(GOOGLE_SHEET_WEBAPP_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+
+          alert("✅ ĐÃ GỬI THÀNH CÔNG!\nKết quả đánh giá OJT của bạn đã được ghi nhận trực tiếp vào Google Sheet của Giảng viên.");
+        } catch (error) {
+          alert("❌ Có lỗi kết nối khi gửi dữ liệu về Sheet. Vui lòng kiểm tra lại mạng!");
+        } finally {
+          setIsSendingSheet(false);
+        }
       };
 
       const handleExportReport = () => {
@@ -230,37 +321,18 @@ KIẾN THỨC BẮT BUỘC NẮM RÕ:
         URL.revokeObjectURL(url);
       };
 
-// GỌI QUA VERCEL SERVERLESS FUNCTION - NHỚ ĐẦY ĐỦ NGỮ CẢNH HỘI THOẠI
-      const handleSend = async (textToSend) => {
+      const handleSend = (textToSend) => {
         const query = textToSend || inputQuery;
         if (!query.trim()) return;
 
-        const updatedMessages = [...messages, { sender: "user", text: query }];
-        setMessages(updatedMessages);
+        const newMessages = [...messages, { sender: "user", text: query }];
+        setMessages(newMessages);
         setInputQuery("");
-        setIsLoadingAI(true);
 
-        try {
-          // Gọi vào serverless function trung gian trên Vercel
-          const response = await fetch("/api/chat", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              messages: updatedMessages.map(m => ({ sender: m.sender, text: m.text }))
-            })
-          });
-
-          const data = await response.json();
-          if (data.error) {
-            setMessages([...updatedMessages, { sender: "bot", text: `⚠️ ${data.error}` }]);
-          } else {
-            setMessages([...updatedMessages, { sender: "bot", text: data.reply }]);
-          }
-        } catch (error) {
-          setMessages([...updatedMessages, { sender: "bot", text: "❌ Lỗi kết nối mạng tới máy chủ AI." }]);
-        } finally {
-          setIsLoadingAI(false);
-        }
+        setTimeout(() => {
+          const botReply = processAIQuery(query);
+          setMessages([...newMessages, { sender: "bot", text: botReply }]);
+        }, 300);
       };
 
       const filteredChecklist = useMemo(() => {
@@ -278,45 +350,24 @@ KIẾN THỨC BẮT BUỘC NẮM RÕ:
                 <p className="text-xs text-blue-100">Đồng hành & Đánh giá năng lực GĐ2</p>
               </div>
               <div className="text-right flex items-center gap-1.5">
+                {/* Nút Gửi Google Sheet */}
                 <button
-                  onClick={handleExportReport}
-                  className="bg-emerald-500 hover:bg-emerald-600 text-white px-2.5 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 shadow-sm transition-all"
-                  title="Xuất kết quả đánh giá"
+                  onClick={handleSendToGoogleSheet}
+                  disabled={isSendingSheet}
+                  className="bg-amber-400 hover:bg-amber-500 text-slate-900 px-2.5 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 shadow-sm transition-all disabled:opacity-50"
+                  title="Gửi dữ liệu trực tiếp về Google Sheet cho Giảng viên"
                 >
-                  <Icons.Download /> Xuất Báo Cáo
+                  <Icons.SendCloud /> {isSendingSheet ? "Đang gửi..." : "Gửi Sheet"}
                 </button>
                 <button
-                  onClick={() => setShowSettings(!showSettings)}
-                  className="bg-blue-700 hover:bg-blue-800 text-white p-1.5 rounded-lg text-xs shadow-sm"
-                  title="Cài đặt API Key"
+                  onClick={handleExportReport}
+                  className="bg-emerald-500 hover:bg-emerald-600 text-white p-1.5 rounded-lg text-xs shadow-sm transition-all"
+                  title="Tải tệp báo cáo .txt về máy"
                 >
-                  <Icons.Settings />
+                  <Icons.Download />
                 </button>
               </div>
             </div>
-
-            {/* Popup Cài đặt API Key */}
-            {showSettings && (
-              <div className="mt-3 bg-blue-900/95 p-3 rounded-lg text-xs text-slate-100 border border-blue-400 shadow-md">
-                <p className="font-bold mb-1">Cài đặt Google Gemini API Key:</p>
-                <p className="text-[11px] text-blue-200 mb-2">Nhận API Key miễn phí tại <a href="https://aistudio.google.com" target="_blank" className="underline text-amber-300 font-bold">aistudio.google.com</a>.</p>
-                <div className="flex gap-2">
-                  <input
-                    type="password"
-                    placeholder="Dán API Key dạng AIzaSy... vào đây"
-                    defaultValue={apiKey}
-                    id="apiKeyInput"
-                    className="flex-1 px-2.5 py-1.5 bg-white text-slate-800 rounded text-xs focus:outline-none"
-                  />
-                  <button
-                    onClick={() => handleSaveApiKey(document.getElementById("apiKeyInput").value)}
-                    className="bg-emerald-500 hover:bg-emerald-600 px-3 py-1.5 rounded text-white font-bold"
-                  >
-                    Lưu Key
-                  </button>
-                </div>
-              </div>
-            )}
 
             {/* Thanh tiến độ OJT */}
             <div className="mt-3 bg-blue-800/60 p-2.5 rounded-lg">
@@ -368,7 +419,7 @@ KIẾN THỨC BẮT BUỘC NẮM RÕ:
                 <div className="grid grid-cols-2 gap-2">
                   <input
                     type="text"
-                    placeholder="Họ tên NVBH..."
+                    placeholder="Họ tên NVBH (*)..."
                     value={staffName}
                     onChange={(e) => setStaffName(e.target.value)}
                     className="border border-slate-200 rounded p-1.5 text-xs focus:outline-none focus:border-blue-500"
@@ -400,6 +451,15 @@ KIẾN THỨC BẮT BUỘC NẮM RÕ:
                   </select>
                 </div>
               </div>
+
+              {/* Nút gửi lớn phía dưới thông tin */}
+              <button
+                onClick={handleSendToGoogleSheet}
+                disabled={isSendingSheet}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 shadow transition-all disabled:opacity-50"
+              >
+                <Icons.SendCloud /> {isSendingSheet ? "Đang gửi dữ liệu về Google Sheet..." : "GỬI KẾT QUẢ ĐÁNH GIÁ VỀ CHO GIẢNG VIÊN"}
+              </button>
 
               <div className="flex gap-1 overflow-x-auto pb-1 no-scrollbar text-xs">
                 {["ALL", "A", "B", "C", "D", "E", "G"].map(group => (
@@ -457,6 +517,15 @@ KIẾN THỨC BẮT BUỘC NẮM RÕ:
                   </div>
                 );
               })}
+
+              {/* Nút gửi thêm ở cuối trang để người dùng tick xong bấm ngay */}
+              <button
+                onClick={handleSendToGoogleSheet}
+                disabled={isSendingSheet}
+                className="w-full mt-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl text-xs flex items-center justify-center gap-2 shadow-md transition-all disabled:opacity-50"
+              >
+                <Icons.SendCloud /> {isSendingSheet ? "Đang gửi dữ liệu về Google Sheet..." : "HOÀN TẤT & GỬI KẾT QUẢ ĐÁNH GIÁ"}
+              </button>
             </div>
           )}
 
@@ -510,21 +579,14 @@ KIẾN THỨC BẮT BUỘC NẮM RÕ:
                     </div>
                   </div>
                 ))}
-                {isLoadingAI && (
-                  <div className="flex justify-start">
-                    <div className="bg-white border border-slate-200 text-blue-600 rounded-2xl rounded-tl-none px-3.5 py-2 text-xs font-medium animate-pulse flex items-center gap-1.5">
-                      <Icons.Bot /> Gemini AI đang phân tích câu hỏi của bạn...
-                    </div>
-                  </div>
-                )}
               </div>
 
               <div className="p-2 bg-slate-100 border-t border-slate-200 flex gap-2 overflow-x-auto no-scrollbar">
                 {[
                   "Tôi build CPU AMD Ryzen 5600 vào Main Asus B650 được không?",
+                  "Main AMD mới nhất là dòng nào?",
                   "5 điểm đỏ khi build PC là gì?",
-                  "Cách chào khách chuẩn 4 bước?",
-                  "Khách chê giá đắt hơn đối thủ xử lý sao?"
+                  "Cách chào khách chuẩn 4 bước?"
                 ].map((q, idx) => (
                   <button
                     key={idx}
@@ -547,8 +609,7 @@ KIẾN THỨC BẮT BUỘC NẮM RÕ:
                 />
                 <button
                   onClick={() => handleSend()}
-                  disabled={isLoadingAI}
-                  className="bg-blue-600 text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center justify-center hover:bg-blue-700 disabled:opacity-50"
+                  className="bg-blue-600 text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center justify-center hover:bg-blue-700"
                 >
                   <Icons.Send />
                 </button>
