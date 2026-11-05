@@ -2,28 +2,361 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Phong Vũ OJT Coach & AI Assistant</title>
-  <!-- Tailwind CSS -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Phong Vũ OJT Coach & Knowledge Hub</title>
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- React & ReactDOM -->
+  <!-- React 18 CDN -->
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-  <!-- Babel để dịch JSX -->
+  <!-- Babel Standalone để chạy JSX trực tiếp -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
   <style>
-    body { font-family: system-ui, -apple-system, sans-serif; }
-    /* Ẩn scrollbar phụ cho tab mobile */
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
-<body class="bg-slate-100">
+<body class="bg-slate-100 text-slate-900">
   <div id="root"></div>
 
-  <!-- Nạp file App.jsx chứa toàn bộ giao diện và dữ liệu OJT -->
-  <script type="text/babel" src="App.jsx"></script>
+  <script type="text/babel">
+    const { useState, useMemo } = React;
+
+    // SVG Icons trực tiếp để không bị lỗi tải thư viện bên ngoài
+    const Icons = {
+      BookOpen: () => <svg className="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>,
+      CheckSquare: () => <svg className="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>,
+      Bot: () => <svg className="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>,
+      Send: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>,
+      CheckCircle2: () => <svg className="w-5 h-5 text-emerald-600 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>,
+      XCircle: () => <svg className="w-5 h-5 text-rose-500 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    };
+
+    // Dữ liệu 20 Checklist Final (HR_QĐ.01, Golden Rule ver 2)
+    const OJT_CHECKLIST = [
+      { id: "A.1", group: "A", title: "Tiêu chuẩn mặt tiền cửa hàng", desc: "Standee/cờ vuông góc, không cản lối đi; kính/bảng hiệu sáng đẹp; băng rôn phẳng phiu đúng CTKM.", passReq: "Standee cờ ngay ngắn, kính sạch không vết keo cũ, băng rôn phẳng, xe khách có phủ bạt che.", failReq: "Standee ngả nghiêng, rách mép, dán đè CTKM cũ; rác lối vào; bảng hiệu tắt đèn." },
+      { id: "A.2", group: "A", title: "Tiêu chuẩn bên trong cửa hàng", desc: "Xếp đúng layout; thứ tự giá/kích thước/màu sắc; 100% bảng giá mica chuẩn; bàn tư vấn sạch sẽ.", passReq: "Bảng giá đặt bên phải sản phẩm; laptop mở 110-120°; bàn tư vấn có ly nước sạch, kẹo còn hạn.", failReq: "Màn hình đặt tầng sát đất; laptop mở góc xô lệch; thiếu bảng giá; ly nước dở chưa dọn." },
+      { id: "B.1", group: "B", title: "Diện mạo, Tác phong chuẩn", desc: "Đồng phục đúng chuẩn, phẳng phiu, đeo thẻ tên ngực trái, mang giày kín mũi tối màu.", passReq: "Có mặt trước 15 phút, đồng phục chỉnh tề, giày tối màu, tóc gọn gàng, không dùng điện thoại riêng.", failReq: "Áo bỏ ngoài quần, đi dép/giày sáng màu, xõa tóc, tụ tập cười đùa (SHR1, SHR2, SHR5, SHR8)." },
+      { id: "B.2", group: "B", title: "4 điểm chạm khi Chào đón", desc: "Đứng thẳng, hướng mắt về khách, tay đặt ngực trái, cúi 15 độ: 'Dạ Phong Vũ xin chào!'.", passReq: "Chủ động tiếp cận trong 5-10s; thực hiện đủ 4 bước nghi thức; mở cửa khi rảnh.", failReq: "Phớt lờ khách, chào không cúi người, chào lí nhí, không đặt tay lên ngực (SHR23, SHR38, SHR41)." },
+      { id: "B.3", group: "B", title: "Ngôn ngữ hình thể khi phục vụ", desc: "Đứng thẳng lưng, chỉ dẫn bằng cả bàn tay, đưa/nhận tài liệu, đồ đạc bằng cả 2 tay.", passReq: "Tư thế thẳng thắn niềm nở; dùng cả bàn tay ngửa nhẹ chỉ đường; cầm bill/máy bằng 2 tay.", failReq: "Cho tay túi quần, khoanh tay, dựa vách, dùng 1 ngón tay chỉ trỏ, đưa đồ bằng 1 tay (SHR10, SHR14, SHR17)." },
+      { id: "B.4", group: "B", title: "Chuẩn mực giao tiếp & Xưng hô", desc: "Xưng hô lịch sự đúng thứ bậc; giọng nói nhẹ nhàng, luôn dùng kính ngữ dạ/vâng và cảm ơn.", passReq: "Dùng từ ngữ bình dân dễ hiểu; kiên nhẫn lắng nghe; giải thích thấu đáo không tranh cãi.", failReq: "Nói trống không, cướp lời khách, tranh luận gay gắt, đổ lỗi cho khách hàng (SHR35, SHR36)." },
+      { id: "C.1", group: "C", title: "Chào đón & Tạo thiện cảm", desc: "Duy trì khoảng cách tiếp cận 1-1.5m, nụ cười thân thiện, câu chào chuẩn mực.", passReq: "Tiếp cận tự nhiên, giữ cự ly thoải mái, mỉm cười và lắng nghe ngay từ giây đầu tiên.", failReq: "Đứng quá sát làm khách ngợp hoặc đứng quá xa; mặt lạnh lùng không biểu cảm." },
+      { id: "C.2", group: "C", title: "Khai thác nhu cầu & Ngân sách", desc: "Dùng câu hỏi mở tìm mục đích dùng, ngân sách, tóm tắt xác nhận lại trước khi tư vấn.", passReq: "Hỏi rõ tác vụ phần mềm/game, mức tài chính tối đa; nhắc lại nhu cầu khách vừa nêu.", failReq: "Chưa hỏi nhu cầu đã vội chỉ máy đắt nhất; hỏi dồn dập khiến khách khó chịu." },
+      { id: "C.3", group: "C", title: "Đề xuất tối thiểu 3 phương án", desc: "Đưa ra 3 phương án: Chuẩn nhu cầu - Tiết kiệm chi phí - Nâng cấp đón đầu công nghệ.", passReq: "Nêu rõ sự khác biệt của 3 máy trên quầy trải nghiệm; bám sát mức ngân sách dự kiến.", failReq: "Chỉ ép khách xem đúng 1 máy hoặc chỉ lan man quá nhiều máy gây rối mắt." },
+      { id: "C.4", group: "C", title: "Trình bày Lợi ích (FABE)", desc: "Quy đổi thông số kỹ thuật thành lợi ích thực tế; mời khách trải nghiệm trực tiếp.", passReq: "Nói '16GB RAM mở 30 tab không lag' thay vì chỉ đọc thông số; hướng dẫn khách gõ phím thử.", failReq: "Chỉ đọc bảng thông số GHz, Watt khô khan; không liên hệ với công việc của khách." },
+      { id: "C.5", group: "C", title: "Chốt bán & Hướng dẫn tiếp theo", desc: "Tóm tắt máy khách thích, đưa ra câu chốt dạng giả định hoặc câu hỏi lựa chọn.", passReq: "Dùng câu: 'Em lấy máy mới nguyên seal cho mình nhé?' hoặc 'Mình quẹt thẻ hay tiền mặt ạ?'.", failReq: "Đứng im chờ khách tự đòi mua; khách ưng ý rồi vẫn nói lan man làm loãng đơn." },
+      { id: "C.6", group: "C", title: "Chính sách bảo hành & CSKH", desc: "Nêu rõ hạn bảo hành, chính sách 1 đổi 1 lỗi phần cứng, mời khách quét Zalo OA.", passReq: "Giải thích rõ điều kiện đổi trả; mở mã Zalo OA Phong Vũ hướng dẫn khách theo dõi ưu đãi.", failReq: "Báo sai hạn bảo hành; không nhắc đổi mới 1-1; bỏ qua bước mời vào Zalo OA / App." },
+      { id: "D.1", group: "D", title: "Đọc bảng thông số Laptop", desc: "Hiểu hậu tố CPU (U/V/H/HX), khả năng nâng cấp RAM, ưu điểm VGA rời vs Onboard, dòng máy.", passReq: "Phân biệt Vivobook vs ROG, Ideapad vs Legion; biết máy nào RAM hàn chết, máy nào nâng được.", failReq: "Không biết đuôi U/H là gì; tư vấn nhầm máy không thể nâng RAM cho khách cần chạy nặng." },
+      { id: "D.2", group: "D", title: "So sánh Laptop Văn phòng vs Gaming vs AI", desc: "Văn phòng (mỏng nhẹ, pin trâu) - Gaming (hiệu năng cao, tản nhiệt to) - AI PC (NPU >= 40 TOPS).", passReq: "Nêu đúng đặc trưng chip, card rời, tần số quét màn hình và chip NPU xử lý AI offline.", failReq: "Bán laptop văn phòng mỏng nhẹ cho khách cày game AAA; không giải thích được NPU AI là gì." },
+      { id: "D.3", group: "D", title: "Tư vấn khách mua Laptop văn phòng", desc: "Khai thác ngành học/công việc, độ di chuyển; cấu hình chuẩn và tư vấn kèm MS 365, balo.", passReq: "Chọn CPU U/V, RAM 16GB, màn hình 16:10 chống chói; bán kèm chuột, balo, Office bản quyền.", failReq: "Tư vấn máy cồng kềnh, pin yếu; quên tư vấn phần mềm Microsoft 365 chính hãng." },
+      { id: "D.4", group: "D", title: "Tư vấn khách mua Laptop Gaming", desc: "Khai thác tựa game cụ thể; đề xuất card RTX, màn hình tần số quét cao, tản nhiệt tốt.", passReq: "Hỏi rõ game LOL hay AAA; chọn CPU dòng H/HX, VGA RTX 4050+, màn 144Hz, sạc công suất lớn.", failReq: "Bán máy chỉ có card Onboard để chơi game nặng; không dặn khách cắm sạc khi combat." },
+      { id: "E.1", group: "E", title: "Nhận biết 8 linh kiện PC", desc: "Chỉ đúng 8 linh kiện trên case thực tế: CPU, Mainboard, RAM, SSD/HDD, GPU, PSU, Vỏ, Tản nhiệt.", passReq: "Chỉ đúng từng vị trí trong case máy tính; giải thích CPU là bộ não, RAM là mặt bàn, PSU là tim.", failReq: "Chỉ nhầm Mainboard với Nguồn; không phân biệt được SSD M.2 với thanh RAM." },
+      { id: "E.2", group: "E", title: "PC Đồng bộ vs PC Lắp ráp (DIY)", desc: "PC Đồng bộ: Doanh nghiệp, văn phòng cần ổn định. PC Lắp ráp: Gamer, đồ họa cần tối ưu cấu hình.", passReq: "Phân tích rõ: Đồng bộ được bảo hành trọn bộ an tâm; Lắp ráp tối ưu hiệu năng/giá, dễ nâng cấp.", failReq: "Khách văn phòng cần máy nhỏ gọn lại ép mua bộ DIY cồng kềnh, lòe loẹt." },
+      { id: "E.3", group: "E", title: "Tính tương thích khi Build PC", desc: "Khớp Socket CPU - Mainboard; RAM đúng DDR4/DDR5; PSU dư tải 15-20%; đủ linh kiện cốt lõi.", passReq: "Kiểm tra đúng socket Intel/AMD; lắp đủ RAM Dual Channel; nguồn chuẩn 80 Plus đủ công suất.", failReq: "Chọn CPU Intel gắn main AMD; RAM DDR5 nhét main DDR4; nguồn 400W kéo VGA khủng." },
+      { id: "E.4", group: "E", title: "Phân bổ ngân sách & Trade-off", desc: "Gaming: 40-50% cho GPU. Đồ họa: CPU nhiều nhân + RAM 32GB+. Văn phòng: SSD mượt & Nguồn tốt.", passReq: "Biết dồn tiền đúng linh kiện quyết định hiệu năng; khi hạ giá thì giảm vỏ case, tuyệt đối giữ nguồn.", failReq: "Cắt giảm ngân sách bằng cách mua nguồn noname rẻ tiền gây nguy cơ chập cháy." },
+      { id: "E.5", group: "E", title: "Tư vấn Hệ sinh thái đi kèm PC", desc: "Đề xuất màn hình phù hợp; combo phím chuột gear; Windows 11 và kiểm tra Wi-Fi/LAN.", passReq: "Máy game đi với màn 144Hz; máy vẽ đi với màn 100% sRGB; nhắc khách mua card Wi-Fi nếu main chưa có.", failReq: "Chỉ bán mỗi case máy tính; để khách về nhà mới phát hiện không có màn hình hoặc không bắt được Wi-Fi." },
+      { id: "G.1", group: "G", title: "Phổ biến CTKM đang diễn ra", desc: "Thuộc thời gian, điều kiện áp dụng, quà tặng, tính ra số tiền giảm giá thực tế cho khách.", passReq: "Nắm vững khuyến mãi tháng; tính nhanh số tiền tiết kiệm được sau khi áp voucher VNPay/HSSV.", failReq: "Không biết showroom đang chạy khuyến mãi gì; tính sai giá trừ tiền của khách." }
+    ];
+
+    // Tóm tắt bài học theo 5 ngày
+    const LESSONS = {
+      1: {
+        title: "Ngày 1: Hội nhập & Tiêu chuẩn cửa hàng",
+        summary: [
+          "Lịch sử Phong Vũ: Thành lập năm 1997, thuộc Teko/VNLife, định hướng nhà bán lẻ đa kênh hàng đầu.",
+          "4 Giá trị cốt lõi: Khách hàng là số 1 - Chính trực - Quan tâm - Đồng đội.",
+          "Ý nghĩa Logo: Hình vuông (vững chãi), Hình tròn (ấm áp, quan tâm), Tam giác (tiên phong, thành tựu).",
+          "Tiêu chuẩn mặt tiền (HR_QĐ.01): Cờ/Standee vuông góc; băng rôn căng phẳng; vách kính sạch bong.",
+          "Quy tắc vàng (Golden Rule): Đứng thẳng, tay đặt ngực trái, cúi 15 độ: 'Dạ Phong Vũ xin chào!'.",
+          "Mã lỗi SHR cần tránh: SHR1 (sai đồng phục), SHR8 (tụ tập cười đùa), SHR17 (đưa đồ bằng 1 tay)."
+        ]
+      },
+      2: {
+        title: "Ngày 2: Kỹ năng & 6 Bước bán hàng",
+        summary: [
+          "Quy trình 6 bước: Chuẩn bị -> Tiếp cận tạo thiện cảm -> Khai thác nhu cầu -> Giới thiệu FABE -> Xử lý phản bác LAST -> Chốt đơn & CSKH.",
+          "Giao tiếp 55-38-7: Ngôn ngữ cơ thể chiếm 55%, ngữ điệu 38%, từ ngữ chỉ 7%.",
+          "Khai thác nhu cầu: Hỏi mục đích dùng, tầm ngân sách, người dùng chính và kinh nghiệm dùng máy cũ.",
+          "Giới thiệu FABE: Feature (Tính năng) -> Advantage (Ưu điểm) -> Benefit (Lợi ích khách nhận) -> Evidence (Bằng chứng).",
+          "Xử lý từ chối LAST: Listen (Lắng nghe) -> Apologize (Đồng cảm) -> Solve (Giải pháp) -> Thanks (Cảm ơn).",
+          "4 Kỹ thuật chốt: Chốt giả định, Chốt cảm xúc, Chốt chia nhỏ số tiền, Chốt khan hiếm quyền lợi."
+        ]
+      },
+      3: {
+        title: "Ngày 3: Kiến thức nền tảng & Tư vấn Laptop",
+        summary: [
+          "Phân nhóm Laptop: Học tập/Văn phòng (tiết kiệm điện) - Doanh nhân (siêu mỏng nhẹ) - Gaming (tản nhiệt to, GPU rời) - Đồ họa (chuẩn màu 100% sRGB) - AI PC (NPU >= 40 TOPS).",
+          "Đọc hậu tố CPU: Đuôi U/V (tiết kiệm pin, mát máy) vs Đuôi H/HX (hiệu năng bung nóc cho Gaming/Render).",
+          "RAM: Tối thiểu 16GB để không giật lag. Chú ý dòng RAM hàn chết (LPDDR) không thể nâng cấp.",
+          "Ổ cứng SSD: Chuẩn M.2 NVMe PCIe cho tốc độ mở máy và ứng dụng thần tốc.",
+          "Card đồ họa: Card Onboard (đủ cho Word, Excel, lướt web) vs Card rời RTX (bắt buộc cho game và đồ họa 3D).",
+          "Màn hình: Tấm nền IPS/OLED góc nhìn rộng, tần số quét 144Hz+ cho game thủ phản xạ mượt mà."
+        ]
+      },
+      4: {
+        title: "Ngày 4: Cấu tạo & Xây dựng cấu hình PC",
+        summary: [
+          "8 Linh kiện cốt lõi: CPU, Bo mạch chủ (Main), RAM, SSD, Card màn hình (VGA), Nguồn (PSU), Tản nhiệt, Vỏ case.",
+          "5 Điểm đỏ tương thích: (1) Socket CPU khớp Chipset Main, (2) RAM đúng chuẩn DDR4/DDR5, (3) Lắp RAM theo cặp Dual Channel, (4) Nguồn 80 Plus dư tải 15-20%, (5) VGA/Tản nhét vừa kích thước case.",
+          "Phân bổ ngân sách PC Gaming (15-35tr): 40-50% dồn cho Card VGA, 20% cho CPU, còn lại chia đều linh kiện khác.",
+          "Phân bổ PC Đồ họa: Ưu tiên CPU nhiều nhân thực + RAM 32GB-64GB + SSD đọc ghi nhanh.",
+          "Quy tắc đánh đổi: Khách thiếu tiền chỉ được hạ vỏ case hoặc tản nhiệt, tuyệt đối không hạ chất lượng nguồn."
+        ]
+      },
+      5: {
+        title: "Ngày 5: Quy trình Quản lý tiền mặt & Thanh toán",
+        summary: [
+          "Quy trình 7 bước thu ngân: Chuẩn bị tiền lẻ 500k -> Thao tác thu tiền -> Lập phiếu thu 2 liên -> Kết ca -> Niêm phong két -> Nộp ngân hàng -> Lưu hồ sơ.",
+          "Quy tắc túi Zip & Dropbox: Bỏ toàn bộ tiền và hóa đơn vào túi zip, ghi tên MSNV, thả vào Dropbox dưới camera CCTV.",
+          "Các hình thức thanh toán: Tiền mặt, Cà thẻ POS ngân hàng, Quét mã VNPay-QR / MoMo / ShopeePay, Trả góp 0% thẻ tín dụng, Trả góp qua cty tài chính (Home Credit/HD Saison), COD và Công nợ doanh nghiệp.",
+          "Chế tài nghiêm cấm: Gian lận hoặc mang tiền ra khỏi cửa hàng sa thải ngay lập tức; không in phiếu thu phạt 50% thưởng CIS/Golden Rule."
+        ]
+      }
+    };
+
+    function App() {
+      const [tab, setTab] = useState("checklist");
+      const [selectedDay, setSelectedDay] = useState(1);
+      const [checklistState, setChecklistState] = useState({});
+      const [messages, setMessages] = useState([
+        { sender: "bot", text: "Xin chào bạn! Mình là AI Trợ lý OJT Phong Vũ. Hôm nay bạn cần ôn bài ngày mấy, hay cần hỏi về tương thích PC, chuẩn mực chào đón khách hàng?" }
+      ]);
+      const [inputQuery, setInputQuery] = useState("");
+
+      const handleCheck = (id, status) => {
+        setChecklistState(prev => ({
+          ...prev,
+          [id]: prev[id] === status ? undefined : status
+        }));
+      };
+
+      const passedCount = useMemo(() => {
+        return Object.values(checklistState).filter(v => v === "pass").length;
+      }, [checklistState]);
+
+      const progressPercent = Math.round((passedCount / OJT_CHECKLIST.length) * 100);
+
+      const handleSend = (textToSend) => {
+        const query = textToSend || inputQuery;
+        if (!query.trim()) return;
+
+        const newMessages = [...messages, { sender: "user", text: query }];
+        setMessages(newMessages);
+        setInputQuery("");
+
+        // Phản hồi thông minh theo nội dung tài liệu
+        setTimeout(() => {
+          let reply = "Dạ, vấn đề này bạn bám sát quy chuẩn Phong Vũ nhé:";
+          const q = query.toLowerCase();
+
+          if (q.includes("hôm nay") || q.includes("học gì") || q.includes("ngày 1") || q.includes("ngày 2") || q.includes("ngày 3") || q.includes("ngày 4") || q.includes("ngày 5")) {
+            reply = "Bạn hãy chọn xem lại theo từng ngày ở tab 'Ôn Tập Bài Học' phía trên để nắm trọn vẹn lộ trình 5 ngày nhé! Tóm tắt nhanh: Ngày 1 (Hội nhập & Tiêu chuẩn CH), Ngày 2 (6 bước bán hàng & FABE), Ngày 3 (Laptop & NPU AI), Ngày 4 (Build PC & 5 điểm đỏ), Ngày 5 (Quản lý tiền mặt & POS).";
+          } else if (q.includes("pc") || q.includes("tương thích") || q.includes("điểm đỏ")) {
+            reply = "5 Điểm đỏ khi Build PC: (1) Socket CPU phải khớp Chipset bo mạch chủ (Intel main B/Z, AMD main B/X); (2) Đúng chuẩn RAM DDR4 hay DDR5; (3) Đi RAM theo cặp để bật Dual Channel; (4) Nguồn chuẩn 80 Plus dư tải tối thiểu 15-20%; (5) Chiều dài card VGA và chiều cao tản nhiệt lắp vừa case!";
+          } else if (q.includes("chào") || q.includes("golden") || q.includes("4 điểm")) {
+            reply = "Nghi thức chào 4 điểm chạm chuẩn Phong Vũ: (1) Đứng thẳng hướng mắt về khách; (2) Đặt bàn tay lên ngực trái vị trí trái tim; (3) Cúi người nhẹ khoảng 15 độ kèm nụ cười tươi; (4) Nói to rõ câu chào: 'Dạ Phong Vũ xin chào!'.";
+          } else if (q.includes("chê đắt") || q.includes("giá cao") || q.includes("đối thủ")) {
+            reply = "Xử lý khi khách chê giá: Áp dụng công thức LAST (Lắng nghe & đồng cảm). Nếu đối thủ nhỏ lẻ rẻ hơn, nêu bật giá trị Phong Vũ: hàng chính hãng VAT 100%, 1 đổi 1 tận nơi, kỹ thuật viên ủy quyền nâng cấp không mất bảo hành hãng, hỗ trợ trả góp 0%!";
+          } else {
+            reply = `Về nội dung "${query}": Bạn lưu ý luôn lấy khách hàng làm trọng tâm, tuân thủ đúng quy chuẩn phục vụ Golden Rule và tham khảo các checklist chi tiết trong giai đoạn OJT nhé!`;
+          }
+
+          setMessages([...newMessages, { sender: "bot", text: reply }]);
+        }, 500);
+      };
+
+      return (
+        <div className="max-w-md mx-auto min-h-screen bg-slate-50 flex flex-col shadow-lg">
+          {/* Header */}
+          <div className="bg-blue-600 text-white p-4 sticky top-0 z-20 shadow-md">
+            <div className="flex justify-between items-center">
+              <div>
+                <h1 className="text-lg font-bold">PHONG VŨ OJT COACH</h1>
+                <p className="text-xs text-blue-100">Đồng hành cùng nhân viên mới</p>
+              </div>
+              <div className="text-right">
+                <span className="text-xs font-semibold bg-blue-700 px-2 py-1 rounded">GĐ2: Thử việc</span>
+              </div>
+            </div>
+
+            {/* Thanh tiến độ OJT */}
+            <div className="mt-3 bg-blue-800/60 p-2 rounded-lg">
+              <div className="flex justify-between text-xs mb-1">
+                <span>Tiến độ đạt Checklist: <strong>{passedCount}/{OJT_CHECKLIST.length}</strong> mục</span>
+                <span className={`font-bold ${progressPercent >= 80 ? 'text-emerald-300' : 'text-amber-300'}`}>{progressPercent}% (Chuẩn: 80%)</span>
+              </div>
+              <div className="w-full bg-blue-950 h-2.5 rounded-full overflow-hidden">
+                <div 
+                  className={`h-full transition-all duration-300 ${progressPercent >= 80 ? 'bg-emerald-400' : 'bg-amber-400'}`}
+                  style={{ width: `${Math.min(progressPercent, 100)}%` }}
+                ></div>
+              </div>
+            </div>
+
+            {/* Thanh Tab chuyển đổi */}
+            <div className="flex mt-3 bg-blue-700/50 p-1 rounded-lg text-xs font-medium">
+              <button 
+                onClick={() => setTab("checklist")} 
+                className={`flex-1 py-1.5 rounded text-center transition-all ${tab === "checklist" ? "bg-white text-blue-700 shadow font-bold" : "text-white"}`}
+              >
+                <Icons.CheckSquare /> Checklist
+              </button>
+              <button 
+                onClick={() => setTab("lessons")} 
+                className={`flex-1 py-1.5 rounded text-center transition-all ${tab === "lessons" ? "bg-white text-blue-700 shadow font-bold" : "text-white"}`}
+              >
+                <Icons.BookOpen /> Ôn Bài Học
+              </button>
+              <button 
+                onClick={() => setTab("chat")} 
+                className={`flex-1 py-1.5 rounded text-center transition-all ${tab === "chat" ? "bg-white text-blue-700 shadow font-bold" : "text-white"}`}
+              >
+                <Icons.Bot /> Hỏi Đáp AI
+              </button>
+            </div>
+          </div>
+
+          {/* Nội dung Tab 1: Checklist OJT */}
+          {tab === "checklist" && (
+            <div className="flex-1 p-3 space-y-3 pb-8">
+              <div className="text-xs text-slate-500 flex justify-between items-center px-1">
+                <span>Danh mục 20 tiêu chí chuẩn hoá</span>
+                <span className="text-emerald-600 font-medium">Đạt tối thiểu: 16 mục</span>
+              </div>
+
+              {OJT_CHECKLIST.map((item) => {
+                const status = checklistState[item.id];
+                return (
+                  <div key={item.id} className="bg-white rounded-xl p-3 border border-slate-200 shadow-sm text-sm">
+                    <div className="flex justify-between items-start gap-2">
+                      <span className="text-xs font-bold px-2 py-0.5 rounded bg-blue-50 text-blue-700">{item.id}</span>
+                      <h3 className="font-semibold text-slate-800 flex-1">{item.title}</h3>
+                    </div>
+
+                    <p className="text-xs text-slate-500 mt-1">{item.desc}</p>
+
+                    <div className="mt-2 text-xs bg-emerald-50 text-emerald-800 p-2 rounded">
+                      <span className="font-bold">✓ Tiêu chí Đạt:</span> {item.passReq}
+                    </div>
+
+                    <div className="mt-1 text-xs bg-rose-50 text-rose-800 p-2 rounded">
+                      <span className="font-bold">✗ Điểm Chưa đạt:</span> {item.failReq}
+                    </div>
+
+                    <div className="flex gap-2 mt-3 pt-2 border-t border-slate-100">
+                      <button
+                        onClick={() => handleCheck(item.id, "pass")}
+                        className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all border ${status === "pass" ? "bg-emerald-600 text-white border-emerald-600 shadow" : "bg-white text-emerald-600 border-emerald-300"}`}
+                      >
+                        Đạt chuẩn
+                      </button>
+                      <button
+                        onClick={() => handleCheck(item.id, "fail")}
+                        className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all border ${status === "fail" ? "bg-rose-600 text-white border-rose-600 shadow" : "bg-white text-rose-600 border-rose-300"}`}
+                      >
+                        Chưa đạt
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Nội dung Tab 2: Ôn tập bài học 5 ngày */}
+          {tab === "lessons" && (
+            <div className="flex-1 p-3 pb-8">
+              {/* Thanh chọn ngày */}
+              <div className="flex gap-1.5 overflow-x-auto pb-2 no-scrollbar">
+                {[1, 2, 3, 4, 5].map((day) => (
+                  <button
+                    key={day}
+                    onClick={() => setSelectedDay(day)}
+                    className={`px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all ${selectedDay === day ? "bg-blue-600 text-white shadow" : "bg-white text-slate-600 border border-slate-200"}`}
+                  >
+                    Ngày {day}
+                  </button>
+                ))}
+              </div>
+
+              {/* Tóm tắt bài học */}
+              <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm mt-3">
+                <h2 className="font-bold text-blue-700 text-sm mb-3">{LESSONS[selectedDay].title}</h2>
+                <div className="space-y-2">
+                  {LESSONS[selectedDay].summary.map((point, index) => (
+                    <div key={index} className="flex gap-2 text-xs leading-relaxed text-slate-700">
+                      <span className="text-blue-500 font-bold">•</span>
+                      <span>{point}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <button
+                  onClick={() => {
+                    setTab("chat");
+                    handleSend(`Tóm tắt chi tiết hơn nội dung bài học Ngày ${selectedDay}`);
+                  }}
+                  className="w-full mt-4 bg-blue-50 hover:bg-blue-100 text-blue-700 py-2 rounded-lg text-xs font-semibold text-center transition-all"
+                >
+                  Hỏi AI chi tiết về Ngày {selectedDay}
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Nội dung Tab 3: Hỏi đáp AI */}
+          {tab === "chat" && (
+            <div className="flex-1 flex flex-col h-[calc(100vh-170px)]">
+              {/* Lịch sử tin nhắn */}
+              <div className="flex-1 overflow-y-auto p-3 space-y-3 text-xs">
+                {messages.map((m, idx) => (
+                  <div key={idx} className={`flex ${m.sender === "user" ? "justify-end" : "justify-start"}`}>
+                    <div className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 ${m.sender === "user" ? "bg-blue-600 text-white rounded-tr-none" : "bg-white border border-slate-200 text-slate-800 rounded-tl-none shadow-sm"}`}>
+                      {m.text}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Gợi ý câu hỏi nhanh */}
+              <div className="p-2 bg-slate-100 border-t border-slate-200 flex gap-2 overflow-x-auto no-scrollbar">
+                {["5 điểm đỏ khi build PC là gì?", "Cách chào khách chuẩn 4 bước?", "Khách chê giá cao xử lý sao?"].map((q, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => handleSend(q)}
+                    className="bg-white border border-slate-300 hover:border-blue-500 text-slate-700 px-2.5 py-1 rounded-full text-[11px] whitespace-nowrap shadow-xs"
+                  >
+                    {q}
+                  </button>
+                ))}
+              </div>
+
+              {/* Ô gõ câu hỏi */}
+              <div className="p-2 bg-white border-t border-slate-200 flex gap-2">
+                <input
+                  type="text"
+                  value={inputQuery}
+                  onChange={(e) => setInputQuery(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleSend()}
+                  placeholder="Hỏi về bài học, tình huống..."
+                  className="flex-1 border border-slate-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-blue-600"
+                />
+                <button
+                  onClick={() => handleSend()}
+                  className="bg-blue-600 text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center justify-center hover:bg-blue-700"
+                >
+                  <Icons.Send />
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<App />);
+  </script>
 </body>
 </html>
