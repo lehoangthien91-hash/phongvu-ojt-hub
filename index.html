@@ -21,43 +21,106 @@
     const { useState, useMemo } = React;
 
     // ==========================================
-    // 💡 DÁN LINK GOOGLE APPS SCRIPT WEB APP VÀO ĐÂY:
+    // 💡 LINK GOOGLE APPS SCRIPT WEB APP CỦA BẠN:
     const GOOGLE_SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyGDnbGzLVxEWJiyJ8DHhf6HoEDoXlTpd0Q4yrTZdCZgk1D2NIdN4BnbPKjq7zlPfmNnQ/exec";
     // ==========================================
 
     const Icons = {
-      BookOpen: () => <svg className="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>,
-      CheckSquare: () => <svg className="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>,
-      Bot: () => <svg className="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>,
+      BookOpen: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>,
+      CheckSquare: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>,
+      Bot: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>,
       Send: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>,
       SendCloud: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>,
-      Download: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+      Download: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>,
+      Note: () => <svg className="w-3.5 h-3.5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
     };
 
-    const OJT_CHECKLIST = [
-      { id: "A.1", group: "A", title: "Tiêu chuẩn mặt tiền cửa hàng", desc: "Standee/cờ vuông góc; kính/bảng hiệu sáng đẹp; băng rôn phẳng phiu đúng CTKM.", passReq: "Standee cờ ngay ngắn, kính sạch không vết keo cũ, băng rôn phẳng, xe khách có phủ bạt che.", failReq: "Standee ngả nghiêng, rách mép, dán đè CTKM cũ; rác lối vào; bảng hiệu tắt đèn." },
-      { id: "A.2", group: "A", title: "Tiêu chuẩn bên trong cửa hàng", desc: "Xếp đúng layout; thứ tự giá/kích thước/màu sắc; 100% bảng giá mica chuẩn; bàn tư vấn sạch sẽ.", passReq: "Bảng giá đặt bên phải sản phẩm; laptop mở 110-120°; bàn tư vấn có ly nước sạch, kẹo còn hạn.", failReq: "Màn hình đặt tầng sát đất; laptop mở góc xô lệch; thiếu bảng giá; ly nước dở chưa dọn." },
-      { id: "B.1", group: "B", title: "Diện mạo, Tác phong chuẩn", desc: "Đồng phục đúng chuẩn, phẳng phiu, đeo thẻ tên ngực trái, mang giày kín mũi tối màu.", passReq: "Có mặt trước 15 phút, đồng phục chỉnh tề, giày tối màu, tóc gọn gàng, không dùng điện thoại riêng.", failReq: "Áo bỏ ngoài quần, đi dép/giày sáng màu, xõa tóc, tụ tập cười đùa (SHR1, SHR2, SHR5, SHR8)." },
-      { id: "B.2", group: "B", title: "4 điểm chạm khi Chào đón", desc: "Đứng thẳng, hướng mắt về khách, tay đặt ngực trái, cúi 15 độ: 'Dạ Phong Vũ xin chào!'.", passReq: "Chủ động tiếp cận trong 5-10s; thực hiện đủ 4 bước nghi thức; mở cửa khi rảnh.", failReq: "Phớt lờ khách, chào không cúi người, chào lí nhí, không đặt tay lên ngực (SHR23, SHR38, SHR41)." },
-      { id: "B.3", group: "B", title: "Ngôn ngữ hình thể khi phục vụ", desc: "Đứng thẳng lưng, chỉ dẫn bằng cả bàn tay, đưa/nhận tài liệu, đồ đạc bằng cả 2 tay.", passReq: "Tư thế thẳng thắn niềm nở; dùng cả bàn tay ngửa nhẹ chỉ đường; cầm bill/máy bằng 2 tay.", failReq: "Cho tay túi quần, khoanh tay, dựa vách, dùng 1 ngón tay chỉ trỏ, đưa đồ bằng 1 tay (SHR10, SHR14, SHR17)." },
-      { id: "B.4", group: "B", title: "Chuẩn mực giao tiếp & Xưng hô", desc: "Xưng hô lịch sự đúng thứ bậc; giọng nói nhẹ nhàng, luôn dùng kính ngữ dạ/vâng và cảm ơn.", passReq: "Dùng từ ngữ bình dân dễ hiểu; kiên nhẫn lắng nghe; giải thích thấu đáo không tranh cãi.", failReq: "Nói trống không, cướp lời khách, tranh luận gay gắt, đổ lỗi cho khách hàng (SHR35, SHR36)." },
-      { id: "C.1", group: "C", title: "Chào đón & Tạo thiện cảm", desc: "Duy trì khoảng cách tiếp cận 1-1.5m, nụ cười thân thiện, câu chào chuẩn mực.", passReq: "Tiếp cận tự nhiên, giữ cự ly thoải mái, mỉm cười và lắng nghe ngay từ giây đầu tiên.", failReq: "Đứng quá sát làm khách ngợp hoặc đứng quá xa; mặt lạnh lùng không biểu cảm." },
-      { id: "C.2", group: "C", title: "Khai thác nhu cầu & Ngân sách", desc: "Dùng câu hỏi mở tìm mục đích dùng, ngân sách, tóm tắt xác nhận lại trước khi tư vấn.", passReq: "Hỏi rõ tác vụ phần mềm/game, mức tài chính tối đa; nhắc lại nhu cầu khách vừa nêu.", failReq: "Chưa hỏi nhu cầu đã vội chỉ máy đắt nhất; hỏi dồn dập khiến khách khó chịu." },
-      { id: "C.3", group: "C", title: "Đề xuất tối thiểu 3 phương án", desc: "Đưa ra 3 phương án: Chuẩn nhu cầu - Tiết kiệm chi phí - Nâng cấp đón đầu công nghệ.", passReq: "Nêu rõ sự khác biệt của 3 máy trên quầy trải nghiệm; bám sát mức ngân sách dự kiến.", failReq: "Chỉ ép khách xem đúng 1 máy hoặc chỉ lan man quá nhiều máy gây rối mắt." },
-      { id: "C.4", group: "C", title: "Trình bày Lợi ích (FABE)", desc: "Quy đổi thông số kỹ thuật thành lợi ích thực tế; mời khách trải nghiệm trực tiếp.", passReq: "Nói '16GB RAM mở 30 tab không lag' thay vì chỉ đọc thông số; hướng dẫn khách gõ phím thử.", failReq: "Chỉ đọc bảng thông số GHz, Watt khô khan; không liên hệ với công việc của khách." },
-      { id: "C.5", group: "C", title: "Chốt bán & Hướng dẫn tiếp theo", desc: "Tóm tắt máy khách thích, đưa ra câu chốt dạng giả định hoặc câu hỏi lựa chọn.", passReq: "Dùng câu: 'Em lấy máy mới nguyên seal cho mình nhé?' hoặc 'Mình quẹt thẻ hay tiền mặt ạ?'.", failReq: "Đứng im chờ khách tự đòi mua; khách ưng ý rồi vẫn nói lan man làm loãng đơn." },
-      { id: "C.6", group: "C", title: "Chính sách bảo hành & CSKH", desc: "Nêu rõ hạn bảo hành, chính sách 1 đổi 1 lỗi phần cứng, mời khách quét Zalo OA.", passReq: "Giải thích rõ điều kiện đổi trả; mở mã Zalo OA Phong Vũ hướng dẫn khách theo dõi ưu đãi.", failReq: "Báo sai hạn bảo hành; không nhắc đổi mới 1-1; bỏ qua bước mời vào Zalo OA / App." },
-      { id: "D.1", group: "D", title: "Đọc bảng thông số Laptop", desc: "Hiểu hậu tố CPU (U/V/H/HX), khả năng nâng cấp RAM, ưu điểm VGA rời vs Onboard, dòng máy.", passReq: "Phân biệt Vivobook vs ROG, Ideapad vs Legion; biết máy nào RAM hàn chết, máy nào nâng được.", failReq: "Không biết đuôi U/H là gì; tư vấn nhầm máy không thể nâng RAM cho khách cần chạy nặng." },
-      { id: "D.2", group: "D", title: "So sánh Laptop Văn phòng vs Gaming vs AI", desc: "Văn phòng (mỏng nhẹ, pin trâu) - Gaming (hiệu năng cao, tản nhiệt to) - AI PC (NPU >= 40 TOPS).", passReq: "Nêu đúng đặc trưng chip, card rời, tần số quét màn hình và chip NPU xử lý AI offline.", failReq: "Bán laptop văn phòng mỏng nhẹ cho khách cày game AAA; không giải thích được NPU AI là gì." },
-      { id: "D.3", group: "D", title: "Tư vấn khách mua Laptop văn phòng", desc: "Khai thác ngành học/công việc, độ di chuyển; cấu hình chuẩn và tư vấn kèm MS 365, balo.", passReq: "Chọn CPU U/V, RAM 16GB, màn hình 16:10 chống chói; bán kèm chuột, balo, Office bản quyền.", failReq: "Tư vấn máy cồng kềnh, pin yếu; quên tư vấn phần mềm Microsoft 365 chính hãng." },
-      { id: "D.4", group: "D", title: "Tư vấn khách mua Laptop Gaming", desc: "Khai thác tựa game cụ thể; đề xuất card RTX, màn hình tần số quét cao, tản nhiệt tốt.", passReq: "Hỏi rõ game LOL hay AAA; chọn CPU dòng H/HX, VGA RTX 4050+, màn 144Hz, sạc công suất lớn.", failReq: "Bán máy chỉ có card Onboard để chơi game nặng; không dặn khách cắm sạc khi combat." },
-      { id: "E.1", group: "E", title: "Nhận biết 8 linh kiện PC", desc: "Chỉ đúng 8 linh kiện trên case thực tế: CPU, Mainboard, RAM, SSD/HDD, GPU, PSU, Vỏ, Tản nhiệt.", passReq: "Chỉ đúng từng vị trí trong case máy tính; giải thích CPU là bộ não, RAM là mặt bàn, PSU là tim.", failReq: "Chỉ nhầm Mainboard với Nguồn; không phân biệt được SSD M.2 với thanh RAM." },
-      { id: "E.2", group: "E", title: "PC Đồng bộ vs PC Lắp ráp (DIY)", desc: "PC Đồng bộ: Doanh nghiệp, văn phòng cần ổn định. PC Lắp ráp: Gamer, đồ họa cần tối ưu cấu hình.", passReq: "Phân tích rõ: Đồng bộ được bảo hành trọn bộ an tâm; Lắp ráp tối ưu hiệu năng/giá, dễ nâng cấp.", failReq: "Khách văn phòng cần máy nhỏ gọn lại ép mua bộ DIY cồng kềnh, lòe loẹt." },
-      { id: "E.3", group: "E", title: "Tính tương thích khi Build PC", desc: "Khớp Socket CPU - Mainboard; RAM đúng DDR4/DDR5; PSU dư tải 15-20%; đủ linh kiện cốt lõi.", passReq: "Kiểm tra đúng socket Intel/AMD; lắp đủ RAM Dual Channel; nguồn chuẩn 80 Plus đủ công suất.", failReq: "Chọn CPU Intel gắn main AMD; RAM DDR5 nhét main DDR4; nguồn 400W kéo VGA khủng." },
-      { id: "E.4", group: "E", title: "Phân bổ ngân sách & Trade-off", desc: "Gaming: 40-50% cho GPU. Đồ họa: CPU nhiều nhân + RAM 32GB+. Văn phòng: SSD mượt & Nguồn tốt.", passReq: "Biết dồn tiền đúng linh kiện quyết định hiệu năng; khi hạ giá thì giảm vỏ case, tuyệt đối giữ nguồn.", failReq: "Cắt giảm ngân sách bằng cách mua nguồn noname rẻ tiền gây nguy cơ chập cháy." },
-      { id: "E.5", group: "E", title: "Tư vấn Hệ sinh thái đi kèm PC", desc: "Đề xuất màn hình phù hợp; combo phím chuột gear; Windows 11 và kiểm tra Wi-Fi/LAN.", passReq: "Máy game đi với màn 144Hz; máy vẽ đi với màn 100% sRGB; nhắc khách mua card Wi-Fi nếu main chưa có.", failReq: "Chỉ bán mỗi case máy tính; để khách về nhà mới phát hiện không có màn hình hoặc không bắt được Wi-Fi." },
-      { id: "G.1", group: "G", title: "Phổ biến CTKM đang diễn ra", desc: "Thuộc thời gian, điều kiện áp dụng, quà tặng, tính ra số tiền giảm giá thực tế cho khách.", passReq: "Nắm vững khuyến mãi tháng; tính nhanh số tiền tiết kiệm được sau khi áp voucher VNPay/HSSV.", failReq: "Không biết showroom đang chạy khuyến mãi gì; tính sai giá trừ tiền của khách." }
+    // DANH MỤC 62 TIÊU CHÍ CHUẨN TỪ BIỂU MẪU COACHING OJT VER 2
+    const OJT_CHECKLIST_62 = [
+      // Nhóm A: Tiêu chuẩn cửa hàng (6 mục)
+      { id: "A.1", group: "A", title: "Standee/cờ vỉa hè đặt vuông góc mặt tiền, cờ thẳng hàng không che lối đi" },
+      { id: "A.2", group: "A", title: "Bảng hiệu/hộp đèn nguyên vẹn, sáng đủ đèn; vách kính và cửa ra vào sạch sẽ" },
+      { id: "A.3", group: "A", title: "Băng rôn căng phẳng không trùng/nhăn, đúng nội dung CTKM mới nhất" },
+      { id: "A.4", group: "A", title: "Xếp đúng layout ngành hàng; tuân thủ thứ tự ưu tiên giá - kích thước - màu" },
+      { id: "A.5", group: "A", title: "100% sản phẩm trưng bày có bảng giá đặt chuẩn vị trí & thông tin chuẩn xác" },
+      { id: "A.6", group: "A", title: "Bàn tư vấn: Mặt bàn sạch không vết vân tay/vết keo; tờ rơi mới; ghế xếp ngay ngắn" },
+
+      // Nhóm B: Tiêu chuẩn phục vụ khách hàng trong bán hàng (10 mục)
+      { id: "B.1", group: "B", title: "Mặc đúng đồng phục quy định, áo quần phẳng phiu, đi giày kín mũi" },
+      { id: "B.2", group: "B", title: "Chào đón: Đứng thẳng, hướng mắt về phía khách" },
+      { id: "B.3", group: "B", title: "Chào đón: Đặt bàn tay lên ngực trái (vị trí trái tim)" },
+      { id: "B.4", group: "B", title: "Chào đón: Cúi người khoảng 15° với nụ cười thân thiện" },
+      { id: "B.5", group: "B", title: "Chào đón: Nói rõ câu chào chuẩn: 'Dạ Phong Vũ xin chào!'" },
+      { id: "B.6", group: "B", title: "Tư thế: Luôn đứng/ngồi thẳng lưng, ánh mắt tập trung, niềm nở, lắng nghe" },
+      { id: "B.7", group: "B", title: "Chỉ dẫn: Hướng dẫn vị trí quầy kệ, sản phẩm hoặc mời khách ngồi bằng cả bàn tay" },
+      { id: "B.8", group: "B", title: "Giao nhận: Luôn đưa/nhận tài liệu, máy trải nghiệm, tờ rơi bằng cả hai tay" },
+      { id: "B.9", group: "B", title: "Xưng hô lịch sự, đúng thứ bậc/độ tuổi/giới tính" },
+      { id: "B.10", group: "B", title: "Âm lượng vừa phải, tốc độ nói nhẹ nhàng, luôn dạ/vâng và cảm ơn" },
+
+      // Nhóm C: Thực hiện 6 bước bán hàng (15 mục)
+      { id: "C.1", group: "C", title: "Duy trì khoảng cách tiếp cận 1–1.5m, nụ cười thân thiện" },
+      { id: "C.2", group: "C", title: "Nói câu chào theo tiêu chuẩn phục vụ: 'Dạ Phong Vũ xin chào'" },
+      { id: "C.3", group: "C", title: "Dùng câu hỏi mở để tìm hiểu mục đích sử dụng và nhu cầu ưu tiên" },
+      { id: "C.4", group: "C", title: "Hỏi rõ ngân sách và các yêu cầu khách mong muốn ở sản phẩm" },
+      { id: "C.5", group: "C", title: "Tóm tắt và xác nhận lại nhu cầu trước khi giới thiệu phương án" },
+      { id: "C.6", group: "C", title: "Phương án Chuẩn: Đúng tầm giá và vừa khít nhu cầu" },
+      { id: "C.7", group: "C", title: "Phương án Tiết kiệm: Giá thấp hơn một chút, đủ dùng tác vụ cơ bản" },
+      { id: "C.8", group: "C", title: "Phương án Nâng cấp: Giá nhỉnh hơn 10-15%, cấu hình đón đầu 3-4 năm tới" },
+      { id: "C.9", group: "C", title: "Trình bày FABE: Quy đổi thông số kỹ thuật đi kèm lợi ích thực tế" },
+      { id: "C.10", group: "C", title: "Sau khi trình bày, có dẫn chứng/mời khách trải nghiệm tính năng vừa nêu" },
+      { id: "C.11", group: "C", title: "Có tóm tắt phương án khách quan tâm" },
+      { id: "C.12", group: "C", title: "Đưa ra câu chốt bán dạng giả định hoặc lựa chọn" },
+      { id: "C.13", group: "C", title: "Thông báo Thời hạn bảo hành bao lâu" },
+      { id: "C.14", group: "C", title: "Thông báo Chính sách đổi trả bao nhiêu ngày đầu nếu có lỗi phần cứng" },
+      { id: "C.15", group: "C", title: "Mời khách hàng quét Zalo OA" },
+
+      // Nhóm D: Kiến thức & Tư vấn Laptop (13 mục)
+      { id: "D.1", group: "D", title: "Trình bày được ý nghĩa hậu tố CPU (U là gì, H là gì)" },
+      { id: "D.2", group: "D", title: "Trình bày được Laptop có nâng cấp thêm RAM được hay không" },
+      { id: "D.3", group: "D", title: "Trình bày được ưu điểm của Card đồ họa rời so với Card onboard" },
+      { id: "D.4", group: "D", title: "Phân loại chuẩn dòng máy (Asus Vivobook vs ROG/TUF; Lenovo Ideapad vs Legion)" },
+      { id: "D.5", group: "D", title: "Văn phòng: Mỏng nhẹ, pin trâu 6–8h, CPU tiết kiệm điện (đuôi U)" },
+      { id: "D.6", group: "D", title: "Gaming: CPU hiệu năng cao (đuôi H/HX), có card RTX, tản nhiệt to, màn 144Hz+" },
+      { id: "D.7", group: "D", title: "Laptop AI: Có nhân NPU xử lý tác vụ AI cục bộ (Copilot, lọc ồn không tốn pin)" },
+      { id: "D.8", group: "D", title: "Tư vấn VP: Khai thác sâu về học ngành gì / làm việc gì? Có hay di chuyển không?" },
+      { id: "D.9", group: "D", title: "Tư vấn VP: Đưa ra đề xuất cấu hình chuẩn xác" },
+      { id: "D.10", group: "D", title: "Tư vấn VP: Có tư vấn kèm các phụ kiện và phần mềm (balo, chuột, MS 365)" },
+      { id: "D.11", group: "D", title: "Tư vấn Gaming: Khai thác sâu về thể loại Game khách hay chơi" },
+      { id: "D.12", group: "D", title: "Tư vấn Gaming: Đưa ra đề xuất cấu hình chuẩn xác" },
+      { id: "D.13", group: "D", title: "Tư vấn Gaming: Có tư vấn kèm các phụ kiện và phần mềm khác (gear, tai nghe)" },
+
+      // Nhóm E: Kiến thức & Tư vấn PC (14 mục)
+      { id: "E.1", group: "E", title: "Chỉ đúng vị trí 8 thành phần chính (CPU, Main, RAM, SSD, GPU, PSU, Case, Tản)" },
+      { id: "E.2", group: "E", title: "Giải thích đúng công dụng của từng linh kiện PC" },
+      { id: "E.3", group: "E", title: "PC Đồng bộ: Bán cho Doanh nghiệp, người lớn tuổi, VP cần ổn định tuyệt đối" },
+      { id: "E.4", group: "E", title: "PC Lắp ráp (DIY): Bán cho Gamer/Designer tối ưu sức mạnh trên giá, dễ nâng cấp" },
+      { id: "E.5", group: "E", title: "Tính tương thích: Socket CPU khớp Chipset Mainboard" },
+      { id: "E.6", group: "E", title: "Tính tương thích: RAM đúng chuẩn Main hỗ trợ (DDR4 vs DDR5)" },
+      { id: "E.7", group: "E", title: "Tính tương thích: Công suất PSU dư tải an toàn 15–20% so với tổng CPU + GPU" },
+      { id: "E.8", group: "E", title: "Không thiếu bất kì linh kiện bắt buộc nào (CPU/RAM/VGA/Mainboard, PSU, Case)" },
+      { id: "E.9", group: "E", title: "Bộ Gaming: 40–50% ngân sách dồn cho GPU, còn lại chia cho CPU, Main, RAM, Nguồn" },
+      { id: "E.10", group: "E", title: "Bộ Đồ họa: Dồn tiền cho CPU nhiều nhân + RAM 32GB–64GB + SSD đọc ghi nhanh" },
+      { id: "E.11", group: "E", title: "Bộ Văn Phòng: Tập trung đầu tư cho SSD & nguồn chất lượng" },
+      { id: "E.12", group: "E", title: "Đề xuất màn hình phù hợp (Hz, FHD/2K/4K, tấm nền IPS/VA chuẩn màu)" },
+      { id: "E.13", group: "E", title: "Tư vấn combo: Phím, chuột, tai nghe/loa, lót chuột, dây LAN/Card Wi-Fi" },
+      { id: "E.14", group: "E", title: "Tư vấn phần mềm bản quyền Windows 11 / MS 365" },
+
+      // Nhóm G: CTKM (4 mục)
+      { id: "G.1", group: "G", title: "Nêu đúng thời gian áp dụng chương trình khuyến mãi" },
+      { id: "G.2", group: "G", title: "Nêu đúng điều kiện áp dụng chương trình khuyến mãi" },
+      { id: "G.3", group: "G", title: "Nêu đúng quà tặng của chương trình khuyến mãi (nếu có)" },
+      { id: "G.4", group: "G", title: "Chủ động tính ra số tiền đã được khuyến mãi cho khách" }
     ];
+
+    const GROUP_NAMES = {
+      ALL: "Tất cả (62)",
+      A: "A. Cửa hàng (6)",
+      B: "B. Phục vụ (10)",
+      C: "C. 6 Bước bán hàng (15)",
+      D: "D. Laptop (13)",
+      E: "E. PC (14)",
+      G: "G. CTKM (4)"
+    };
 
     const LESSONS = {
       1: {
@@ -114,79 +177,6 @@
       }
     };
 
-    function processAIQuery(query) {
-      const q = query.toLowerCase();
-
-      if ((q.includes("5600") || q.includes("5700") || q.includes("5800") || q.includes("3600") || q.includes("am4")) && 
-          (q.includes("b650") || q.includes("x670") || q.includes("a620") || q.includes("b850") || q.includes("am5"))) {
-        return "❌ KHÔNG ĐƯỢC BẠN NHÉ! Đây là lỗi xung đột Socket nghiêm trọng:\n\n" +
-          "• CPU AMD Ryzen 5 5600 dùng Socket AM4 và chuẩn RAM DDR4.\n" +
-          "• Mainboard Asus B650 dùng Socket AM5 và chuẩn RAM DDR5.\n\n" +
-          "👉 Hướng tư vấn thay thế cho khách:\n" +
-          "1. Giữ CPU Ryzen 5 5600: Đổi Main sang Asus Prime B550M hoặc B450M (Socket AM4) + RAM DDR4 (Tiết kiệm ngân sách).\n" +
-          "2. Giữ Main Asus B650: Đổi CPU lên AMD Ryzen 5 7500F hoặc 7600 (Socket AM5) + RAM DDR5 (Đón đầu công nghệ).";
-      }
-
-      if ((q.includes("12400") || q.includes("13400") || q.includes("14400")) && (q.includes("z890") || q.includes("b860") || q.includes("1851"))) {
-        return "❌ KHÔNG TƯƠNG THÍCH! CPU Intel thế hệ 12/13/14 chạy Socket LGA1700, không thể lắp vào bo mạch chủ mới Socket LGA1851 (Z890, B860). Hãy tư vấn khách dùng Mainboard H610, B760 hoặc Z790 nhé!";
-      }
-
-      if ((q.includes("intel") || q.includes("core i") || q.includes("ultra")) && (q.includes("b650") || q.includes("b550") || q.includes("x670") || q.includes("am4") || q.includes("am5"))) {
-        return "❌ LỖI NGHIÊM TRỌNG: Bạn đang gắn CPU Intel vào Mainboard của AMD! Nhớ câu thần chú đào tạo: 'Bác 67 Ham Zui' (Intel: H, B đuôi 60/70, Z) và 'Bác 50 Ăn Xài' (AMD: A, B đuôi 50, X).";
-      }
-      if ((q.includes("ryzen") || q.includes("amd")) && (q.includes("b760") || q.includes("z790") || q.includes("h610") || q.includes("b660"))) {
-        return "❌ KHÔNG TƯƠNG THÍCH: CPU AMD Ryzen không cắm vừa bo mạch chủ dành cho Intel (H610, B760, Z790).";
-      }
-
-      if ((q.includes("4070") || q.includes("4080") || q.includes("4090") || q.includes("5070")) && (q.includes("450w") || q.includes("500w") || q.includes("550w"))) {
-        return "⚠️ NGUY HIỂM / KHÔNG ĐẠT: Nguồn công suất quá yếu! Dòng VGA cao cấp như RTX 4070/5070 yêu cầu PSU tối thiểu từ 650W - 750W chuẩn 80 Plus Bronze/Gold để đảm bảo không bị sập nguồn khi tải nặng.";
-      }
-
-      if (q.includes("5 điểm đỏ") || q.includes("điểm đỏ") || (q.includes("lưu ý") && q.includes("build pc"))) {
-        return "📌 5 ĐIỂM ĐỎ KIỂM TRA TƯƠNG THÍCH PC:\n" +
-          "1. Socket CPU khớp Chipset Mainboard (Intel: LGA1700; AMD: AM4/AM5).\n" +
-          "2. RAM đúng chuẩn bo mạch hỗ trợ (DDR4 vs DDR5).\n" +
-          "3. Luôn lắp RAM theo cặp (2 thanh) để kích hoạt Dual Channel nhân đôi băng thông.\n" +
-          "4. Nguồn (PSU) chuẩn 80 Plus, tính dư tải an toàn 15 - 20%.\n" +
-          "5. Kích thước lắp vừa thùng case (chiều dài VGA và chiều cao tản nhiệt khí/rad nước).";
-      }
-
-      if (q.includes("chào") || q.includes("4 điểm") || q.includes("golden rule")) {
-        return "👋 NGHI THỨC CHÀO ĐÓN 4 ĐIỂM CHẠM (GOLDEN RULE):\n" +
-          "1. Đứng thẳng, ánh mắt hướng về phía khách hàng.\n" +
-          "2. Đặt bàn tay lên ngực trái (vị trí trái tim) thể hiện sự trân trọng.\n" +
-          "3. Cúi người khoảng 15 độ với nụ cười thân thiện.\n" +
-          "4. Nói rõ câu chào chuẩn mực: 'Dạ Phong Vũ xin chào!'.";
-      }
-
-      if (q.includes("chê đắt") || q.includes("giá cao") || q.includes("đối thủ") || q.includes("rẻ hơn")) {
-        return "💡 XỬ LÝ KHÁCH CHÊ GIÁ CAO (ÁP DỤNG LAST):\n" +
-          "• Lắng nghe và đồng cảm, tuyệt đối không đôi co tranh cãi.\n" +
-          "• Khách so sánh với sàn TMĐT: Giải thích chính sách trợ giá riêng của sàn, nhấn mạnh mua tại showroom được bảo hành 1 đổi 1 tận nơi, máy sẵn kiểm tra liền tay.\n" +
-          "• Khách so sánh với cửa hàng nhỏ lẻ: Nêu bật thế mạnh Phong Vũ là hàng chính hãng 100% có VAT, kỹ thuật viên ủy quyền nâng cấp linh kiện không bị mất bảo hành hãng, hỗ trợ trả góp 0%!";
-      }
-
-      if (q.includes("main amd") || q.includes("mainboard amd") || (q.includes("amd") && q.includes("mới nhất"))) {
-        return "⚡ DÒNG MAINBOARD AMD MỚI NHẤT:\n" +
-          "Hiện nay các dòng Bo mạch chủ mới nhất dành cho AMD là thế hệ Socket AM5:\n" +
-          "• Phân khúc cao cấp: X870E, X870, X670E (hỗ trợ ép xung, PCIe 5.0 toàn diện).\n" +
-          "• Phân khúc tầm trung/phổ biến: B850, B650 (cân bằng hiệu năng/giá thành tốt nhất cho Ryzen 7000/9000).\n" +
-          "• Phân khúc cơ bản: B840, A620.\n" +
-          "Tất cả đều bắt buộc chạy chuẩn RAM DDR5!";
-      }
-
-      if (q.includes("hôm nay") || q.includes("học gì") || q.includes("ngày 1") || q.includes("ngày 2") || q.includes("ngày 3") || q.includes("ngày 4") || q.includes("ngày 5")) {
-        return "📚 TÓM TẮT LỘ TRÌNH 5 NGÀY OJT:\n" +
-          "• Ngày 1: Hội nhập văn hóa (1997, 4 giá trị cốt lõi) & Tiêu chuẩn CH (HR_QĐ.01, Golden Rule, mã lỗi SHR).\n" +
-          "• Ngày 2: Kỹ năng 6 bước bán hàng, câu hỏi SPIN, mô hình FABE, xử lý phản bác LAST, 4 kỹ thuật chốt đơn.\n" +
-          "• Ngày 3: Kiến thức Laptop (CPU U/V vs H/HX, RAM, SSD NVMe, GPU rời vs Onboard, Màn hình, AI PC).\n" +
-          "• Ngày 4: Cấu tạo PC, 5 điểm đỏ tương thích, phân bổ ngân sách Gaming/Đồ họa/Văn phòng.\n" +
-          "• Ngày 5: Quy trình 7 bước quản lý tiền mặt, thao tác túi Zip/Dropbox dưới camera CCTV, các hình thức thanh toán POS/Trả góp.";
-      }
-
-      return "Dạ, về câu hỏi '" + query + "':\nBạn lưu ý luôn bám sát quy trình phục vụ chuẩn của Phong Vũ, tuân thủ 5 Điểm đỏ kỹ thuật khi tư vấn phần cứng và tham khảo chi tiết theo từng ngày trong tab 'Ôn Bài Học' nhé!";
-    }
-
     function App() {
       const [tab, setTab] = useState("checklist");
       const [selectedDay, setSelectedDay] = useState(1);
@@ -198,6 +188,7 @@
       const [evaluator, setEvaluator] = useState("");
       const [checklistState, setChecklistState] = useState({});
       const [notesState, setNotesState] = useState({});
+      const [activeNoteId, setActiveNoteId] = useState(null);
       const [isSendingSheet, setIsSendingSheet] = useState(false);
 
       const [messages, setMessages] = useState([
@@ -220,9 +211,10 @@
         return Object.values(checklistState).filter(v => v === "pass").length;
       }, [checklistState]);
 
-      const progressPercent = Math.round((passedCount / OJT_CHECKLIST.length) * 100);
+      const progressPercent = Math.round((passedCount / OJT_CHECKLIST_62.length) * 100);
+      const isPassedGoal = passedCount >= 50; // Ngưỡng đạt: ít nhất 50/62 mục đạt (>=80%)
 
-     // HÀM GỬI DỮ LIỆU TÁCH CỘT VỀ GOOGLE SHEETS
+      // HÀM GỬI DỮ LIỆU TÁCH CỘT VỀ GOOGLE SHEETS
       const handleSendToGoogleSheet = async () => {
         if (!staffName.trim()) {
           alert("⚠️ Vui lòng nhập Họ tên Nhân viên bán hàng trước khi gửi!");
@@ -230,8 +222,8 @@
         }
 
         const evaluatedCount = Object.keys(checklistState).length;
-        if (evaluatedCount < OJT_CHECKLIST.length) {
-          const confirmSend = confirm(`Bạn mới đánh giá ${evaluatedCount}/${OJT_CHECKLIST.length} tiêu chí. Bạn có chắc chắn muốn gửi kết quả này không?`);
+        if (evaluatedCount < OJT_CHECKLIST_62.length) {
+          const confirmSend = confirm(`Bạn mới đánh giá ${evaluatedCount}/${OJT_CHECKLIST_62.length} tiêu chí. Bạn có chắc chắn muốn gửi kết quả này không?`);
           if (!confirmSend) return;
         }
 
@@ -242,9 +234,8 @@
 
         setIsSendingSheet(true);
 
-        // Đóng gói chi tiết từng tiêu chí thành Object theo mã tiêu chí
         const itemsPayload = {};
-        OJT_CHECKLIST.forEach(item => {
+        OJT_CHECKLIST_62.forEach(item => {
           itemsPayload[item.id] = {
             status: checklistState[item.id] === "pass" ? "ĐẠT" : checklistState[item.id] === "fail" ? "CHƯA ĐẠT" : "Chưa đánh giá",
             note: notesState[item.id] || ""
@@ -258,9 +249,9 @@
           evalRound: evalRound,
           evaluator: evaluator.trim() || "Chưa nhập",
           passedCount: passedCount,
-          totalCount: OJT_CHECKLIST.length,
+          totalCount: OJT_CHECKLIST_62.length,
           progressPercent: progressPercent,
-          isPassed: progressPercent >= 80,
+          isPassed: isPassedGoal,
           items: itemsPayload
         };
 
@@ -272,7 +263,7 @@
             body: JSON.stringify(payload)
           });
 
-          alert("✅ ĐÃ GỬI THÀNH CÔNG!\nKết quả đã được tách cột chi tiết vào Google Sheet của Giảng viên.");
+          alert("✅ ĐÃ GỬI THÀNH CÔNG!\nKết quả đánh giá 62 tiêu chí OJT đã được tách cột chi tiết vào Google Sheet của Giảng viên.");
         } catch (error) {
           alert("❌ Có lỗi kết nối khi gửi dữ liệu. Vui lòng kiểm tra lại mạng!");
         } finally {
@@ -280,27 +271,26 @@
         }
       };
 
+      // XUẤT BÁO CÁO DẠNG TXT
       const handleExportReport = () => {
         const currentDate = new Date().toLocaleDateString('vi-VN');
-        const isPassed = progressPercent >= 80;
-
-        let content = `PHIẾU ĐÁNH GIÁ NĂNG LỰC NHÂN VIÊN BÁN HÀNG - GIAI ĐOẠN 2 (OJT)\n`;
+        let content = `PHIẾU CHECKLIST ĐÁNH GIÁ NĂNG LỰC – GIAI ĐOẠN 2 (62 TIÊU CHÍ)\n`;
         content += `HỆ THỐNG CỬA HÀNG PHONG VŨ\n`;
         content += `---------------------------------------------------------\n`;
-        content += `Họ tên NVBH    : ${staffName || "(Chưa nhập)"}\n`;
-        content += `Cửa hàng/Showroom: ${storeName || "(Chưa nhập)"}\n`;
-        content += `Đợt đánh giá   : ${evalRound}\n`;
-        content += `Người đánh giá : ${evaluator || "(Chưa nhập)"}\n`;
-        content += `Ngày xuất      : ${currentDate}\n`;
+        content += `Họ tên NVBH       : ${staffName || "(Chưa nhập)"}\n`;
+        content += `Cửa hàng/Showroom : ${storeName || "(Chưa nhập)"}\n`;
+        content += `Đợt đánh giá      : ${evalRound}\n`;
+        content += `Người đánh giá    : ${evaluator || "(Chưa nhập)"}\n`;
+        content += `Ngày xuất         : ${currentDate}\n`;
         content += `---------------------------------------------------------\n`;
         content += `KẾT QUẢ ĐÁNH GIÁ:\n`;
-        content += `• Số mục Đạt   : ${passedCount}/${OJT_CHECKLIST.length}\n`;
+        content += `• Số mục Đạt      : ${passedCount}/${OJT_CHECKLIST_62.length} mục\n`;
         content += `• Tỷ lệ hoàn thành: ${progressPercent}%\n`;
-        content += `• Kết luận     : ${isPassed ? "ĐẠT CHUẨN NĂNG LỰC GĐ2 (>= 80%)" : "CHƯA ĐẠT (Cần đào tạo & kèm cặp thêm)"}\n`;
+        content += `• Kết luận        : ${isPassedGoal ? "ĐẠT CHUẨN NĂNG LỰC GĐ2 (>= 50/62 mục đạt)" : "CHƯA ĐẠT (Cần đào tạo & kèm cặp thêm)"}\n`;
         content += `---------------------------------------------------------\n\n`;
-        content += `CHI TIẾT TỪNG TIÊU CHÍ ĐÁNH GIÁ:\n`;
+        content += `CHI TIẾT 62 TIÊU CHÍ ĐÁNH GIÁ:\n`;
 
-        OJT_CHECKLIST.forEach((item, index) => {
+        OJT_CHECKLIST_62.forEach((item, index) => {
           const status = checklistState[item.id] === "pass" ? "[ ĐẠT ]" : checklistState[item.id] === "fail" ? "[ CHƯA ĐẠT ]" : "[ CHƯA ĐÁNH GIÁ ]";
           const note = notesState[item.id] ? ` (Ghi chú: ${notesState[item.id]})` : "";
           content += `${index + 1}. [${item.id}] ${item.title}: ${status}${note}\n`;
@@ -315,7 +305,7 @@
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
-        link.download = `OJT_DanhGia_${evalRound}_${staffName ? staffName.replace(/\s+/g, '_') : 'NVBH'}.txt`;
+        link.download = `OJT_DanhGia62_${evalRound}_${staffName ? staffName.replace(/\s+/g, '_') : 'NVBH'}.txt`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -331,7 +321,6 @@
         setMessages(updatedMessages);
         setInputQuery("");
 
-        // Hiển thị trạng thái đang trả lời
         setMessages([...updatedMessages, { sender: "bot", text: "..." }]);
 
         try {
@@ -355,28 +344,27 @@
       };
 
       const filteredChecklist = useMemo(() => {
-        if (filterGroup === "ALL") return OJT_CHECKLIST;
-        return OJT_CHECKLIST.filter(item => item.group === filterGroup);
+        if (filterGroup === "ALL") return OJT_CHECKLIST_62;
+        return OJT_CHECKLIST_62.filter(item => item.group === filterGroup);
       }, [filterGroup]);
 
       return (
         <div className="max-w-md mx-auto min-h-screen bg-slate-50 flex flex-col shadow-lg">
           {/* Header */}
-          <div className="bg-blue-600 text-white p-4 sticky top-0 z-20 shadow-md">
+          <div className="bg-blue-600 text-white p-3.5 sticky top-0 z-20 shadow-md">
             <div className="flex justify-between items-center">
               <div>
-                <h1 className="text-lg font-bold">PHONG VŨ OJT COACH</h1>
-                <p className="text-xs text-blue-100">Đồng hành & Đánh giá năng lực GĐ2</p>
+                <h1 className="text-base font-bold tracking-tight">PHONG VŨ OJT COACH</h1>
+                <p className="text-[11px] text-blue-100">Đánh giá Năng lực GĐ2 (62 tiêu chí)</p>
               </div>
               <div className="text-right flex items-center gap-1.5">
-                {/* Nút Gửi Google Sheet */}
                 <button
                   onClick={handleSendToGoogleSheet}
                   disabled={isSendingSheet}
                   className="bg-amber-400 hover:bg-amber-500 text-slate-900 px-2.5 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 shadow-sm transition-all disabled:opacity-50"
                   title="Gửi dữ liệu trực tiếp về Google Sheet cho Giảng viên"
                 >
-                  <Icons.SendCloud /> {isSendingSheet ? "Đang gửi..." : "Gửi Sheet"}
+                  <Icons.SendCloud /> {isSendingSheet ? "..." : "Gửi Sheet"}
                 </button>
                 <button
                   onClick={handleExportReport}
@@ -388,29 +376,29 @@
               </div>
             </div>
 
-            {/* Thanh tiến độ OJT */}
-            <div className="mt-3 bg-blue-800/60 p-2.5 rounded-lg">
-              <div className="flex justify-between text-xs mb-1">
-                <span>Tiến độ đạt: <strong>{passedCount}/{OJT_CHECKLIST.length}</strong> mục</span>
-                <span className={`font-bold ${progressPercent >= 80 ? 'text-emerald-300' : 'text-amber-300'}`}>
-                  {progressPercent}% {progressPercent >= 80 ? "(Đạt chuẩn)" : "(Ngưỡng: 80%)"}
+            {/* Thanh tiến độ OJT tinh gọn */}
+            <div className="mt-2.5 bg-blue-800/60 p-2 rounded-lg text-xs">
+              <div className="flex justify-between items-center mb-1">
+                <span>Đạt: <strong>{passedCount}/62</strong> mục</span>
+                <span className={`font-bold ${isPassedGoal ? 'text-emerald-300' : 'text-amber-300'}`}>
+                  {progressPercent}% {isPassedGoal ? "✓ Đạt chuẩn (≥50)" : "(Chuẩn: ≥50 mục)"}
                 </span>
               </div>
-              <div className="w-full bg-blue-950 h-2.5 rounded-full overflow-hidden">
+              <div className="w-full bg-blue-950 h-2 rounded-full overflow-hidden">
                 <div 
-                  className={`h-full transition-all duration-300 ${progressPercent >= 80 ? 'bg-emerald-400' : 'bg-amber-400'}`}
+                  className={`h-full transition-all duration-300 ${isPassedGoal ? 'bg-emerald-400' : 'bg-amber-400'}`}
                   style={{ width: `${Math.min(progressPercent, 100)}%` }}
                 ></div>
               </div>
             </div>
 
             {/* Thanh Tab */}
-            <div className="flex mt-3 bg-blue-700/50 p-1 rounded-lg text-xs font-medium">
+            <div className="flex mt-2.5 bg-blue-700/50 p-1 rounded-lg text-xs font-medium">
               <button 
                 onClick={() => setTab("checklist")} 
                 className={`flex-1 py-1.5 rounded text-center transition-all ${tab === "checklist" ? "bg-white text-blue-700 shadow font-bold" : "text-white"}`}
               >
-                <Icons.CheckSquare /> Checklist
+                <Icons.CheckSquare /> Checklist (62)
               </button>
               <button 
                 onClick={() => setTab("lessons")} 
@@ -427,15 +415,16 @@
             </div>
           </div>
 
-          {/* Tab 1: Checklist */}
+          {/* TAB 1: CHECKLIST 62 TIÊU CHÍ */}
           {tab === "checklist" && (
-            <div className="flex-1 p-3 space-y-3 pb-8">
-              <div className="bg-white rounded-xl p-3 border border-slate-200 shadow-sm space-y-2 text-xs">
+            <div className="flex-1 p-2.5 space-y-2.5 pb-8">
+              {/* Khung Thông tin nhân sự */}
+              <div className="bg-white rounded-xl p-2.5 border border-slate-200 shadow-xs space-y-2 text-xs">
                 <div className="font-bold text-slate-700 flex justify-between">
                   <span>Thông tin đợt đánh giá</span>
                   <span className="text-blue-600 font-semibold">{evalRound}</span>
                 </div>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-2 gap-1.5">
                   <input
                     type="text"
                     placeholder="Họ tên NVBH (*)..."
@@ -451,7 +440,7 @@
                     className="border border-slate-200 rounded p-1.5 text-xs focus:outline-none focus:border-blue-500"
                   />
                 </div>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-2 gap-1.5">
                   <input
                     type="text"
                     placeholder="Người đánh giá (Coach/SM)..."
@@ -466,89 +455,107 @@
                   >
                     <option value="Lần 1">Đánh giá Lần 1</option>
                     <option value="Lần 2">Đánh giá Lần 2</option>
-                    <option value="Lần 3">Đánh giá Lần 3 (Chung kết)</option>
+                    <option value="Lần 3">Đánh giá Lần 3</option>
                   </select>
                 </div>
               </div>
 
-              {/* Nút gửi lớn phía dưới thông tin */}
+              {/* Nút gửi trên */}
               <button
                 onClick={handleSendToGoogleSheet}
                 disabled={isSendingSheet}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 shadow transition-all disabled:opacity-50"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-xl text-xs flex items-center justify-center gap-1.5 shadow transition-all disabled:opacity-50"
               >
                 <Icons.SendCloud /> {isSendingSheet ? "Đang gửi dữ liệu về Google Sheet..." : "GỬI KẾT QUẢ ĐÁNH GIÁ VỀ CHO GIẢNG VIÊN"}
               </button>
 
+              {/* Bộ lọc nhóm tiêu chí */}
               <div className="flex gap-1 overflow-x-auto pb-1 no-scrollbar text-xs">
-                {["ALL", "A", "B", "C", "D", "E", "G"].map(group => (
+                {Object.keys(GROUP_NAMES).map(group => (
                   <button
                     key={group}
                     onClick={() => setFilterGroup(group)}
-                    className={`px-3 py-1 rounded-full font-bold whitespace-nowrap transition-all ${filterGroup === group ? "bg-blue-600 text-white shadow" : "bg-white text-slate-600 border border-slate-200"}`}
+                    className={`px-2.5 py-1 rounded-full font-bold whitespace-nowrap transition-all ${filterGroup === group ? "bg-blue-600 text-white shadow-xs" : "bg-white text-slate-600 border border-slate-200"}`}
                   >
-                    {group === "ALL" ? "Tất cả (20)" : `Nhóm ${group}`}
+                    {GROUP_NAMES[group]}
                   </button>
                 ))}
               </div>
 
-              {filteredChecklist.map((item) => {
-                const status = checklistState[item.id];
-                return (
-                  <div key={item.id} className="bg-white rounded-xl p-3 border border-slate-200 shadow-sm text-sm">
-                    <div className="flex justify-between items-start gap-2">
-                      <span className="text-xs font-bold px-2 py-0.5 rounded bg-blue-50 text-blue-700">{item.id}</span>
-                      <h3 className="font-semibold text-slate-800 flex-1">{item.title}</h3>
+              {/* Danh sách 62 tiêu chí dạng Card nén gọn */}
+              <div className="space-y-1.5">
+                {filteredChecklist.map((item) => {
+                  const status = checklistState[item.id];
+                  const hasNote = Boolean(notesState[item.id]);
+                  const isNoteOpen = activeNoteId === item.id;
+
+                  return (
+                    <div 
+                      key={item.id} 
+                      className={`bg-white rounded-lg p-2 border transition-all text-xs ${status === 'pass' ? 'border-emerald-200 bg-emerald-50/20' : status === 'fail' ? 'border-rose-200 bg-rose-50/20' : 'border-slate-200'}`}
+                    >
+                      <div className="flex items-center justify-between gap-2">
+                        {/* Mã tiêu chí & Tên tiêu chí */}
+                        <div className="flex-1 flex items-start gap-1.5 min-w-0">
+                          <span className={`font-mono font-bold text-[11px] px-1.5 py-0.5 rounded shrink-0 ${status === 'pass' ? 'bg-emerald-100 text-emerald-800' : status === 'fail' ? 'bg-rose-100 text-rose-800' : 'bg-slate-100 text-slate-600'}`}>
+                            {item.id}
+                          </span>
+                          <span className="text-slate-800 leading-snug line-clamp-2">{item.title}</span>
+                        </div>
+
+                        {/* Nút Đạt / Chưa đạt / Ghi chú */}
+                        <div className="flex items-center gap-1 shrink-0">
+                          <button
+                            onClick={() => handleCheck(item.id, "pass")}
+                            className={`px-2 py-1 rounded font-bold text-[11px] transition-all border ${status === "pass" ? "bg-emerald-600 text-white border-emerald-600 shadow-xs" : "bg-white text-emerald-600 border-emerald-200 hover:bg-emerald-50"}`}
+                          >
+                            Đạt
+                          </button>
+                          <button
+                            onClick={() => handleCheck(item.id, "fail")}
+                            className={`px-2 py-1 rounded font-bold text-[11px] transition-all border ${status === "fail" ? "bg-rose-600 text-white border-rose-600 shadow-xs" : "bg-white text-rose-600 border-rose-200 hover:bg-rose-50"}`}
+                          >
+                            Hỏng
+                          </button>
+                          <button
+                            onClick={() => setActiveNoteId(isNoteOpen ? null : item.id)}
+                            className={`p-1 rounded border transition-all ${hasNote ? "bg-blue-100 text-blue-700 border-blue-300" : "text-slate-400 border-slate-200 hover:text-slate-600"}`}
+                            title="Ghi chú minh chứng"
+                          >
+                            <Icons.Note />
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Ô nhập ghi chú khi bấm mở */}
+                      {(isNoteOpen || hasNote) && (
+                        <div className="mt-1.5 pt-1.5 border-t border-slate-100">
+                          <input
+                            type="text"
+                            placeholder="Ghi chú minh chứng..."
+                            value={notesState[item.id] || ""}
+                            onChange={(e) => handleNoteChange(item.id, e.target.value)}
+                            className="w-full bg-slate-50 border border-slate-200 rounded px-2 py-1 text-[11px] text-slate-700 focus:outline-none focus:border-blue-400"
+                          />
+                        </div>
+                      )}
                     </div>
+                  );
+                })}
+              </div>
 
-                    <p className="text-xs text-slate-500 mt-1">{item.desc}</p>
-
-                    <div className="mt-2 text-xs bg-emerald-50 text-emerald-800 p-2 rounded">
-                      <span className="font-bold">✓ Tiêu chí Đạt:</span> {item.passReq}
-                    </div>
-
-                    <div className="mt-1 text-xs bg-rose-50 text-rose-800 p-2 rounded">
-                      <span className="font-bold">✗ Điểm Chưa đạt:</span> {item.failReq}
-                    </div>
-
-                    <input
-                      type="text"
-                      placeholder="Ghi chú minh chứng (nếu có)..."
-                      value={notesState[item.id] || ""}
-                      onChange={(e) => handleNoteChange(item.id, e.target.value)}
-                      className="w-full mt-2 border border-slate-200 rounded p-1.5 text-xs text-slate-700 focus:outline-none focus:border-blue-400 placeholder-slate-400"
-                    />
-
-                    <div className="flex gap-2 mt-3 pt-2 border-t border-slate-100">
-                      <button
-                        onClick={() => handleCheck(item.id, "pass")}
-                        className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all border ${status === "pass" ? "bg-emerald-600 text-white border-emerald-600 shadow" : "bg-white text-emerald-600 border-emerald-300"}`}
-                      >
-                        Đạt chuẩn
-                      </button>
-                      <button
-                        onClick={() => handleCheck(item.id, "fail")}
-                        className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all border ${status === "fail" ? "bg-rose-600 text-white border-rose-600 shadow" : "bg-white text-rose-600 border-rose-300"}`}
-                      >
-                        Chưa đạt
-                      </button>
-                    </div>
-                  </div>
-                );
-              })}
-
-              {/* Nút gửi thêm ở cuối trang để người dùng tick xong bấm ngay */}
+              {/* Nút gửi dưới */}
               <button
                 onClick={handleSendToGoogleSheet}
                 disabled={isSendingSheet}
-                className="w-full mt-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl text-xs flex items-center justify-center gap-2 shadow-md transition-all disabled:opacity-50"
+                className="w-full mt-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-md transition-all disabled:opacity-50"
               >
-                <Icons.SendCloud /> {isSendingSheet ? "Đang gửi dữ liệu về Google Sheet..." : "HOÀN TẤT & GỬI KẾT QUẢ ĐÁNH GIÁ"}
+                <Icons.SendCloud /> {isSendingSheet ? "Đang gửi về Sheet..." : "HOÀN TẤT & GỬI KẾT QUẢ ĐÁNH GIÁ (62 MỤC)"}
               </button>
             </div>
           )}
 
-          {/* Tab 2: Ôn tập */}
+          {/* TAB 2: ÔN TẬP BÀI HỌC */}
           {tab === "lessons" && (
             <div className="flex-1 p-3 pb-8">
               <div className="flex gap-1.5 overflow-x-auto pb-2 no-scrollbar">
@@ -587,7 +594,7 @@
             </div>
           )}
 
-          {/* Tab 3: Hỏi đáp AI */}
+          {/* TAB 3: HỎI ĐÁP AI */}
           {tab === "chat" && (
             <div className="flex-1 flex flex-col h-[calc(100vh-170px)]">
               <div className="flex-1 overflow-y-auto p-3 space-y-3 text-xs">
@@ -602,6 +609,7 @@
 
               <div className="p-2 bg-slate-100 border-t border-slate-200 flex gap-2 overflow-x-auto no-scrollbar">
                 {[
+                  "Nvidia dùng main nào?",
                   "Tôi build CPU AMD Ryzen 5600 vào Main Asus B650 được không?",
                   "Main AMD mới nhất là dòng nào?",
                   "5 điểm đỏ khi build PC là gì?",
