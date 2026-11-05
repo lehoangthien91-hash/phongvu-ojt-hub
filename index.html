@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Phong Vũ OJT Coach & Knowledge Hub</title>
+  <title>Phong Vũ OJT Coach & AI Assistant</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
@@ -18,7 +18,40 @@
   <div id="root"></div>
 
   <script type="text/babel">
-    const { useState, useMemo } = React;
+    const { useState, useMemo, useEffect } = React;
+
+    // ==========================================
+    // 💡 CHỖ DÁN GEMINI API KEY DÙNG CHUNG CHO TẤT CẢ HỌC VIÊN
+    // Nếu bạn muốn học viên mở ra là chat được ngay không cần nhập key,
+    // hãy dán chuỗi API Key của bạn vào giữa 2 dấu ngoặc kép dưới đây:
+    const DEFAULT_API_KEY = "AQ.Ab8RN6L8UHlXxkvLUvRw0zWHlAcOe__io4Ace-G2kNYkHdiZvA";
+    // ==========================================
+
+    const SYSTEM_KNOWLEDGE = `
+Bạn là AI Coach - Chuyên gia Đào tạo Bán hàng & Kỹ thuật thuộc Phòng Đào Tạo Phong Vũ (phongvu.vn).
+Nhiệm vụ của bạn là giải đáp chính xác, thực tế cho nhân viên mới (NVBH) trong quá trình Onboarding OJT.
+
+KIẾN THỨC BẮT BUỘC NẮM RÕ:
+1. VĂN HÓA & TIÊU CHUẨN PHONG VŨ:
+- Thành lập 1997, thuộc hệ sinh thái Teko/VNLife. 4 giá trị cốt lõi: Khách hàng là số 1, Chính trực, Quan tâm, Đồng đội.
+- Quy tắc vàng Golden Rule: Chào khách 4 điểm chạm (Đứng thẳng, tay đặt ngực trái vị trí trái tim, cúi 15 độ, nói: "Dạ Phong Vũ xin chào!").
+- Quy chuẩn trưng bày: Bảng giá lồng mica đặt BÊN PHẢI sản phẩm. Laptop mở góc 110-120 độ. Màn hình không để tầng sát đất.
+- Tránh các mã lỗi SHR: SHR1 (sai đồng phục), SHR8 (tụ tập cười đùa), SHR17 (đưa đồ bằng 1 tay).
+
+2. KỸ NĂNG BÁN HÀNG:
+- 6 bước bán hàng: Chuẩn bị -> Tiếp cận -> Khai thác nhu cầu (SPIN) -> Trình bày FABE -> Xử lý từ chối (LAST) -> Chốt đơn & CSKH (mời quét Zalo OA Phong Vũ).
+- Xử lý giá: Áp dụng LAST. Không nói xấu đối thủ; nhấn mạnh hàng chính hãng 100% VAT, đổi mới 1-1, kỹ thuật ủy quyền sửa chữa không mất bảo hành hãng.
+
+3. KỸ THUẬT PC & LAPTOP (5 ĐIỂM ĐỎ TƯƠNG THÍCH):
+- Socket CPU & Bo mạch chủ: "Bác 67 Ham Zui" (Intel đi với main H, B đuôi 60/70, Z; LGA1700 cho Gen 12-14, LGA1851 cho Core Ultra). "Bác 50 Ăn Xài" (AMD: AM4 cho Ryzen 1000-5000 đi với A320/B450/B550; AM5 cho Ryzen 7000-9000 đi với B650/X670/B850).
+- KHÔNG BAO GIỜ gắn CPU AM4 (như Ryzen 5 5600) vào Main AM5 (như B650)! Nếu khách hỏi câu này, khẳng định ngay là KHÔNG ĐƯỢC vì lệch Socket và hướng dẫn đổi Main B550 hoặc đổi CPU sang Ryzen 7500F/7600.
+- RAM: Đúng chuẩn DDR4 hoặc DDR5 bo mạch chủ hỗ trợ; luôn cắm theo cặp để chạy Dual Channel.
+- Nguồn (PSU): Chuẩn 80 Plus, dư tải tối thiểu 15-20% (RTX 4070/5070 phải dùng nguồn từ 650W-750W trở lên). Cắt giảm giá thì giảm vỏ case/tản, cấm hạ chất lượng nguồn!
+- Laptop: Đuôi U/V tiết kiệm điện, đuôi H/HX hiệu năng cao; Laptop AI cần NPU >= 40 TOPS; làm đồ họa bắt buộc màn hình 100% sRGB/OLED.
+
+4. QUẢN LÝ TIỀN MẶT:
+- Thu tiền cho vào túi Zip, ghi mã NV, thả vào thùng Dropbox dưới sự giám sát của Camera CCTV.
+`;
 
     const Icons = {
       BookOpen: () => <svg className="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>,
@@ -109,48 +142,6 @@
       }
     };
 
-    // BỘ NÃA QUY TẮC PHẦN CỨNG PC NÂNG CAO
-    function checkPCHardwareRules(query) {
-      const q = query.toLowerCase();
-
-      // Trường hợp 1: Ryzen 5000 / 3000 (Socket AM4) ghép với Main B650 / X670 / A620 / AM5
-      if ((q.includes("5600") || q.includes("5700") || q.includes("5800") || q.includes("3600") || q.includes("am4")) && 
-          (q.includes("b650") || q.includes("x670") || q.includes("a620") || q.includes("b850") || q.includes("am5"))) {
-        return "❌ KHÔNG ĐƯỢC BẠN NHÉ! Đây là lỗi xung đột Socket nghiêm trọng:\n\n" +
-          "• CPU AMD Ryzen 5000 series (như Ryzen 5 5600) sử dụng Socket AM4 và hỗ trợ RAM DDR4.\n" +
-          "• Mainboard Asus B650 sử dụng Socket AM5 và bắt buộc chạy RAM DDR5.\n\n" +
-          "👉 Hướng xử lý cho khách:\n" +
-          "1. Phương án 1 (Giữ CPU 5600 để tiết kiệm): Đổi Mainboard sang Asus Prime B550M hoặc B450M (Socket AM4) + RAM DDR4.\n" +
-          "2. Phương án 2 (Giữ Mainboard B650 đón đầu công nghệ): Đổi CPU sang Ryzen 5 7500F / Ryzen 5 7600 (Socket AM5) + RAM DDR5.";
-      }
-
-      // Trường hợp 2: Intel Gen 12/13/14 (LGA1700) ghép với Main đời mới Intel Core Ultra (LGA1851 / Z890 / B860)
-      if ((q.includes("12400") || q.includes("13400") || q.includes("14400") || q.includes("13700") || q.includes("14700")) &&
-          (q.includes("z890") || q.includes("b860") || q.includes("1851"))) {
-        return "❌ KHÔNG TƯƠNG THÍCH! CPU Intel thế hệ 12/13/14 dùng Socket LGA1700, không thể lắp vào các dòng bo mạch chủ mới Socket LGA1851 (Z890, B860). Bạn hãy tư vấn khách chọn Mainboard B760 hoặc Z790 nhé!";
-      }
-
-      // Trường hợp 3: Ghép CPU Intel với Main AMD hoặc ngược lại
-      if ((q.includes("intel") || q.includes("core i") || q.includes("ultra")) && (q.includes("b650") || q.includes("b550") || q.includes("x670") || q.includes("am4") || q.includes("am5"))) {
-        return "❌ KHÔNG ĐƯỢC! Bạn đang ghép CPU Intel vào Bo mạch chủ dành cho AMD. Nhớ câu thần chú đào tạo: 'Bác 67 Ham Zui' (Intel: H, B, Z) và 'Bác 50 Ăn Xài' (AMD: A, B, X) nhé!";
-      }
-      if ((q.includes("ryzen") || q.includes("amd")) && (q.includes("b760") || q.includes("z790") || q.includes("h610") || q.includes("z890") || q.includes("b660"))) {
-        return "❌ KHÔNG ĐƯỢC! CPU AMD không thể lắp vào Bo mạch chủ dành cho Intel (H610, B760, Z790).";
-      }
-
-      // Trường hợp 4: Nguồn và Card đồ họa (VGA)
-      if ((q.includes("4070") || q.includes("4080") || q.includes("4090") || q.includes("5070")) && (q.includes("450w") || q.includes("500w") || q.includes("550w"))) {
-        return "⚠️ NGUY HIỂM / KHÔNG ĐẠT: Nguồn công suất quá thấp! Card đồ họa tầm RTX 4070 / RTX 5070 yêu cầu nguồn chuẩn tối thiểu từ 650W - 750W 80 Plus chất lượng cao để đảm bảo an toàn khi tải nặng.";
-      }
-
-      // Trường hợp 5: RAM DDR4 nhét Main DDR5
-      if (q.includes("ram ddr4") && q.includes("main ddr5") || (q.includes("ram ddr5") && q.includes("main ddr4"))) {
-        return "❌ KHÔNG TƯƠNG THÍCH: Khe cắm RAM DDR4 và DDR5 có chân cắm khác nhau hoàn toàn, không thể cắm chéo. Hãy kiểm tra đúng chuẩn RAM bo mạch chủ hỗ trợ.";
-      }
-
-      return null;
-    }
-
     function App() {
       const [tab, setTab] = useState("checklist");
       const [selectedDay, setSelectedDay] = useState(1);
@@ -163,13 +154,12 @@
       const [checklistState, setChecklistState] = useState({});
       const [notesState, setNotesState] = useState({});
 
-      // Cài đặt API Key
-      const [apiKey, setApiKey] = useState(localStorage.getItem("GEMINI_API_KEY") || "");
+      const [apiKey, setApiKey] = useState(localStorage.getItem("GEMINI_API_KEY") || DEFAULT_API_KEY || "");
       const [showSettings, setShowSettings] = useState(false);
       const [isLoadingAI, setIsLoadingAI] = useState(false);
 
       const [messages, setMessages] = useState([
-        { sender: "bot", text: "Xin chào bạn! Mình là AI Trợ lý OJT Phong Vũ. Bạn có thể hỏi mình mọi thứ về: Kiểm tra tương thích PC, phân tích cấu hình, 4 điểm chạm chào khách, hoặc nội dung ôn tập 5 ngày nhé!" }
+        { sender: "bot", text: "Xin chào bạn! Mình là AI Trợ lý OJT Phong Vũ. Bạn có thể hỏi mình mọi thứ: Kiểm tra độ tương thích CPU/Main PC, phân tích cấu hình, cách chào khách chuẩn 4 bước hay nội dung học 5 ngày nhé!" }
       ]);
       const [inputQuery, setInputQuery] = useState("");
 
@@ -191,9 +181,11 @@
       const progressPercent = Math.round((passedCount / OJT_CHECKLIST.length) * 100);
 
       const handleSaveApiKey = (key) => {
-        setApiKey(key);
-        localStorage.setItem("GEMINI_API_KEY", key);
+        const cleanKey = key.trim();
+        setApiKey(cleanKey);
+        localStorage.setItem("GEMINI_API_KEY", cleanKey);
         setShowSettings(false);
+        alert("Đã lưu API Key thành công! Bây giờ bạn có thể chat trực tiếp với Gemini AI.");
       };
 
       const handleExportReport = () => {
@@ -238,64 +230,55 @@
         URL.revokeObjectURL(url);
       };
 
-      // Xử lý gửi tin nhắn (kết hợp Bộ não phần cứng + Gemini API nếu có)
+      // GỌI TRỰC TIẾP GOOGLE GEMINI API
       const handleSend = async (textToSend) => {
         const query = textToSend || inputQuery;
         if (!query.trim()) return;
 
+        const activeKey = apiKey || DEFAULT_API_KEY;
         const newMessages = [...messages, { sender: "user", text: query }];
         setMessages(newMessages);
         setInputQuery("");
 
-        // 1. Kiểm tra trước qua Bộ não Quy tắc Phần cứng PC
-        const hardwareAnswer = checkPCHardwareRules(query);
-        if (hardwareAnswer) {
-          setMessages([...newMessages, { sender: "bot", text: hardwareAnswer }]);
+        if (!activeKey) {
+          setShowSettings(true);
+          setMessages([...newMessages, { 
+            sender: "bot", 
+            text: "⚠️ Bạn chưa cấu hình Gemini API Key. Vui lòng bấm biểu tượng ⚙️ (Bánh răng) ở góc trên bên phải để nhập API Key miễn phí từ Google AI Studio nhé!" 
+          }]);
           return;
         }
 
-        // 2. Nếu có cài Gemini API Key -> Gọi thẳng tới Google Gemini
-        if (apiKey) {
-          setIsLoadingAI(true);
-          try {
-            const systemPrompt = "Bạn là Trợ lý Đào tạo OJT chuyên nghiệp của Hệ thống Phong Vũ (phongvu.vn). Hãy trả lời ngắn gọn, chuẩn xác kỹ thuật phần cứng PC/Laptop, quy chuẩn phục vụ Golden Rule và văn hóa bán hàng Phong Vũ. Dùng ngôn từ tích cực, mạch lạc.";
-            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                contents: [{ role: "user", parts: [{ text: `${systemPrompt}\n\nCâu hỏi của học viên: ${query}` }] }]
-              })
-            });
-            const data = await res.json();
-            const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Xin lỗi, hiện tại không nhận được phản hồi từ AI.";
-            setMessages([...newMessages, { sender: "bot", text: aiText }]);
-          } catch (err) {
-            setMessages([...newMessages, { sender: "bot", text: "Có lỗi khi kết nối Gemini API. Đang chuyển về chế độ offline." }]);
-          } finally {
-            setIsLoadingAI(false);
-          }
-          return;
-        }
+        setIsLoadingAI(true);
+        try {
+          // Gọi trực tiếp REST API v1beta của Gemini
+          const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${activeKey}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              contents: [
+                {
+                  role: "user",
+                  parts: [
+                    { text: `${SYSTEM_KNOWLEDGE}\n\n[CÂU HỎI TỪ HỌC VIÊN PHONG VŨ]: ${query}\n[TRẢ LỜI NGẮN GỌN, CHUẨN XÁC, DỄ HIỂU]:` }
+                  ]
+                }
+              ]
+            })
+          });
 
-        // 3. Xử lý offline thông minh dựa trên giáo trình 5 ngày
-        setTimeout(() => {
-          let reply = "Dạ, vấn đề này bạn bám sát quy chuẩn Phong Vũ nhé:";
-          const q = query.toLowerCase();
-
-          if (q.includes("hôm nay") || q.includes("học gì") || q.includes("ngày 1") || q.includes("ngày 2") || q.includes("ngày 3") || q.includes("ngày 4") || q.includes("ngày 5")) {
-            reply = "Bạn hãy chọn xem lại theo từng ngày ở tab 'Ôn Bài Học' phía trên để nắm trọn vẹn lộ trình 5 ngày nhé! Tóm tắt nhanh: Ngày 1 (Hội nhập & Tiêu chuẩn CH), Ngày 2 (6 bước bán hàng & FABE), Ngày 3 (Laptop & NPU AI), Ngày 4 (Build PC & 5 điểm đỏ), Ngày 5 (Quản lý tiền mặt & POS).";
-          } else if (q.includes("chào") || q.includes("golden") || q.includes("4 điểm")) {
-            reply = "Nghi thức chào 4 điểm chạm chuẩn Phong Vũ: (1) Đứng thẳng hướng mắt về khách; (2) Đặt bàn tay lên ngực trái vị trí trái tim; (3) Cúi người nhẹ khoảng 15 độ kèm nụ cười tươi; (4) Nói to rõ câu chào: 'Dạ Phong Vũ xin chào!'.";
-          } else if (q.includes("chê đắt") || q.includes("giá cao") || q.includes("đối thủ")) {
-            reply = "Xử lý khi khách chê giá: Áp dụng công thức LAST (Lắng nghe & đồng cảm). Nếu đối thủ nhỏ lẻ rẻ hơn, nêu bật giá trị Phong Vũ: hàng chính hãng VAT 100%, 1 đổi 1 tận nơi, kỹ thuật viên ủy quyền nâng cấp không mất bảo hành hãng, hỗ trợ trả góp 0%!";
-          } else if (q.includes("pc") || q.includes("build") || q.includes("tương thích")) {
-            reply = "5 Điểm đỏ khi Build PC: (1) Socket CPU phải khớp Chipset bo mạch chủ; (2) Đúng chuẩn RAM DDR4 hay DDR5; (3) Đi RAM theo cặp Dual Channel; (4) Nguồn 80 Plus dư tải tối thiểu 15-20%; (5) Chiều dài VGA và chiều cao tản nhiệt lắp vừa case!";
+          const data = await response.json();
+          if (data.error) {
+            setMessages([...newMessages, { sender: "bot", text: `❌ Lỗi Gemini API: ${data.error.message || "Key không hợp lệ hoặc hết hạn ngạch"}` }]);
           } else {
-            reply = `Về câu hỏi: "${query}"\nBạn lưu ý luôn bám sát 5 Điểm đỏ kỹ thuật khi tư vấn phần cứng và lấy sự hài lòng của khách hàng làm trọng tâm phục vụ nhé!`;
+            const botReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Không nhận được phản hồi từ AI.";
+            setMessages([...newMessages, { sender: "bot", text: botReply }]);
           }
-
-          setMessages([...newMessages, { sender: "bot", text: reply }]);
-        }, 400);
+        } catch (error) {
+          setMessages([...newMessages, { sender: "bot", text: "❌ Có lỗi kết nối mạng tới máy chủ Google Gemini. Vui lòng kiểm tra lại kết nối Internet." }]);
+        } finally {
+          setIsLoadingAI(false);
+        }
       };
 
       const filteredChecklist = useMemo(() => {
@@ -323,31 +306,31 @@
                 <button
                   onClick={() => setShowSettings(!showSettings)}
                   className="bg-blue-700 hover:bg-blue-800 text-white p-1.5 rounded-lg text-xs shadow-sm"
-                  title="Cài đặt AI"
+                  title="Cài đặt API Key"
                 >
                   <Icons.Settings />
                 </button>
               </div>
             </div>
 
-            {/* Popup Cài đặt API Key (Tùy chọn) */}
+            {/* Popup Cài đặt API Key */}
             {showSettings && (
-              <div className="mt-3 bg-blue-900/90 p-3 rounded-lg text-xs text-slate-100 border border-blue-400">
-                <p className="font-bold mb-1">Cài đặt Gemini API (Không bắt buộc):</p>
-                <p className="text-[11px] text-blue-200 mb-2">Nhập API Key miễn phí từ Google AI Studio để kích hoạt AI trả lời tự do mọi câu hỏi.</p>
+              <div className="mt-3 bg-blue-900/95 p-3 rounded-lg text-xs text-slate-100 border border-blue-400 shadow-md">
+                <p className="font-bold mb-1">Cài đặt Google Gemini API Key:</p>
+                <p className="text-[11px] text-blue-200 mb-2">Nhận API Key miễn phí tại <a href="https://aistudio.google.com" target="_blank" className="underline text-amber-300 font-bold">aistudio.google.com</a>.</p>
                 <div className="flex gap-2">
                   <input
                     type="password"
-                    placeholder="Dán AI Studio Key vào đây..."
+                    placeholder="Dán API Key dạng AIzaSy... vào đây"
                     defaultValue={apiKey}
                     id="apiKeyInput"
-                    className="flex-1 px-2 py-1 bg-white text-slate-800 rounded text-xs focus:outline-none"
+                    className="flex-1 px-2.5 py-1.5 bg-white text-slate-800 rounded text-xs focus:outline-none"
                   />
                   <button
                     onClick={() => handleSaveApiKey(document.getElementById("apiKeyInput").value)}
-                    className="bg-emerald-500 hover:bg-emerald-600 px-3 py-1 rounded text-white font-bold"
+                    className="bg-emerald-500 hover:bg-emerald-600 px-3 py-1.5 rounded text-white font-bold"
                   >
-                    Lưu
+                    Lưu Key
                   </button>
                 </div>
               </div>
@@ -540,15 +523,15 @@
               <div className="flex-1 overflow-y-auto p-3 space-y-3 text-xs">
                 {messages.map((m, idx) => (
                   <div key={idx} className={`flex ${m.sender === "user" ? "justify-end" : "justify-start"}`}>
-                    <div className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 whitespace-pre-line ${m.sender === "user" ? "bg-blue-600 text-white rounded-tr-none" : "bg-white border border-slate-200 text-slate-800 rounded-tl-none shadow-sm"}`}>
+                    <div className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 whitespace-pre-line leading-relaxed ${m.sender === "user" ? "bg-blue-600 text-white rounded-tr-none" : "bg-white border border-slate-200 text-slate-800 rounded-tl-none shadow-sm"}`}>
                       {m.text}
                     </div>
                   </div>
                 ))}
                 {isLoadingAI && (
                   <div className="flex justify-start">
-                    <div className="bg-white border border-slate-200 text-slate-500 rounded-2xl rounded-tl-none px-3.5 py-2 text-xs animate-pulse">
-                      AI đang phân tích kiến thức Phong Vũ...
+                    <div className="bg-white border border-slate-200 text-blue-600 rounded-2xl rounded-tl-none px-3.5 py-2 text-xs font-medium animate-pulse flex items-center gap-1.5">
+                      <Icons.Bot /> Gemini AI đang phân tích câu hỏi của bạn...
                     </div>
                   </div>
                 )}
@@ -556,10 +539,10 @@
 
               <div className="p-2 bg-slate-100 border-t border-slate-200 flex gap-2 overflow-x-auto no-scrollbar">
                 {[
-                  "Ryzen 5600 gắn main B650 được không?",
+                  "Tôi build CPU AMD Ryzen 5600 vào Main Asus B650 được không?",
                   "5 điểm đỏ khi build PC là gì?",
                   "Cách chào khách chuẩn 4 bước?",
-                  "Khách chê giá cao xử lý sao?"
+                  "Khách chê giá đắt hơn đối thủ xử lý sao?"
                 ].map((q, idx) => (
                   <button
                     key={idx}
@@ -577,12 +560,13 @@
                   value={inputQuery}
                   onChange={(e) => setInputQuery(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSend()}
-                  placeholder="Hỏi về tương thích PC, tình huống bán hàng..."
+                  placeholder="Hỏi về kỹ thuật PC, Laptop, kỹ năng bán hàng..."
                   className="flex-1 border border-slate-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-blue-600"
                 />
                 <button
                   onClick={() => handleSend()}
-                  className="bg-blue-600 text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center justify-center hover:bg-blue-700"
+                  disabled={isLoadingAI}
+                  className="bg-blue-600 text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center justify-center hover:bg-blue-700 disabled:opacity-50"
                 >
                   <Icons.Send />
                 </button>
