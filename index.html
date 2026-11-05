@@ -9,7 +9,7 @@
   <!-- React 18 CDN -->
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-  <!-- Babel Standalone để chạy JSX trực tiếp -->
+  <!-- Babel Standalone -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
@@ -23,19 +23,18 @@
   <script type="text/babel">
     const { useState, useMemo } = React;
 
-    // SVG Icons trực tiếp để không bị lỗi tải thư viện bên ngoài
     const Icons = {
       BookOpen: () => <svg className="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>,
       CheckSquare: () => <svg className="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>,
       Bot: () => <svg className="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>,
       Send: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>,
-      CheckCircle2: () => <svg className="w-5 h-5 text-emerald-600 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>,
-      XCircle: () => <svg className="w-5 h-5 text-rose-500 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      Download: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>,
+      Filter: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
     };
 
-    // Dữ liệu 20 Checklist Final (HR_QĐ.01, Golden Rule ver 2)
+    // 20 Tiêu chí chuẩn theo Template OJT Ver 2
     const OJT_CHECKLIST = [
-      { id: "A.1", group: "A", title: "Tiêu chuẩn mặt tiền cửa hàng", desc: "Standee/cờ vuông góc, không cản lối đi; kính/bảng hiệu sáng đẹp; băng rôn phẳng phiu đúng CTKM.", passReq: "Standee cờ ngay ngắn, kính sạch không vết keo cũ, băng rôn phẳng, xe khách có phủ bạt che.", failReq: "Standee ngả nghiêng, rách mép, dán đè CTKM cũ; rác lối vào; bảng hiệu tắt đèn." },
+      { id: "A.1", group: "A", title: "Tiêu chuẩn mặt tiền cửa hàng", desc: "Standee/cờ vuông góc; kính/bảng hiệu sáng đẹp; băng rôn phẳng phiu đúng CTKM.", passReq: "Standee cờ ngay ngắn, kính sạch không vết keo cũ, băng rôn phẳng, xe khách có phủ bạt che.", failReq: "Standee ngả nghiêng, rách mép, dán đè CTKM cũ; rác lối vào; bảng hiệu tắt đèn." },
       { id: "A.2", group: "A", title: "Tiêu chuẩn bên trong cửa hàng", desc: "Xếp đúng layout; thứ tự giá/kích thước/màu sắc; 100% bảng giá mica chuẩn; bàn tư vấn sạch sẽ.", passReq: "Bảng giá đặt bên phải sản phẩm; laptop mở 110-120°; bàn tư vấn có ly nước sạch, kẹo còn hạn.", failReq: "Màn hình đặt tầng sát đất; laptop mở góc xô lệch; thiếu bảng giá; ly nước dở chưa dọn." },
       { id: "B.1", group: "B", title: "Diện mạo, Tác phong chuẩn", desc: "Đồng phục đúng chuẩn, phẳng phiu, đeo thẻ tên ngực trái, mang giày kín mũi tối màu.", passReq: "Có mặt trước 15 phút, đồng phục chỉnh tề, giày tối màu, tóc gọn gàng, không dùng điện thoại riêng.", failReq: "Áo bỏ ngoài quần, đi dép/giày sáng màu, xõa tóc, tụ tập cười đùa (SHR1, SHR2, SHR5, SHR8)." },
       { id: "B.2", group: "B", title: "4 điểm chạm khi Chào đón", desc: "Đứng thẳng, hướng mắt về khách, tay đặt ngực trái, cúi 15 độ: 'Dạ Phong Vũ xin chào!'.", passReq: "Chủ động tiếp cận trong 5-10s; thực hiện đủ 4 bước nghi thức; mở cửa khi rảnh.", failReq: "Phớt lờ khách, chào không cúi người, chào lí nhí, không đặt tay lên ngực (SHR23, SHR38, SHR41)." },
@@ -59,7 +58,6 @@
       { id: "G.1", group: "G", title: "Phổ biến CTKM đang diễn ra", desc: "Thuộc thời gian, điều kiện áp dụng, quà tặng, tính ra số tiền giảm giá thực tế cho khách.", passReq: "Nắm vững khuyến mãi tháng; tính nhanh số tiền tiết kiệm được sau khi áp voucher VNPay/HSSV.", failReq: "Không biết showroom đang chạy khuyến mãi gì; tính sai giá trừ tiền của khách." }
     ];
 
-    // Tóm tắt bài học theo 5 ngày
     const LESSONS = {
       1: {
         title: "Ngày 1: Hội nhập & Tiêu chuẩn cửa hàng",
@@ -118,7 +116,16 @@
     function App() {
       const [tab, setTab] = useState("checklist");
       const [selectedDay, setSelectedDay] = useState(1);
+      const [filterGroup, setFilterGroup] = useState("ALL");
+      
+      // Thông tin nhân viên & đánh giá
+      const [staffName, setStaffName] = useState("");
+      const [storeName, setStoreName] = useState("");
+      const [evalRound, setEvalRound] = useState("Lần 1");
+      const [evaluator, setEvaluator] = useState("");
       const [checklistState, setChecklistState] = useState({});
+      const [notesState, setNotesState] = useState({});
+
       const [messages, setMessages] = useState([
         { sender: "bot", text: "Xin chào bạn! Mình là AI Trợ lý OJT Phong Vũ. Hôm nay bạn cần ôn bài ngày mấy, hay cần hỏi về tương thích PC, chuẩn mực chào đón khách hàng?" }
       ]);
@@ -131,11 +138,58 @@
         }));
       };
 
+      const handleNoteChange = (id, text) => {
+        setNotesState(prev => ({ ...prev, [id]: text }));
+      };
+
       const passedCount = useMemo(() => {
         return Object.values(checklistState).filter(v => v === "pass").length;
       }, [checklistState]);
 
       const progressPercent = Math.round((passedCount / OJT_CHECKLIST.length) * 100);
+
+      // Hàm Xuất Báo Cáo Đánh Giá (.txt)
+      const handleExportReport = () => {
+        const currentDate = new Date().toLocaleDateString('vi-VN');
+        const isPassed = progressPercent >= 80;
+
+        let content = `PHIẾU ĐÁNH GIÁ NĂNG LỰC NHÂN VIÊN BÁN HÀNG - GIAI ĐOẠN 2 (OJT)\n`;
+        content += `HỆ THỐNG CỬA HÀNG PHONG VŨ\n`;
+        content += `---------------------------------------------------------\n`;
+        content += `Họ tên NVBH    : ${staffName || "(Chưa nhập)"}\n`;
+        content += `Cửa hàng/Showroom: ${storeName || "(Chưa nhập)"}\n`;
+        content += `Đợt đánh giá   : ${evalRound}\n`;
+        content += `Người đánh giá : ${evaluator || "(Chưa nhập)"}\n`;
+        content += `Ngày xuất      : ${currentDate}\n`;
+        content += `---------------------------------------------------------\n`;
+        content += `KẾT QUẢ ĐÁNH GIÁ:\n`;
+        content += `• Số mục Đạt   : ${passedCount}/${OJT_CHECKLIST.length}\n`;
+        content += `• Tỷ lệ hoàn thành: ${progressPercent}%\n`;
+        content += `• Kết luận     : ${isPassed ? "ĐẠT CHUẨN NĂNG LỰC GĐ2 (>= 80%)" : "CHƯA ĐẠT (Cần đào tạo & kèm cặp thêm)"}\n`;
+        content += `---------------------------------------------------------\n\n`;
+        content += `CHI TIẾT TỪNG TIÊU CHÍ ĐÁNH GIÁ:\n`;
+
+        OJT_CHECKLIST.forEach((item, index) => {
+          const status = checklistState[item.id] === "pass" ? "[ ĐẠT ]" : checklistState[item.id] === "fail" ? "[ CHƯA ĐẠT ]" : "[ CHƯA ĐÁNH GIÁ ]";
+          const note = notesState[item.id] ? ` (Ghi chú: ${notesState[item.id]})` : "";
+          content += `${index + 1}. [${item.id}] ${item.title}: ${status}${note}\n`;
+        });
+
+        content += `\n---------------------------------------------------------\n`;
+        content += `XÁC NHẬN CỦA CÁC BÊN:\n\n`;
+        content += `Người Đánh Giá / Coach             Nhân Viên Được Đánh Giá\n`;
+        content += `(Ký và ghi rõ họ tên)               (Ký và ghi rõ họ tên)\n`;
+
+        const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `OJT_DanhGia_${evalRound}_${staffName ? staffName.replace(/\s+/g, '_') : 'NVBH'}.txt`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      };
 
       const handleSend = (textToSend) => {
         const query = textToSend || inputQuery;
@@ -145,13 +199,12 @@
         setMessages(newMessages);
         setInputQuery("");
 
-        // Phản hồi thông minh theo nội dung tài liệu
         setTimeout(() => {
           let reply = "Dạ, vấn đề này bạn bám sát quy chuẩn Phong Vũ nhé:";
           const q = query.toLowerCase();
 
           if (q.includes("hôm nay") || q.includes("học gì") || q.includes("ngày 1") || q.includes("ngày 2") || q.includes("ngày 3") || q.includes("ngày 4") || q.includes("ngày 5")) {
-            reply = "Bạn hãy chọn xem lại theo từng ngày ở tab 'Ôn Tập Bài Học' phía trên để nắm trọn vẹn lộ trình 5 ngày nhé! Tóm tắt nhanh: Ngày 1 (Hội nhập & Tiêu chuẩn CH), Ngày 2 (6 bước bán hàng & FABE), Ngày 3 (Laptop & NPU AI), Ngày 4 (Build PC & 5 điểm đỏ), Ngày 5 (Quản lý tiền mặt & POS).";
+            reply = "Bạn hãy chọn xem lại theo từng ngày ở tab 'Ôn Bài Học' phía trên để nắm trọn vẹn lộ trình 5 ngày nhé! Tóm tắt nhanh: Ngày 1 (Hội nhập & Tiêu chuẩn CH), Ngày 2 (6 bước bán hàng & FABE), Ngày 3 (Laptop & NPU AI), Ngày 4 (Build PC & 5 điểm đỏ), Ngày 5 (Quản lý tiền mặt & POS).";
           } else if (q.includes("pc") || q.includes("tương thích") || q.includes("điểm đỏ")) {
             reply = "5 Điểm đỏ khi Build PC: (1) Socket CPU phải khớp Chipset bo mạch chủ (Intel main B/Z, AMD main B/X); (2) Đúng chuẩn RAM DDR4 hay DDR5; (3) Đi RAM theo cặp để bật Dual Channel; (4) Nguồn chuẩn 80 Plus dư tải tối thiểu 15-20%; (5) Chiều dài card VGA và chiều cao tản nhiệt lắp vừa case!";
           } else if (q.includes("chào") || q.includes("golden") || q.includes("4 điểm")) {
@@ -166,6 +219,11 @@
         }, 500);
       };
 
+      const filteredChecklist = useMemo(() => {
+        if (filterGroup === "ALL") return OJT_CHECKLIST;
+        return OJT_CHECKLIST.filter(item => item.group === filterGroup);
+      }, [filterGroup]);
+
       return (
         <div className="max-w-md mx-auto min-h-screen bg-slate-50 flex flex-col shadow-lg">
           {/* Header */}
@@ -173,18 +231,26 @@
             <div className="flex justify-between items-center">
               <div>
                 <h1 className="text-lg font-bold">PHONG VŨ OJT COACH</h1>
-                <p className="text-xs text-blue-100">Đồng hành cùng nhân viên mới</p>
+                <p className="text-xs text-blue-100">Đồng hành & Đánh giá năng lực GĐ2</p>
               </div>
-              <div className="text-right">
-                <span className="text-xs font-semibold bg-blue-700 px-2 py-1 rounded">GĐ2: Thử việc</span>
+              <div className="text-right flex items-center gap-1.5">
+                <button
+                  onClick={handleExportReport}
+                  className="bg-emerald-500 hover:bg-emerald-600 text-white px-2.5 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 shadow-sm transition-all"
+                  title="Xuất kết quả đánh giá"
+                >
+                  <Icons.Download /> Xuất Báo Cáo
+                </button>
               </div>
             </div>
 
             {/* Thanh tiến độ OJT */}
-            <div className="mt-3 bg-blue-800/60 p-2 rounded-lg">
+            <div className="mt-3 bg-blue-800/60 p-2.5 rounded-lg">
               <div className="flex justify-between text-xs mb-1">
-                <span>Tiến độ đạt Checklist: <strong>{passedCount}/{OJT_CHECKLIST.length}</strong> mục</span>
-                <span className={`font-bold ${progressPercent >= 80 ? 'text-emerald-300' : 'text-amber-300'}`}>{progressPercent}% (Chuẩn: 80%)</span>
+                <span>Tiến độ đạt: <strong>{passedCount}/{OJT_CHECKLIST.length}</strong> mục</span>
+                <span className={`font-bold ${progressPercent >= 80 ? 'text-emerald-300' : 'text-amber-300'}`}>
+                  {progressPercent}% {progressPercent >= 80 ? "(Đạt chuẩn)" : "(Ngưỡng: 80%)"}
+                </span>
               </div>
               <div className="w-full bg-blue-950 h-2.5 rounded-full overflow-hidden">
                 <div 
@@ -217,15 +283,66 @@
             </div>
           </div>
 
-          {/* Nội dung Tab 1: Checklist OJT */}
+          {/* Tab 1: Checklist */}
           {tab === "checklist" && (
             <div className="flex-1 p-3 space-y-3 pb-8">
-              <div className="text-xs text-slate-500 flex justify-between items-center px-1">
-                <span>Danh mục 20 tiêu chí chuẩn hoá</span>
-                <span className="text-emerald-600 font-medium">Đạt tối thiểu: 16 mục</span>
+              {/* Khung Thông tin nhân sự để xuất báo cáo */}
+              <div className="bg-white rounded-xl p-3 border border-slate-200 shadow-sm space-y-2 text-xs">
+                <div className="font-bold text-slate-700 flex justify-between">
+                  <span>Thông tin đợt đánh giá</span>
+                  <span className="text-blue-600 font-semibold">{evalRound}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <input
+                    type="text"
+                    placeholder="Họ tên NVBH..."
+                    value={staffName}
+                    onChange={(e) => setStaffName(e.target.value)}
+                    className="border border-slate-200 rounded p-1.5 text-xs focus:outline-none focus:border-blue-500"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Tên Showroom..."
+                    value={storeName}
+                    onChange={(e) => setStoreName(e.target.value)}
+                    className="border border-slate-200 rounded p-1.5 text-xs focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <input
+                    type="text"
+                    placeholder="Người đánh giá (Coach/SM)..."
+                    value={evaluator}
+                    onChange={(e) => setEvaluator(e.target.value)}
+                    className="border border-slate-200 rounded p-1.5 text-xs focus:outline-none focus:border-blue-500"
+                  />
+                  <select
+                    value={evalRound}
+                    onChange={(e) => setEvalRound(e.target.value)}
+                    className="border border-slate-200 rounded p-1.5 text-xs bg-white text-slate-700 focus:outline-none focus:border-blue-500"
+                  >
+                    <option value="Lần 1">Đánh giá Lần 1</option>
+                    <option value="Lần 2">Đánh giá Lần 2</option>
+                    <option value="Lần 3">Đánh giá Lần 3 (Chung kết)</option>
+                  </select>
+                </div>
               </div>
 
-              {OJT_CHECKLIST.map((item) => {
+              {/* Bộ lọc Nhóm tiêu chí */}
+              <div className="flex gap-1 overflow-x-auto pb-1 no-scrollbar text-xs">
+                {["ALL", "A", "B", "C", "D", "E", "G"].map(group => (
+                  <button
+                    key={group}
+                    onClick={() => setFilterGroup(group)}
+                    className={`px-3 py-1 rounded-full font-bold whitespace-nowrap transition-all ${filterGroup === group ? "bg-blue-600 text-white shadow" : "bg-white text-slate-600 border border-slate-200"}`}
+                  >
+                    {group === "ALL" ? "Tất cả (20)" : `Nhóm ${group}`}
+                  </button>
+                ))}
+              </div>
+
+              {/* Danh sách tiêu chí */}
+              {filteredChecklist.map((item) => {
                 const status = checklistState[item.id];
                 return (
                   <div key={item.id} className="bg-white rounded-xl p-3 border border-slate-200 shadow-sm text-sm">
@@ -243,6 +360,15 @@
                     <div className="mt-1 text-xs bg-rose-50 text-rose-800 p-2 rounded">
                       <span className="font-bold">✗ Điểm Chưa đạt:</span> {item.failReq}
                     </div>
+
+                    {/* Ô ghi chú minh chứng thực tế */}
+                    <input
+                      type="text"
+                      placeholder="Ghi chú minh chứng (nếu có)..."
+                      value={notesState[item.id] || ""}
+                      onChange={(e) => handleNoteChange(item.id, e.target.value)}
+                      className="w-full mt-2 border border-slate-200 rounded p-1.5 text-xs text-slate-700 focus:outline-none focus:border-blue-400 placeholder-slate-400"
+                    />
 
                     <div className="flex gap-2 mt-3 pt-2 border-t border-slate-100">
                       <button
@@ -264,10 +390,9 @@
             </div>
           )}
 
-          {/* Nội dung Tab 2: Ôn tập bài học 5 ngày */}
+          {/* Tab 2: Ôn tập */}
           {tab === "lessons" && (
             <div className="flex-1 p-3 pb-8">
-              {/* Thanh chọn ngày */}
               <div className="flex gap-1.5 overflow-x-auto pb-2 no-scrollbar">
                 {[1, 2, 3, 4, 5].map((day) => (
                   <button
@@ -280,7 +405,6 @@
                 ))}
               </div>
 
-              {/* Tóm tắt bài học */}
               <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm mt-3">
                 <h2 className="font-bold text-blue-700 text-sm mb-3">{LESSONS[selectedDay].title}</h2>
                 <div className="space-y-2">
@@ -305,10 +429,9 @@
             </div>
           )}
 
-          {/* Nội dung Tab 3: Hỏi đáp AI */}
+          {/* Tab 3: Hỏi đáp AI */}
           {tab === "chat" && (
             <div className="flex-1 flex flex-col h-[calc(100vh-170px)]">
-              {/* Lịch sử tin nhắn */}
               <div className="flex-1 overflow-y-auto p-3 space-y-3 text-xs">
                 {messages.map((m, idx) => (
                   <div key={idx} className={`flex ${m.sender === "user" ? "justify-end" : "justify-start"}`}>
@@ -319,7 +442,6 @@
                 ))}
               </div>
 
-              {/* Gợi ý câu hỏi nhanh */}
               <div className="p-2 bg-slate-100 border-t border-slate-200 flex gap-2 overflow-x-auto no-scrollbar">
                 {["5 điểm đỏ khi build PC là gì?", "Cách chào khách chuẩn 4 bước?", "Khách chê giá cao xử lý sao?"].map((q, idx) => (
                   <button
@@ -332,7 +454,6 @@
                 ))}
               </div>
 
-              {/* Ô gõ câu hỏi */}
               <div className="p-2 bg-white border-t border-slate-200 flex gap-2">
                 <input
                   type="text"
