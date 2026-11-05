@@ -510,7 +510,7 @@
       return "Dạ, bạn hãy chọn hoặc gõ các chủ đề trong chương trình đào tạo 5 ngày như:\n• 'Danh sách 50 mã lỗi SHR' hoặc 'Chính sách thưởng Golden Rule'\n• 'Nội dung bài học Ngày 1' (Hội nhập, HR_QĐ.01, Bảo hiểm, Phép năm)\n• 'Nội dung bài học Ngày 2' (6 bước bán hàng, SPIN, FABE, LAST, Chốt đơn)\n• 'Nội dung bài học Ngày 3' (5 nhóm Laptop, Hậu tố CPU, RAM, SSD, Màn hình)\n• 'Nội dung bài học Ngày 4' (Cấu tạo PC, 5 bước Build PC, Nguồn 80 Plus, Phân bổ ngân sách)\n• 'Nội dung bài học Ngày 5' (7 bước thu ngân, Túi Zip/Dropbox, Chế tài, 10 hình thức thanh toán)";
     }
 
-    // DỮ LIỆU TAB ÔN BÀI HỌC 5 NGÀY (CẬP NHẬT ĐẦY ĐỦ TỪ 8 FILE PDF)
+    // DỮ LIỆU TAB Tóm tắt bài học 5 NGÀY (CẬP NHẬT ĐẦY ĐỦ TỪ 8 FILE PDF)
     const LESSONS = {
       1: {
         title: "Ngày 1: Hội nhập, Tiêu chuẩn CH (HR_QĐ.01) & Golden Rule",
@@ -776,13 +776,13 @@
                 onClick={() => setTab("lessons")} 
                 className={`flex-1 py-1.5 rounded text-center transition-all ${tab === "lessons" ? "bg-white text-blue-700 shadow font-bold" : "text-white"}`}
               >
-                <Icons.BookOpen /> Ôn Bài Học
+                <Icons.BookOpen /> Tóm tắt bài học
               </button>
               <button 
                 onClick={() => setTab("chat")} 
                 className={`flex-1 py-1.5 rounded text-center transition-all ${tab === "chat" ? "bg-white text-blue-700 shadow font-bold" : "text-white"}`}
               >
-                <Icons.Bot /> Tra Cứu Bài Học
+                <Icons.Bot /> Bài Học Chi Tiết
               </button>
             </div>
           </div>
