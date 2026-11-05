@@ -322,18 +322,36 @@
         URL.revokeObjectURL(url);
       };
 
-      const handleSend = (textToSend) => {
+      // GỌI TRỰC TIẾP QUA VERCEL API (KẾT NỐI GEMINI AI THẬT)
+      const handleSend = async (textToSend) => {
         const query = textToSend || inputQuery;
         if (!query.trim()) return;
 
-        const newMessages = [...messages, { sender: "user", text: query }];
-        setMessages(newMessages);
+        const updatedMessages = [...messages, { sender: "user", text: query }];
+        setMessages(updatedMessages);
         setInputQuery("");
 
-        setTimeout(() => {
-          const botReply = processAIQuery(query);
-          setMessages([...newMessages, { sender: "bot", text: botReply }]);
-        }, 300);
+        // Hiển thị trạng thái đang trả lời
+        setMessages([...updatedMessages, { sender: "bot", text: "..." }]);
+
+        try {
+          const response = await fetch("/api/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              messages: updatedMessages.map(m => ({ sender: m.sender, text: m.text }))
+            })
+          });
+
+          const data = await response.json();
+          if (data.error) {
+            setMessages([...updatedMessages, { sender: "bot", text: `⚠️ ${data.error}` }]);
+          } else {
+            setMessages([...updatedMessages, { sender: "bot", text: data.reply }]);
+          }
+        } catch (error) {
+          setMessages([...updatedMessages, { sender: "bot", text: "❌ Có lỗi kết nối tới máy chủ AI." }]);
+        }
       };
 
       const filteredChecklist = useMemo(() => {
