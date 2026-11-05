@@ -230,56 +230,59 @@ KIẾN THỨC BẮT BUỘC NẮM RÕ:
         URL.revokeObjectURL(url);
       };
 
-      // GỌI TRỰC TIẾP GOOGLE GEMINI API
-      const handleSend = async (textToSend) => {
-        const query = textToSend || inputQuery;
-        if (!query.trim()) return;
+// GỌI GOOGLE GEMINI API (HỖ TRỢ CẢ KEY AQ. VÀ AIzaSy...)
+const handleSend = async (textToSend) => {
+  const query = textToSend || inputQuery;
+  if (!query.trim()) return;
 
-        const activeKey = apiKey || DEFAULT_API_KEY;
-        const newMessages = [...messages, { sender: "user", text: query }];
-        setMessages(newMessages);
-        setInputQuery("");
+  const activeKey = (apiKey || DEFAULT_API_KEY || "").trim();
+  const newMessages = [...messages, { sender: "user", text: query }];
+  setMessages(newMessages);
+  setInputQuery("");
 
-        if (!activeKey) {
-          setShowSettings(true);
-          setMessages([...newMessages, { 
-            sender: "bot", 
-            text: "⚠️ Bạn chưa cấu hình Gemini API Key. Vui lòng bấm biểu tượng ⚙️ (Bánh răng) ở góc trên bên phải để nhập API Key miễn phí từ Google AI Studio nhé!" 
-          }]);
-          return;
-        }
+  if (!activeKey) {
+    setShowSettings(true);
+    setMessages([...newMessages, { 
+      sender: "bot", 
+      text: "⚠️ Bạn chưa nhập API Key. Vui lòng bấm biểu tượng ⚙️ (Cài đặt) ở góc trên bên phải để dán mã khóa vào nhé!" 
+    }]);
+    return;
+  }
 
-        setIsLoadingAI(true);
-        try {
-          // Gọi trực tiếp REST API v1beta của Gemini
-          const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${activeKey}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              contents: [
-                {
-                  role: "user",
-                  parts: [
-                    { text: `${SYSTEM_KNOWLEDGE}\n\n[CÂU HỎI TỪ HỌC VIÊN PHONG VŨ]: ${query}\n[TRẢ LỜI NGẮN GỌN, CHUẨN XÁC, DỄ HIỂU]:` }
-                  ]
-                }
-              ]
-            })
-          });
-
-          const data = await response.json();
-          if (data.error) {
-            setMessages([...newMessages, { sender: "bot", text: `❌ Lỗi Gemini API: ${data.error.message || "Key không hợp lệ hoặc hết hạn ngạch"}` }]);
-          } else {
-            const botReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Không nhận được phản hồi từ AI.";
-            setMessages([...newMessages, { sender: "bot", text: botReply }]);
+  setIsLoadingAI(true);
+  try {
+    // Gọi API truyền key qua Header x-goog-api-key để hỗ trợ toàn bộ các định dạng khóa (kể cả AQ.)
+    const response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-goog-api-key": activeKey
+      },
+      body: JSON.stringify({
+        contents: [
+          {
+            role: "user",
+            parts: [
+              { text: `${SYSTEM_KNOWLEDGE}\n\n[CÂU HỎI TỪ HỌC VIÊN PHONG VŨ]: ${query}\n[TRẢ LỜI NGẮN GỌN, CHUẨN XÁC KỸ THUẬT, DỄ HIỂU]:` }
+            ]
           }
-        } catch (error) {
-          setMessages([...newMessages, { sender: "bot", text: "❌ Có lỗi kết nối mạng tới máy chủ Google Gemini. Vui lòng kiểm tra lại kết nối Internet." }]);
-        } finally {
-          setIsLoadingAI(false);
-        }
-      };
+        ]
+      })
+    });
+
+    const data = await response.json();
+    if (data.error) {
+      setMessages([...newMessages, { sender: "bot", text: `❌ Lỗi Gemini API (${data.error.code || "Error"}): ${data.error.message}` }]);
+    } else {
+      const botReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Không nhận được phản hồi từ AI.";
+      setMessages([...newMessages, { sender: "bot", text: botReply }]);
+    }
+  } catch (error) {
+    setMessages([...newMessages, { sender: "bot", text: "❌ Có lỗi kết nối mạng. Vui lòng kiểm tra lại kết nối Internet." }]);
+  } finally {
+    setIsLoadingAI(false);
+  }
+};
 
       const filteredChecklist = useMemo(() => {
         if (filterGroup === "ALL") return OJT_CHECKLIST;
