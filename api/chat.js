@@ -1,774 +1,133 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Phong Vũ OJT Coach & Knowledge Hub</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-  </style>
-</head>
-<body class="bg-slate-100 text-slate-900">
-  <div id="root"></div>
+export default async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  <script type="text/babel">
-    const { useState, useMemo } = React;
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
 
-    // ==========================================
-    // 💡 LINK GOOGLE APPS SCRIPT WEB APP CỦA BẠN:
-    const GOOGLE_SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyGDnbGzLVxEWJiyJ8DHhf6HoEDoXlTpd0Q4yrTZdCZgk1D2NIdN4BnbPKjq7zlPfmNnQ/exec";
-    // ==========================================
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Chỉ chấp nhận phương thức POST' });
+  }
 
-    const Icons = {
-      BookOpen: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>,
-      CheckSquare: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>,
-      Bot: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>,
-      Send: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>,
-      SendCloud: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>,
-      Download: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>,
-      Note: () => <svg className="w-3.5 h-3.5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-    };
+  const { messages } = req.body;
+  const apiKey = (process.env.GEMINI_API_KEY || '').trim();
 
-    // DANH MỤC 62 TIÊU CHÍ CHUẨN TỪ BIỂU MẪU COACHING OJT VER 2
-    const OJT_CHECKLIST_62 = [
-      { id: "A.1", group: "A", title: "Standee/cờ vỉa hè đặt vuông góc mặt tiền, cờ thẳng hàng không che lối đi" },
-      { id: "A.2", group: "A", title: "Bảng hiệu/hộp đèn nguyên vẹn, sáng đủ đèn; vách kính và cửa ra vào sạch sẽ" },
-      { id: "A.3", group: "A", title: "Băng rôn căng phẳng không trùng/nhăn, đúng nội dung CTKM mới nhất" },
-      { id: "A.4", group: "A", title: "Xếp đúng layout ngành hàng; tuân thủ thứ tự ưu tiên giá - kích thước - màu" },
-      { id: "A.5", group: "A", title: "100% sản phẩm trưng bày có bảng giá đặt chuẩn vị trí & thông tin chuẩn xác" },
-      { id: "A.6", group: "A", title: "Bàn tư vấn: Mặt bàn sạch không vết vân tay/vết keo; tờ rơi mới; ghế xếp ngay ngắn" },
-      { id: "B.1", group: "B", title: "Mặc đúng đồng phục quy định, áo quần phẳng phiu, đi giày kín mũi" },
-      { id: "B.2", group: "B", title: "Chào đón: Đứng thẳng, hướng mắt về phía khách" },
-      { id: "B.3", group: "B", title: "Chào đón: Đặt bàn tay lên ngực trái (vị trí trái tim)" },
-      { id: "B.4", group: "B", title: "Chào đón: Cúi người khoảng 15° với nụ cười thân thiện" },
-      { id: "B.5", group: "B", title: "Chào đón: Nói rõ câu chào chuẩn: 'Dạ Phong Vũ xin chào!'" },
-      { id: "B.6", group: "B", title: "Tư thế: Luôn đứng/ngồi thẳng lưng, ánh mắt tập trung, niềm nở, lắng nghe" },
-      { id: "B.7", group: "B", title: "Chỉ dẫn: Hướng dẫn vị trí quầy kệ, sản phẩm hoặc mời khách ngồi bằng cả bàn tay" },
-      { id: "B.8", group: "B", title: "Giao nhận: Luôn đưa/nhận tài liệu, máy trải nghiệm, tờ rơi bằng cả hai tay" },
-      { id: "B.9", group: "B", title: "Xưng hô lịch sự, đúng thứ bậc/độ tuổi/giới tính" },
-      { id: "B.10", group: "B", title: "Âm lượng vừa phải, tốc độ nói nhẹ nhàng, luôn dạ/vâng và cảm ơn" },
-      { id: "C.1", group: "C", title: "Duy trì khoảng cách tiếp cận 1–1.5m, nụ cười thân thiện" },
-      { id: "C.2", group: "C", title: "Nói câu chào theo tiêu chuẩn phục vụ: 'Dạ Phong Vũ xin chào'" },
-      { id: "C.3", group: "C", title: "Dùng câu hỏi mở để tìm hiểu mục đích sử dụng và nhu cầu ưu tiên" },
-      { id: "C.4", group: "C", title: "Hỏi rõ ngân sách và các yêu cầu khách mong muốn ở sản phẩm" },
-      { id: "C.5", group: "C", title: "Tóm tắt và xác nhận lại nhu cầu trước khi giới thiệu phương án" },
-      { id: "C.6", group: "C", title: "Phương án Chuẩn: Đúng tầm giá và vừa khít nhu cầu" },
-      { id: "C.7", group: "C", title: "Phương án Tiết kiệm: Giá thấp hơn một chút, đủ dùng tác vụ cơ bản" },
-      { id: "C.8", group: "C", title: "Phương án Nâng cấp: Giá nhỉnh hơn 10-15%, cấu hình đón đầu 3-4 năm tới" },
-      { id: "C.9", group: "C", title: "Trình bày FABE: Quy đổi thông số kỹ thuật đi kèm lợi ích thực tế" },
-      { id: "C.10", group: "C", title: "Sau khi trình bày, có dẫn chứng/mời khách trải nghiệm tính năng vừa nêu" },
-      { id: "C.11", group: "C", title: "Có tóm tắt phương án khách quan tâm" },
-      { id: "C.12", group: "C", title: "Đưa ra câu chốt bán dạng giả định hoặc lựa chọn" },
-      { id: "C.13", group: "C", title: "Thông báo Thời hạn bảo hành bao lâu" },
-      { id: "C.14", group: "C", title: "Thông báo Chính sách đổi trả bao nhiêu ngày đầu nếu có lỗi phần cứng" },
-      { id: "C.15", group: "C", title: "Mời khách hàng quét Zalo OA" },
-      { id: "D.1", group: "D", title: "Trình bày được ý nghĩa hậu tố CPU (U là gì, H là gì)" },
-      { id: "D.2", group: "D", title: "Trình bày được Laptop có nâng cấp thêm RAM được hay không" },
-      { id: "D.3", group: "D", title: "Trình bày được ưu điểm của Card đồ họa rời so với Card onboard" },
-      { id: "D.4", group: "D", title: "Phân loại chuẩn dòng máy (Asus Vivobook vs ROG/TUF; Lenovo Ideapad vs Legion)" },
-      { id: "D.5", group: "D", title: "Văn phòng: Mỏng nhẹ, pin trâu 6–8h, CPU tiết kiệm điện (đuôi U)" },
-      { id: "D.6", group: "D", title: "Gaming: CPU hiệu năng cao (đuôi H/HX), có card RTX, tản nhiệt to, màn 144Hz+" },
-      { id: "D.7", group: "D", title: "Laptop AI: Có nhân NPU xử lý tác vụ AI cục bộ (Copilot, lọc ồn không tốn pin)" },
-      { id: "D.8", group: "D", title: "Tư vấn VP: Khai thác sâu về học ngành gì / làm việc gì? Có hay di chuyển không?" },
-      { id: "D.9", group: "D", title: "Tư vấn VP: Đưa ra đề xuất cấu hình chuẩn xác" },
-      { id: "D.10", group: "D", title: "Tư vấn VP: Có tư vấn kèm các phụ kiện và phần mềm (balo, chuột, MS 365)" },
-      { id: "D.11", group: "D", title: "Tư vấn Gaming: Khai thác sâu về thể loại Game khách hay chơi" },
-      { id: "D.12", group: "D", title: "Tư vấn Gaming: Đưa ra đề xuất cấu hình chuẩn xác" },
-      { id: "D.13", group: "D", title: "Tư vấn Gaming: Có tư vấn kèm các phụ kiện và phần mềm khác (gear, tai nghe)" },
-      { id: "E.1", group: "E", title: "Chỉ đúng vị trí 8 thành phần chính (CPU, Main, RAM, SSD, GPU, PSU, Case, Tản)" },
-      { id: "E.2", group: "E", title: "Giải thích đúng công dụng của từng linh kiện PC" },
-      { id: "E.3", group: "E", title: "PC Đồng bộ: Bán cho Doanh nghiệp, người lớn tuổi, VP cần ổn định tuyệt đối" },
-      { id: "E.4", group: "E", title: "PC Lắp ráp (DIY): Bán cho Gamer/Designer tối ưu sức mạnh trên giá, dễ nâng cấp" },
-      { id: "E.5", group: "E", title: "Tính tương thích: Socket CPU khớp Chipset Mainboard" },
-      { id: "E.6", group: "E", title: "Tính tương thích: RAM đúng chuẩn Main hỗ trợ (DDR4 vs DDR5)" },
-      { id: "E.7", group: "E", title: "Tính tương thích: Công suất PSU dư tải an toàn 15–20% so với tổng CPU + GPU" },
-      { id: "E.8", group: "E", title: "Không thiếu bất kì linh kiện bắt buộc nào (CPU/RAM/VGA/Mainboard, PSU, Case)" },
-      { id: "E.9", group: "E", title: "Bộ Gaming: 40–50% ngân sách dồn cho GPU, còn lại chia cho CPU, Main, RAM, Nguồn" },
-      { id: "E.10", group: "E", title: "Bộ Đồ họa: Dồn tiền cho CPU nhiều nhân + RAM 32GB–64GB + SSD đọc ghi nhanh" },
-      { id: "E.11", group: "E", title: "Bộ Văn Phòng: Tập trung đầu tư cho SSD & nguồn chất lượng" },
-      { id: "E.12", group: "E", title: "Đề xuất màn hình phù hợp (Hz, FHD/2K/4K, tấm nền IPS/VA chuẩn màu)" },
-      { id: "E.13", group: "E", title: "Tư vấn combo: Phím, chuột, tai nghe/loa, lót chuột, dây LAN/Card Wi-Fi" },
-      { id: "E.14", group: "E", title: "Tư vấn phần mềm bản quyền Windows 11 / MS 365" },
-      { id: "G.1", group: "G", title: "Nêu đúng thời gian áp dụng chương trình khuyến mãi" },
-      { id: "G.2", group: "G", title: "Nêu đúng điều kiện áp dụng chương trình khuyến mãi" },
-      { id: "G.3", group: "G", title: "Nêu đúng quà tặng của chương trình khuyến mãi (nếu có)" },
-      { id: "G.4", group: "G", title: "Chủ động tính ra số tiền đã được khuyến mãi cho khách" }
-    ];
+  // Lấy câu hỏi mới nhất của người dùng
+  const userMessages = (messages || []).filter(m => m.sender === 'user');
+  const latestQuery = userMessages.length > 0 ? userMessages[userMessages.length - 1].text : '';
 
-    const GROUP_NAMES = {
-      ALL: "Tất cả (62)",
-      A: "A. Cửa hàng (6)",
-      B: "B. Phục vụ (10)",
-      C: "C. 6 Bước bán hàng (15)",
-      D: "D. Laptop (13)",
-      E: "E. PC (14)",
-      G: "G. CTKM (4)"
-    };
+  // BỘ PHẢN HỒI THÔNG MINH DỰ PHÒNG (KHI GOOGLE API BỊ NGHẼN TẢI)
+  const getFallbackReply = (query) => {
+    const q = (query || '').toLowerCase();
 
-    // ========================================================
-    // 🧠 CƠ SỞ DỮ LIỆU TRI THỨC TOÀN DIỆN (LOCAL KNOWLEDGE BASE)
-    // Hệ thống tra cứu nội bộ tự động đối soát câu hỏi với kho dữ liệu này
-    // ========================================================
-    const KB_DATABASE = [
-      {
-        keywords: ["ngày 1", "ngay 1", "hội nhập", "giá trị cốt lõi", "mặt tiền", "golden rule", "chào đón", "lịch sử"],
-        topic: "Ngày 1: Hội nhập & Tiêu chuẩn cửa hàng",
-        answer: "📚 NỘI DUNG ÔN TẬP BÀI HỌC NGÀY 1:\n\n" +
-          "1. Lịch sử hình thành: Phong Vũ thành lập năm 1997, thuộc hệ sinh thái Teko/VNLife, định hướng nhà bán lẻ đa kênh hàng đầu.\n" +
-          "2. 4 Giá trị cốt lõi: Khách hàng là số 1 - Chính trực - Quan tâm - Đồng đội.\n" +
-          "3. Ý nghĩa Logo: Hình vuông (vững chãi, bền vững) - Hình tròn (quan tâm, ấm áp) - Tam giác (tiên phong, đột phá).\n" +
-          "4. Tiêu chuẩn mặt tiền (HR_QĐ.01): Cờ/Standee vuông góc với mặt tiền, không cản lối đi; băng rôn phẳng phiu đúng CTKM; vách kính sáng sạch, xe khách có phủ bạt che.\n" +
-          "5. Nghi thức chào 4 điểm chạm: Đứng thẳng hướng mắt về khách -> Tay đặt lên ngực trái (vị trí trái tim) -> Cúi người 15 độ với nụ cười -> Nói to rõ: 'Dạ Phong Vũ xin chào!'.\n" +
-          "6. Các mã lỗi SHR cần tránh: SHR1 (sai đồng phục), SHR8 (tụ tập cười đùa), SHR17 (đưa đồ bằng 1 tay), SHR23 (phớt lờ khách)."
-      },
-      {
-        keywords: ["ngày 2", "ngay 2", "6 bước", "kỹ năng bán hàng", "fabe", "last", "chốt đơn", "từ chối"],
-        topic: "Ngày 2: Kỹ năng & 6 Bước bán hàng",
-        answer: "📚 NỘI DUNG ÔN TẬP BÀI HỌC NGÀY 2:\n\n" +
-          "1. Quy trình 6 bước bán hàng: (1) Chuẩn bị -> (2) Tiếp cận tạo thiện cảm -> (3) Khai thác nhu cầu -> (4) Trình bày FABE -> (5) Xử lý phản bác LAST -> (6) Chốt đơn & Hướng dẫn sau bán.\n" +
-          "2. Tỷ lệ giao tiếp 55-38-7: 55% ngôn ngữ cơ thể, 38% ngữ điệu giọng nói, 7% từ ngữ.\n" +
-          "3. Khai thác nhu cầu (SPIN): Đặt câu hỏi mở để nắm rõ ngành nghề/mục đích dùng, mức ngân sách, thói quen và kinh nghiệm máy cũ.\n" +
-          "4. Đề xuất 3 phương án: Phương án Chuẩn (vừa khít nhu cầu) - Phương án Tiết kiệm (giá mềm hơn) - Phương án Nâng cấp (nhỉnh hơn 10-15% đón đầu 3-4 năm).\n" +
-          "5. Công thức FABE: Feature (Tính năng) -> Advantage (Ưu điểm) -> Benefit (Lợi ích thực tế cho khách) -> Evidence (Minh chứng/Trải nghiệm trực tiếp).\n" +
-          "6. Xử lý phản bác LAST: Listen (Lắng nghe) -> Apologize (Đồng cảm) -> Solve (Giải pháp) -> Thanks (Cảm ơn).\n" +
-          "7. Kỹ thuật chốt: Chốt giả định ('Em lấy máy mới nguyên seal cho mình nhé?'), Chốt thanh toán, Chốt quyền lợi khan hiếm."
-      },
-      {
-        keywords: ["ngày 3", "ngay 3", "laptop", "hậu tố cpu", "u là gì", "h là gì", "ram hàn", "npu", "ai pc"],
-        topic: "Ngày 3: Kiến thức & Tư vấn Laptop",
-        answer: "📚 NỘI DUNG ÔN TẬP BÀI HỌC NGÀY 3:\n\n" +
-          "1. Hậu tố CPU: Đuôi U/V (tiết kiệm điện, mát máy, pin 6-8h cho văn phòng) vs Đuôi H/HX (hiệu năng cao, quạt tản lớn cho Gaming/Đồ họa nặng).\n" +
-          "2. RAM Laptop: Tiêu chuẩn tối thiểu 16GB. Lưu ý dòng RAM Onboard (hàn chết như LPDDR) không nâng cấp được, phải tư vấn đúng cấu hình ngay từ đầu.\n" +
-          "3. Ổ cứng SSD: Chuẩn M.2 NVMe PCIe cho tốc độ khởi động và đọc ghi vượt trội.\n" +
-          "4. Phân loại dòng máy: Vivobook vs ROG/TUF (Asus); Ideapad vs Legion (Lenovo); Inspiron vs Alienware (Dell).\n" +
-          "5. Laptop AI: Sở hữu nhân NPU >= 40 TOPS xử lý Copilot, khử ồn, tách nền mượt mà trực tiếp trên máy mà không tốn pin.\n" +
-          "6. Bán kèm hệ sinh thái: Chuột không dây, balo chống sốc, gói phần mềm Microsoft 365 bản quyền."
-      },
-      {
-        keywords: ["ngày 4", "ngay 4", "build pc", "cấu tạo pc", "5 điểm đỏ", "điểm đỏ", "tương thích pc", "nguồn", "psu"],
-        topic: "Ngày 4: Cấu tạo & Xây dựng cấu hình PC",
-        answer: "📚 NỘI DUNG ÔN TẬP BÀI HỌC NGÀY 4:\n\n" +
-          "1. 8 Linh kiện cốt lõi: CPU, Bo mạch chủ (Mainboard), RAM, SSD, Card màn hình (VGA), Nguồn (PSU), Vỏ Case, Tản nhiệt.\n" +
-          "2. 5 Điểm đỏ kiểm tra tương thích:\n" +
-          "   • Điểm 1: Khớp Socket CPU & Bo mạch chủ (Intel: LGA1700/1851; AMD: AM4/AM5).\n" +
-          "   • Điểm 2: Chuẩn RAM đúng với Main (DDR4 vs DDR5).\n" +
-          "   • Điểm 3: Cắm RAM theo cặp để kích hoạt Dual Channel (nhân đôi băng thông).\n" +
-          "   • Điểm 4: Nguồn (PSU) chuẩn 80 Plus, dư tải an toàn 15 - 20% so với tổng CPU + VGA.\n" +
-          "   • Điểm 5: Kích thước thùng case lắp vừa chiều dài VGA và chiều cao tản nhiệt.\n" +
-          "3. Phân bổ ngân sách:\n" +
-          "   • PC Gaming: 40-50% ngân sách dồn cho VGA.\n" +
-          "   • PC Đồ họa: Dồn cho CPU nhiều nhân thực + RAM 32GB-64GB + SSD NVMe tốc độ cao.\n" +
-          "   • Quy tắc đánh đổi: Khách hụt ngân sách chỉ được hạ vỏ case/tản, cấm hạ chất lượng nguồn."
-      },
-      {
-        keywords: ["ngày 5", "ngay 5", "quản lý tiền mặt", "thu ngân", "túi zip", "dropbox", "thanh toán", "trả góp"],
-        topic: "Ngày 5: Quy trình Quản lý tiền mặt & Thanh toán",
-        answer: "📚 NỘI DUNG ÔN TẬP BÀI HỌC NGÀY 5:\n\n" +
-          "1. Quy trình 7 bước thu ngân: Chuẩn bị tiền lẻ 500k -> Thao tác thu tiền -> In và lập phiếu thu 2 liên -> Kết ca -> Niêm phong két -> Nộp tiền ngân hàng -> Lưu trữ chứng từ.\n" +
-          "2. Quy tắc túi Zip & Dropbox: Toàn bộ tiền mặt và hóa đơn phải cho vào túi zip chuyên dụng, ghi rõ mã NVBH, thả vào hòm Dropbox dưới camera giám sát CCTV.\n" +
-          "3. Các hình thức thanh toán: Tiền mặt, quẹt thẻ POS ngân hàng, quét mã VNPay-QR / MoMo, Trả góp thẻ tín dụng 0%, Trả góp qua cty tài chính (Home Credit/HD Saison).\n" +
-          "4. Chế tài nghiêm cấm: Tuyệt đối không giữ tiền riêng hoặc mang tiền ra khỏi showroom (vi phạm sa thải ngay lập tức); không in phiếu thu phạt 50% thưởng CIS/Golden Rule."
-      },
-      {
-        keywords: ["5600", "b650", "ryzen 5600", "am4", "am5"],
-        topic: "Kiểm tra tương thích: Ryzen 5600 & Main B650",
-        answer: "❌ KHÔNG TƯƠNG THÍCH BẠN NHÉ!\n\n" +
-          "• CPU AMD Ryzen 5 5600 sử dụng Socket AM4 và hỗ trợ RAM DDR4.\n" +
-          "• Bo mạch chủ B650 sử dụng Socket AM5 và bắt buộc chạy RAM DDR5.\n\n" +
-          "👉 Hướng xử lý đúng chuẩn kỹ thuật Phong Vũ:\n" +
-          "1. Phương án tiết kiệm: Đổi Mainboard xuống dòng Socket AM4 như Asus Prime B550M-K hoặc B450M để đi cùng CPU Ryzen 5 5600 và RAM DDR4.\n" +
-          "2. Phương án nâng cấp đón đầu: Giữ Mainboard B650, nâng CPU lên AMD Ryzen 5 7500F hoặc Ryzen 5 7600 (Socket AM5) + RAM DDR5."
-      },
-      {
-        keywords: ["dùng main nào", "main nào mới đúng", "main nào cho 5600", "5600 đi với main nào"],
-        topic: "Bo mạch chủ phù hợp cho Ryzen 5 5600",
-        answer: "💡 Bo mạch chủ chuẩn xác cho CPU AMD Ryzen 5 5600 là các dòng chạy SOCKET AM4:\n\n" +
-          "• Lựa chọn tối ưu nhất: Mainboard B550 (ví dụ: Asus Prime B550M-K, MSI B550M Pro-VDH, Gigabyte B550M DS3H) – Đầy đủ PCIe 4.0, tản VRM tốt, tối ưu hiệu năng.\n" +
-          "• Lựa chọn tiết kiệm: Mainboard B450 hoặc A520 (ví dụ: Asus Prime A520M-K, MSI B450M-A Pro Max).\n" +
-          "• Lưu ý kèm theo: Đi cùng RAM DDR4 (khuyên dùng Bus 3200MHz chạy Dual Channel 2x8GB hoặc 2x16GB)."
-      },
-      {
-        keywords: ["nvidia", "card nvidia", "nvidia dùng main nào", "vga nvidia"],
-        topic: "Tương thích Mainboard cho Card NVIDIA",
-        answer: "⚡ Card đồ họa NVIDIA (GeForce RTX 3050, 4060, 4070, RTX 50 series...) KHÔNG KÉN MAINBOARD!\n\n" +
-          "• Card NVIDIA cắm vừa TẤT CẢ các dòng Bo mạch chủ hiện nay (cả Main Intel H/B/Z lẫn Main AMD A/B/X) miễn là có khe cắm PCIe x16 tiêu chuẩn.\n" +
-          "• Điểm cốt lõi cần kiểm tra khi bán VGA NVIDIA:\n" +
-          "  1. Công suất Nguồn (PSU): Chuẩn 80 Plus đủ công suất (RTX 4060 cần từ 500W-550W; RTX 4070/5070 cần từ 650W-750W trở lên).\n" +
-          "  2. Kích thước thùng Case: Chiều dài card không bị cấn quạt trước hoặc khay ổ cứng."
-      },
-      {
-        keywords: ["main amd", "main amd mới nhất", "chipset amd mới nhất", "b850", "x870"],
-        topic: "Dòng Mainboard AMD mới nhất hiện nay",
-        answer: "⚡ CÁC DÒNG MAINBOARD AMD MỚI NHẤT HIỆN NAY (SOCKET AM5):\n\n" +
-          "• Phân khúc cao cấp / Đồ họa chuyên sâu: X870E, X870, X670E (hỗ trợ ép xung mạnh mẽ, full PCIe 5.0 và cổng USB4 tốc độ cao).\n" +
-          "• Phân khúc tầm trung / Bán chạy nhất: B850 và B650 (cân bằng hiệu năng/giá thành tuyệt vời cho Ryzen 7000, 8000 và 9000 series).\n" +
-          "• Phân khúc cơ bản: B840 và A620.\n" +
-          "• Đặc điểm chung: 100% bắt buộc dùng chuẩn RAM DDR5!"
-      },
-      {
-        keywords: ["giá cao", "chê đắt", "đối thủ", "rẻ hơn", "giá đắt"],
-        topic: "Xử lý tình huống khách chê giá cao",
-        answer: "💡 XỬ LÝ KHI KHÁCH CHÊ GIÁ PHONG VŨ CAO HƠN (ÁP DỤNG CÔNG THỨC LAST):\n\n" +
-          "1. Lắng nghe và đồng cảm, tuyệt đối không phản bác hay nói xấu đối thủ.\n" +
-          "2. Nếu so sánh với sàn TMĐT/cửa hàng xách tay nhỏ lẻ, nêu bật 4 giá trị vượt trội chỉ có tại Phong Vũ:\n" +
-          "   • 100% hàng chính hãng có sẵn VAT đầy đủ cho cá nhân và doanh nghiệp.\n" +
-          "   • Chính sách 1 đổi 1 tận nơi nếu phát sinh lỗi phần cứng trong thời gian đầu.\n" +
-          "   • Kỹ thuật viên ủy quyền chính hãng hỗ trợ nâng cấp/bảo dưỡng không làm mất bảo hành của hãng.\n" +
-          "   • Hỗ trợ đa dạng phương thức trả góp 0% lãi suất duyệt hồ sơ nhanh chóng."
-      }
-    ];
-
-    // Thuật toán đối soát nội bộ tìm câu trả lời phù hợp nhất
-    function findBestLocalAnswer(query) {
-      if (!query || !query.trim()) return null;
-      const cleanQ = query.toLowerCase().trim();
-
-      // 1. So khớp chính xác theo các từ khóa trong Cơ sở tri thức
-      let bestMatch = null;
-      let maxScore = 0;
-
-      for (const item of KB_DATABASE) {
-        let score = 0;
-        for (const kw of item.keywords) {
-          if (cleanQ.includes(kw)) {
-            score += kw.length * 2; // Từ khóa càng dài độ ưu tiên càng cao
-          }
-        }
-        if (score > maxScore) {
-          maxScore = score;
-          bestMatch = item;
-        }
-      }
-
-      if (bestMatch && maxScore >= 4) {
-        return bestMatch.answer;
-      }
-
-      // 2. Tra cứu trực tiếp trong danh sách 62 tiêu chí nếu câu hỏi hỏi về tiêu chuẩn/mã tiêu chí
-      const matchCriteria = OJT_CHECKLIST_62.find(c => cleanQ.includes(c.id.toLowerCase()) || cleanQ.includes(c.title.toLowerCase()));
-      if (matchCriteria) {
-        return `📌 TIÊU CHÍ OJT [${matchCriteria.id}]:\n• Nội dung: ${matchCriteria.title}\n• Thuộc nhóm: ${matchCriteria.group}\n• Yêu cầu: Quan sát và thực hiện chuẩn xác trong ca làm việc thực tế tại showroom.`;
-      }
-
-      // 3. Phản hồi định hướng khi không khớp từ khóa
-      return "Dạ, hiện tại hệ thống học tập nội bộ chưa tìm thấy câu trả lời chính xác cho câu hỏi này.\n\n👉 Bạn hãy thử bấm vào các nút gợi ý câu hỏi nhanh bên dưới hoặc gõ các từ khóa ôn bài như: 'Tóm tắt Ngày 1', 'Tóm tắt Ngày 2', '5 điểm đỏ PC', 'Ryzen 5600', 'Nvidia dùng main nào' nhé!";
+    // 1. Tóm tắt nội dung các ngày
+    if (q.includes("ngày 1") || (q.includes("tóm tắt") && q.includes("1"))) {
+      return "📚 TÓM TẮT BÀI HỌC NGÀY 1: HỘI NHẬP & TIÊU CHUẨN CỬA HÀNG\n\n" +
+        "1. Lịch sử & Giá trị cốt lõi: Phong Vũ thành lập năm 1997, thuộc hệ sinh thái Teko/VNLife. 4 giá trị cốt lõi: Khách hàng là số 1 - Chính trực - Quan tâm - Đồng đội.\n" +
+        "2. Nghi thức chào đón 4 điểm chạm (Golden Rule): Đứng thẳng, tay đặt ngực trái (vị trí trái tim), cúi 15 độ, nói rõ câu chào: 'Dạ Phong Vũ xin chào!'.\n" +
+        "3. Tiêu chuẩn mặt tiền (HR_QĐ.01): Cờ/Standee vuông góc không cản lối đi; băng rôn phẳng phiu đúng CTKM; vách kính sáng sạch, xe khách có phủ bạt che mưa/nắng.\n" +
+        "4. Tiêu chuẩn bên trong: Layout theo giá - kích thước - màu; 100% sản phẩm có bảng giá mica đặt bên phải; bàn tư vấn sạch sẽ.\n" +
+        "5. Mã lỗi SHR cần tránh: SHR1 (sai đồng phục), SHR8 (tụ tập cười đùa), SHR17 (đưa đồ bằng 1 tay).";
     }
 
-    const LESSONS = {
-      1: {
-        title: "Ngày 1: Hội nhập & Tiêu chuẩn cửa hàng",
-        summary: [
-          "Lịch sử Phong Vũ: Thành lập năm 1997, thuộc Teko/VNLife, định hướng nhà bán lẻ đa kênh hàng đầu.",
-          "4 Giá trị cốt lõi: Khách hàng là số 1 - Chính trực - Quan tâm - Đồng đội.",
-          "Ý nghĩa Logo: Hình vuông (vững chãi), Hình tròn (ấm áp, quan tâm), Tam giác (tiên phong, thành tựu).",
-          "Tiêu chuẩn mặt tiền (HR_QĐ.01): Cờ/Standee vuông góc; băng rôn căng phẳng; vách kính sạch bong.",
-          "Quy tắc vàng (Golden Rule): Đứng thẳng, tay đặt ngực trái, cúi 15 độ: 'Dạ Phong Vũ xin chào!'.",
-          "Mã lỗi SHR cần tránh: SHR1 (sai đồng phục), SHR8 (tụ tập cười đùa), SHR17 (đưa đồ bằng 1 tay)."
-        ]
-      },
-      2: {
-        title: "Ngày 2: Kỹ năng & 6 Bước bán hàng",
-        summary: [
-          "Quy trình 6 bước: Chuẩn bị -> Tiếp cận tạo thiện cảm -> Khai thác nhu cầu -> Giới thiệu FABE -> Xử lý phản bác LAST -> Chốt đơn & CSKH.",
-          "Giao tiếp 55-38-7: Ngôn ngữ cơ thể chiếm 55%, ngữ điệu 38%, từ ngữ chỉ 7%.",
-          "Khai thác nhu cầu: Hỏi mục đích dùng, tầm ngân sách, người dùng chính và kinh nghiệm dùng máy cũ.",
-          "Giới thiệu FABE: Feature (Tính năng) -> Advantage (Ưu điểm) -> Benefit (Lợi ích khách nhận) -> Evidence (Bằng chứng).",
-          "Xử lý từ chối LAST: Listen (Lắng nghe) -> Apologize (Đồng cảm) -> Solve (Giải pháp) -> Thanks (Cảm ơn).",
-          "4 Kỹ thuật chốt: Chốt giả định, Chốt cảm xúc, Chốt chia nhỏ số tiền, Chốt khan hiếm quyền lợi."
-        ]
-      },
-      3: {
-        title: "Ngày 3: Kiến thức nền tảng & Tư vấn Laptop",
-        summary: [
-          "Phân nhóm Laptop: Học tập/Văn phòng (tiết kiệm điện) - Doanh nhân (siêu mỏng nhẹ) - Gaming (tản nhiệt to, GPU rời) - Đồ họa (chuẩn màu 100% sRGB) - AI PC (NPU >= 40 TOPS).",
-          "Đọc hậu tố CPU: Đuôi U/V (tiết kiệm pin, mát máy) vs Đuôi H/HX (hiệu năng bung nóc cho Gaming/Render).",
-          "RAM: Tối thiểu 16GB để không giật lag. Chú ý dòng RAM hàn chết (LPDDR) không thể nâng cấp.",
-          "Ổ cứng SSD: Chuẩn M.2 NVMe PCIe cho tốc độ mở máy và ứng dụng thần tốc.",
-          "Card đồ họa: Card Onboard (đủ cho Word, Excel, lướt web) vs Card rời RTX (bắt buộc cho game và đồ họa 3D).",
-          "Màn hình: Tấm nền IPS/OLED góc nhìn rộng, tần số quét 144Hz+ cho game thủ phản xạ mượt mà."
-        ]
-      },
-      4: {
-        title: "Ngày 4: Cấu tạo & Xây dựng cấu hình PC",
-        summary: [
-          "8 Linh kiện cốt lõi: CPU, Bo mạch chủ (Main), RAM, SSD, Card màn hình (VGA), Nguồn (PSU), Tản nhiệt, Vỏ case.",
-          "5 Điểm đỏ tương thích: (1) Socket CPU khớp Chipset Main, (2) RAM đúng chuẩn DDR4/DDR5, (3) Lắp RAM theo cặp Dual Channel, (4) Nguồn 80 Plus dư tải 15-20%, (5) VGA/Tản nhét vừa kích thước case.",
-          "Phân bổ ngân sách PC Gaming (15-35tr): 40-50% dồn cho Card VGA, 20% cho CPU, còn lại chia đều linh kiện khác.",
-          "Phân bổ PC Đồ họa: Ưu tiên CPU nhiều nhân thực + RAM 32GB-64GB + SSD đọc ghi nhanh.",
-          "Quy tắc đánh đổi: Khách thiếu tiền chỉ được hạ vỏ case hoặc tản nhiệt, tuyệt đối không hạ chất lượng nguồn."
-        ]
-      },
-      5: {
-        title: "Ngày 5: Quy trình Quản lý tiền mặt & Thanh toán",
-        summary: [
-          "Quy trình 7 bước thu ngân: Chuẩn bị tiền lẻ 500k -> Thao tác thu tiền -> Lập phiếu thu 2 liên -> Kết ca -> Niêm phong két -> Nộp ngân hàng -> Lưu hồ sơ.",
-          "Quy tắc túi Zip & Dropbox: Bỏ toàn bộ tiền và hóa đơn vào túi zip, ghi tên MSNV, thả vào Dropbox dưới camera CCTV.",
-          "Các hình thức thanh toán: Tiền mặt, Cà thẻ POS ngân hàng, Quét mã VNPay-QR / MoMo / ShopeePay, Trả góp 0% thẻ tín dụng, Trả góp qua cty tài chính (Home Credit/HD Saison), COD và Công nợ doanh nghiệp.",
-          "Chế tài nghiêm cấm: Gian lận hoặc mang tiền ra khỏi cửa hàng sa thải ngay lập tức; không in phiếu thu phạt 50% thưởng CIS/Golden Rule."
-        ]
-      }
-    };
-
-    function App() {
-      const [tab, setTab] = useState("checklist");
-      const [selectedDay, setSelectedDay] = useState(1);
-      const [filterGroup, setFilterGroup] = useState("ALL");
-      
-      const [staffName, setStaffName] = useState("");
-      const [storeName, setStoreName] = useState("");
-      const [evalRound, setEvalRound] = useState("Lần 1");
-      const [evaluator, setEvaluator] = useState("");
-      const [checklistState, setChecklistState] = useState({});
-      const [notesState, setNotesState] = useState({});
-      const [activeNoteId, setActiveNoteId] = useState(null);
-      const [isSendingSheet, setIsSendingSheet] = useState(false);
-
-      const [messages, setMessages] = useState([
-        { sender: "bot", text: "Xin chào bạn! Mình là Trợ lý Học tập OJT Phong Vũ. Toàn bộ tài liệu 5 ngày đào tạo và kỹ thuật phần cứng đã được nạp sẵn. Bạn có thể hỏi tóm tắt bài học, tương thích PC/Laptop để ôn bài nhé!" }
-      ]);
-      const [inputQuery, setInputQuery] = useState("");
-
-      const handleCheck = (id, status) => {
-        setChecklistState(prev => ({
-          ...prev,
-          [id]: prev[id] === status ? undefined : status
-        }));
-      };
-
-      const handleNoteChange = (id, text) => {
-        setNotesState(prev => ({ ...prev, [id]: text }));
-      };
-
-      const passedCount = useMemo(() => {
-        return Object.values(checklistState).filter(v => v === "pass").length;
-      }, [checklistState]);
-
-      const progressPercent = Math.round((passedCount / OJT_CHECKLIST_62.length) * 100);
-      const isPassedGoal = passedCount >= 50; // Ngưỡng đạt: ít nhất 50/62 mục đạt (>=80%)
-
-      // HÀM GỬI DỮ LIỆU TÁCH CỘT VỀ GOOGLE SHEETS
-      const handleSendToGoogleSheet = async () => {
-        if (!staffName.trim()) {
-          alert("⚠️ Vui lòng nhập Họ tên Nhân viên bán hàng trước khi gửi!");
-          return;
-        }
-
-        const evaluatedCount = Object.keys(checklistState).length;
-        if (evaluatedCount < OJT_CHECKLIST_62.length) {
-          const confirmSend = confirm(`Bạn mới đánh giá ${evaluatedCount}/${OJT_CHECKLIST_62.length} tiêu chí. Bạn có chắc chắn muốn gửi kết quả này không?`);
-          if (!confirmSend) return;
-        }
-
-        if (!GOOGLE_SHEET_WEBAPP_URL || GOOGLE_SHEET_WEBAPP_URL.includes("...")) {
-          alert("⚠️ Bạn chưa cấu hình đúng GOOGLE_SHEET_WEBAPP_URL!");
-          return;
-        }
-
-        setIsSendingSheet(true);
-
-        const itemsPayload = {};
-        OJT_CHECKLIST_62.forEach(item => {
-          itemsPayload[item.id] = {
-            status: checklistState[item.id] === "pass" ? "ĐẠT" : checklistState[item.id] === "fail" ? "CHƯA ĐẠT" : "Chưa đánh giá",
-            note: notesState[item.id] || ""
-          };
-        });
-
-        const payload = {
-          timestamp: new Date().toLocaleString("vi-VN"),
-          staffName: staffName.trim(),
-          storeName: storeName.trim() || "Chưa nhập",
-          evalRound: evalRound,
-          evaluator: evaluator.trim() || "Chưa nhập",
-          passedCount: passedCount,
-          totalCount: OJT_CHECKLIST_62.length,
-          progressPercent: progressPercent,
-          isPassed: isPassedGoal,
-          items: itemsPayload
-        };
-
-        try {
-          await fetch(GOOGLE_SHEET_WEBAPP_URL, {
-            method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "text/plain;charset=utf-8" },
-            body: JSON.stringify(payload)
-          });
-
-          alert("✅ ĐÃ GỬI THÀNH CÔNG!\nKết quả đánh giá 62 tiêu chí OJT đã được tách cột chi tiết vào Google Sheet của Giảng viên.");
-        } catch (error) {
-          alert("❌ Có lỗi kết nối khi gửi dữ liệu. Vui lòng kiểm tra lại mạng!");
-        } finally {
-          setIsSendingSheet(false);
-        }
-      };
-
-      // XUẤT BÁO CÁO DẠNG TXT
-      const handleExportReport = () => {
-        const currentDate = new Date().toLocaleDateString('vi-VN');
-        let content = `PHIẾU CHECKLIST ĐÁNH GIÁ NĂNG LỰC – GIAI ĐOẠN 2 (62 TIÊU CHÍ)\n`;
-        content += `HỆ THỐNG CỬA HÀNG PHONG VŨ\n`;
-        content += `---------------------------------------------------------\n`;
-        content += `Họ tên NVBH       : ${staffName || "(Chưa nhập)"}\n`;
-        content += `Cửa hàng/Showroom : ${storeName || "(Chưa nhập)"}\n`;
-        content += `Đợt đánh giá      : ${evalRound}\n`;
-        content += `Người đánh giá    : ${evaluator || "(Chưa nhập)"}\n`;
-        content += `Ngày xuất         : ${currentDate}\n`;
-        content += `---------------------------------------------------------\n`;
-        content += `KẾT QUẢ ĐÁNH GIÁ:\n`;
-        content += `• Số mục Đạt      : ${passedCount}/${OJT_CHECKLIST_62.length} mục\n`;
-        content += `• Tỷ lệ hoàn thành: ${progressPercent}%\n`;
-        content += `• Kết luận        : ${isPassedGoal ? "ĐẠT CHUẨN NĂNG LỰC GĐ2 (>= 50/62 mục đạt)" : "CHƯA ĐẠT (Cần đào tạo & kèm cặp thêm)"}\n`;
-        content += `---------------------------------------------------------\n\n`;
-        content += `CHI TIẾT 62 TIÊU CHÍ ĐÁNH GIÁ:\n`;
-
-        OJT_CHECKLIST_62.forEach((item, index) => {
-          const status = checklistState[item.id] === "pass" ? "[ ĐẠT ]" : checklistState[item.id] === "fail" ? "[ CHƯA ĐẠT ]" : "[ CHƯA ĐÁNH GIÁ ]";
-          const note = notesState[item.id] ? ` (Ghi chú: ${notesState[item.id]})` : "";
-          content += `${index + 1}. [${item.id}] ${item.title}: ${status}${note}\n`;
-        });
-
-        const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = `OJT_DanhGia62_${evalRound}_${staffName ? staffName.replace(/\s+/g, '_') : 'NVBH'}.txt`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-      };
-
-      // XỬ LÝ HỎI ĐÁP NỘI BỘ (PHẢN HỒI NGAY LẬP TỨC 100% OFFLINE)
-      const handleSend = (textToSend) => {
-        const query = textToSend || inputQuery;
-        if (!query.trim()) return;
-
-        const updatedMessages = [...messages, { sender: "user", text: query }];
-        setMessages(updatedMessages);
-        setInputQuery("");
-
-        // Trích xuất trực tiếp câu trả lời từ kho tri thức
-        setTimeout(() => {
-          const answer = findBestLocalAnswer(query);
-          setMessages([...updatedMessages, { sender: "bot", text: answer }]);
-        }, 150);
-      };
-
-      const filteredChecklist = useMemo(() => {
-        if (filterGroup === "ALL") return OJT_CHECKLIST_62;
-        return OJT_CHECKLIST_62.filter(item => item.group === filterGroup);
-      }, [filterGroup]);
-
-      return (
-        <div className="max-w-md mx-auto min-h-screen bg-slate-50 flex flex-col shadow-lg">
-          {/* Header */}
-          <div className="bg-blue-600 text-white p-3.5 sticky top-0 z-20 shadow-md">
-            <div className="flex justify-between items-center">
-              <div>
-                <h1 className="text-base font-bold tracking-tight">PHONG VŨ OJT COACH</h1>
-                <p className="text-[11px] text-blue-100">Đánh giá Năng lực GĐ2 (62 tiêu chí)</p>
-              </div>
-              <div className="text-right flex items-center gap-1.5">
-                <button
-                  onClick={handleSendToGoogleSheet}
-                  disabled={isSendingSheet}
-                  className="bg-amber-400 hover:bg-amber-500 text-slate-900 px-2.5 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 shadow-sm transition-all disabled:opacity-50"
-                  title="Gửi dữ liệu trực tiếp về Google Sheet cho Giảng viên"
-                >
-                  <Icons.SendCloud /> {isSendingSheet ? "..." : "Gửi Sheet"}
-                </button>
-                <button
-                  onClick={handleExportReport}
-                  className="bg-emerald-500 hover:bg-emerald-600 text-white p-1.5 rounded-lg text-xs shadow-sm transition-all"
-                  title="Tải tệp báo cáo .txt về máy"
-                >
-                  <Icons.Download />
-                </button>
-              </div>
-            </div>
-
-            {/* Thanh tiến độ OJT */}
-            <div className="mt-2.5 bg-blue-800/60 p-2 rounded-lg text-xs">
-              <div className="flex justify-between items-center mb-1">
-                <span>Đạt: <strong>{passedCount}/62</strong> mục</span>
-                <span className={`font-bold ${isPassedGoal ? 'text-emerald-300' : 'text-amber-300'}`}>
-                  {progressPercent}% {isPassedGoal ? "✓ Đạt chuẩn (≥50)" : "(Chuẩn: ≥50 mục)"}
-                </span>
-              </div>
-              <div className="w-full bg-blue-950 h-2 rounded-full overflow-hidden">
-                <div 
-                  className={`h-full transition-all duration-300 ${isPassedGoal ? 'bg-emerald-400' : 'bg-amber-400'}`}
-                  style={{ width: `${Math.min(progressPercent, 100)}%` }}
-                ></div>
-              </div>
-            </div>
-
-            {/* Thanh Tab */}
-            <div className="flex mt-2.5 bg-blue-700/50 p-1 rounded-lg text-xs font-medium">
-              <button 
-                onClick={() => setTab("checklist")} 
-                className={`flex-1 py-1.5 rounded text-center transition-all ${tab === "checklist" ? "bg-white text-blue-700 shadow font-bold" : "text-white"}`}
-              >
-                <Icons.CheckSquare /> Checklist (62)
-              </button>
-              <button 
-                onClick={() => setTab("lessons")} 
-                className={`flex-1 py-1.5 rounded text-center transition-all ${tab === "lessons" ? "bg-white text-blue-700 shadow font-bold" : "text-white"}`}
-              >
-                <Icons.BookOpen /> Ôn Bài Học
-              </button>
-              <button 
-                onClick={() => setTab("chat")} 
-                className={`flex-1 py-1.5 rounded text-center transition-all ${tab === "chat" ? "bg-white text-blue-700 shadow font-bold" : "text-white"}`}
-              >
-                <Icons.Bot /> Hỏi Đáp AI
-              </button>
-            </div>
-          </div>
-
-          {/* TAB 1: CHECKLIST 62 TIÊU CHÍ */}
-          {tab === "checklist" && (
-            <div className="flex-1 p-2.5 space-y-2.5 pb-8">
-              {/* Khung Thông tin nhân sự */}
-              <div className="bg-white rounded-xl p-2.5 border border-slate-200 shadow-xs space-y-2 text-xs">
-                <div className="font-bold text-slate-700 flex justify-between">
-                  <span>Thông tin đợt đánh giá</span>
-                  <span className="text-blue-600 font-semibold">{evalRound}</span>
-                </div>
-                <div className="grid grid-cols-2 gap-1.5">
-                  <input
-                    type="text"
-                    placeholder="Họ tên NVBH (*)..."
-                    value={staffName}
-                    onChange={(e) => setStaffName(e.target.value)}
-                    className="border border-slate-200 rounded p-1.5 text-xs focus:outline-none focus:border-blue-500"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Tên Showroom..."
-                    value={storeName}
-                    onChange={(e) => setStoreName(e.target.value)}
-                    className="border border-slate-200 rounded p-1.5 text-xs focus:outline-none focus:border-blue-500"
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-1.5">
-                  <input
-                    type="text"
-                    placeholder="Người đánh giá (Coach/SM)..."
-                    value={evaluator}
-                    onChange={(e) => setEvaluator(e.target.value)}
-                    className="border border-slate-200 rounded p-1.5 text-xs focus:outline-none focus:border-blue-500"
-                  />
-                  <select
-                    value={evalRound}
-                    onChange={(e) => setEvalRound(e.target.value)}
-                    className="border border-slate-200 rounded p-1.5 text-xs bg-white text-slate-700 focus:outline-none focus:border-blue-500"
-                  >
-                    <option value="Lần 1">Đánh giá Lần 1</option>
-                    <option value="Lần 2">Đánh giá Lần 2</option>
-                    <option value="Lần 3">Đánh giá Lần 3</option>
-                  </select>
-                </div>
-              </div>
-
-              {/* Nút gửi trên */}
-              <button
-                onClick={handleSendToGoogleSheet}
-                disabled={isSendingSheet}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-xl text-xs flex items-center justify-center gap-1.5 shadow transition-all disabled:opacity-50"
-              >
-                <Icons.SendCloud /> {isSendingSheet ? "Đang gửi dữ liệu về Google Sheet..." : "GỬI KẾT QUẢ ĐÁNH GIÁ VỀ CHO GIẢNG VIÊN"}
-              </button>
-
-              {/* Bộ lọc nhóm tiêu chí */}
-              <div className="flex gap-1 overflow-x-auto pb-1 no-scrollbar text-xs">
-                {Object.keys(GROUP_NAMES).map(group => (
-                  <button
-                    key={group}
-                    onClick={() => setFilterGroup(group)}
-                    className={`px-2.5 py-1 rounded-full font-bold whitespace-nowrap transition-all ${filterGroup === group ? "bg-blue-600 text-white shadow-xs" : "bg-white text-slate-600 border border-slate-200"}`}
-                  >
-                    {GROUP_NAMES[group]}
-                  </button>
-                ))}
-              </div>
-
-              {/* Danh sách 62 tiêu chí dạng Card nén gọn */}
-              <div className="space-y-1.5">
-                {filteredChecklist.map((item) => {
-                  const status = checklistState[item.id];
-                  const hasNote = Boolean(notesState[item.id]);
-                  const isNoteOpen = activeNoteId === item.id;
-
-                  return (
-                    <div 
-                      key={item.id} 
-                      className={`bg-white rounded-lg p-2 border transition-all text-xs ${status === 'pass' ? 'border-emerald-200 bg-emerald-50/20' : status === 'fail' ? 'border-rose-200 bg-rose-50/20' : 'border-slate-200'}`}
-                    >
-                      <div className="flex items-center justify-between gap-2">
-                        {/* Mã tiêu chí & Tên tiêu chí */}
-                        <div className="flex-1 flex items-start gap-1.5 min-w-0">
-                          <span className={`font-mono font-bold text-[11px] px-1.5 py-0.5 rounded shrink-0 ${status === 'pass' ? 'bg-emerald-100 text-emerald-800' : status === 'fail' ? 'bg-rose-100 text-rose-800' : 'bg-slate-100 text-slate-600'}`}>
-                            {item.id}
-                          </span>
-                          <span className="text-slate-800 leading-snug line-clamp-2">{item.title}</span>
-                        </div>
-
-                        {/* Nút Đạt / Chưa đạt / Ghi chú */}
-                        <div className="flex items-center gap-1 shrink-0">
-                          <button
-                            onClick={() => handleCheck(item.id, "pass")}
-                            className={`px-2 py-1 rounded font-bold text-[11px] transition-all border ${status === "pass" ? "bg-emerald-600 text-white border-emerald-600 shadow-xs" : "bg-white text-emerald-600 border-emerald-200 hover:bg-emerald-50"}`}
-                          >
-                            Đạt
-                          </button>
-                          <button
-                            onClick={() => handleCheck(item.id, "fail")}
-                            className={`px-2 py-1 rounded font-bold text-[11px] transition-all border ${status === "fail" ? "bg-rose-600 text-white border-rose-600 shadow-xs" : "bg-white text-rose-600 border-rose-200 hover:bg-rose-50"}`}
-                          >
-                            Hỏng
-                          </button>
-                          <button
-                            onClick={() => setActiveNoteId(isNoteOpen ? null : item.id)}
-                            className={`p-1 rounded border transition-all ${hasNote ? "bg-blue-100 text-blue-700 border-blue-300" : "text-slate-400 border-slate-200 hover:text-slate-600"}`}
-                            title="Ghi chú minh chứng"
-                          >
-                            <Icons.Note />
-                          </button>
-                        </div>
-                      </div>
-
-                      {/* Ô nhập ghi chú khi bấm mở */}
-                      {(isNoteOpen || hasNote) && (
-                        <div className="mt-1.5 pt-1.5 border-t border-slate-100">
-                          <input
-                            type="text"
-                            placeholder="Ghi chú minh chứng..."
-                            value={notesState[item.id] || ""}
-                            onChange={(e) => handleNoteChange(item.id, e.target.value)}
-                            className="w-full bg-slate-50 border border-slate-200 rounded px-2 py-1 text-[11px] text-slate-700 focus:outline-none focus:border-blue-400"
-                          />
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* Nút gửi dưới */}
-              <button
-                onClick={handleSendToGoogleSheet}
-                disabled={isSendingSheet}
-                className="w-full mt-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-md transition-all disabled:opacity-50"
-              >
-                <Icons.SendCloud /> {isSendingSheet ? "Đang gửi về Sheet..." : "HOÀN TẤT & GỬI KẾT QUẢ ĐÁNH GIÁ (62 MỤC)"}
-              </button>
-            </div>
-          )}
-
-          {/* TAB 2: ÔN TẬP BÀI HỌC */}
-          {tab === "lessons" && (
-            <div className="flex-1 p-3 pb-8">
-              <div className="flex gap-1.5 overflow-x-auto pb-2 no-scrollbar">
-                {[1, 2, 3, 4, 5].map((day) => (
-                  <button
-                    key={day}
-                    onClick={() => setSelectedDay(day)}
-                    className={`px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all ${selectedDay === day ? "bg-blue-600 text-white shadow" : "bg-white text-slate-600 border border-slate-200"}`}
-                  >
-                    Ngày {day}
-                  </button>
-                ))}
-              </div>
-
-              <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm mt-3">
-                <h2 className="font-bold text-blue-700 text-sm mb-3">{LESSONS[selectedDay].title}</h2>
-                <div className="space-y-2">
-                  {LESSONS[selectedDay].summary.map((point, index) => (
-                    <div key={index} className="flex gap-2 text-xs leading-relaxed text-slate-700">
-                      <span className="text-blue-500 font-bold">•</span>
-                      <span>{point}</span>
-                    </div>
-                  ))}
-                </div>
-
-                <button
-                  onClick={() => {
-                    setTab("chat");
-                    handleSend(`Tóm tắt chi tiết hơn nội dung bài học Ngày ${selectedDay}`);
-                  }}
-                  className="w-full mt-4 bg-blue-50 hover:bg-blue-100 text-blue-700 py-2 rounded-lg text-xs font-semibold text-center transition-all"
-                >
-                  Hỏi chi tiết về Ngày {selectedDay}
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* TAB 3: HỎI ĐÁP ÔN TẬP (LOCAL ENGINE) */}
-          {tab === "chat" && (
-            <div className="flex-1 flex flex-col h-[calc(100vh-170px)]">
-              <div className="flex-1 overflow-y-auto p-3 space-y-3 text-xs">
-                {messages.map((m, idx) => (
-                  <div key={idx} className={`flex ${m.sender === "user" ? "justify-end" : "justify-start"}`}>
-                    <div className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 whitespace-pre-line leading-relaxed ${m.sender === "user" ? "bg-blue-600 text-white rounded-tr-none" : "bg-white border border-slate-200 text-slate-800 rounded-tl-none shadow-sm"}`}>
-                      {m.text}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="p-2 bg-slate-100 border-t border-slate-200 flex gap-2 overflow-x-auto no-scrollbar">
-                {[
-                  "Tóm tắt chi tiết hơn nội dung bài học Ngày 1",
-                  "Tóm tắt chi tiết hơn nội dung bài học Ngày 2",
-                  "Tôi build CPU AMD Ryzen 5600 vào Main Asus B650 được không?",
-                  "Vậy thì dùng main nào mới đúng?",
-                  "Nvidia dùng main nào?",
-                  "5 điểm đỏ khi build PC là gì?",
-                  "Cách chào khách chuẩn 4 bước?"
-                ].map((q, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => handleSend(q)}
-                    className="bg-white border border-slate-300 hover:border-blue-500 text-slate-700 px-2.5 py-1 rounded-full text-[11px] whitespace-nowrap shadow-xs"
-                  >
-                    {q}
-                  </button>
-                ))}
-              </div>
-
-              <div className="p-2 bg-white border-t border-slate-200 flex gap-2">
-                <input
-                  type="text"
-                  value={inputQuery}
-                  onChange={(e) => setInputQuery(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && handleSend()}
-                  placeholder="Gõ câu hỏi để ôn tập bài học..."
-                  className="flex-1 border border-slate-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-blue-600"
-                />
-                <button
-                  onClick={() => handleSend()}
-                  className="bg-blue-600 text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center justify-center hover:bg-blue-700"
-                >
-                  <Icons.Send />
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      );
+    if (q.includes("ngày 2") || (q.includes("tóm tắt") && q.includes("2"))) {
+      return "📚 TÓM TẮT BÀI HỌC NGÀY 2: KỸ NĂNG & 6 BƯỚC BÁN HÀNG\n\n" +
+        "1. Quy trình 6 bước: Chuẩn bị -> Tiếp cận tạo thiện cảm -> Khai thác nhu cầu -> Giới thiệu FABE -> Xử lý phản bác LAST -> Chốt đơn & CSKH.\n" +
+        "2. Nguyên tắc giao tiếp 55-38-7: 55% phi ngôn ngữ (ngôn ngữ cơ thể, ánh mắt), 38% ngữ điệu giọng nói, 7% từ ngữ.\n" +
+        "3. Khai thác nhu cầu (SPIN): Hỏi mục đích dùng cụ thể, mức ngân sách, người dùng chính và kinh nghiệm dùng máy cũ.\n" +
+        "4. Giới thiệu FABE: Feature (Tính năng) -> Advantage (Ưu điểm) -> Benefit (Lợi ích thực tế cho khách) -> Evidence (Minh chứng/Trải nghiệm thử).\n" +
+        "5. Xử lý từ chối LAST: Listen (Lắng nghe) -> Apologize (Đồng cảm) -> Solve (Đưa giải pháp) -> Thanks (Cảm ơn).\n" +
+        "6. Kỹ thuật chốt: Chốt giả định ('Em lấy máy mới nguyên seal cho mình nhé?'), Chốt lựa chọn thanh toán, Chốt khan hiếm ưu đãi.";
     }
 
-    const root = ReactDOM.createRoot(document.getElementById("root"));
-    root.render(<App />);
-  </script>
-</body>
-</html>
+    if (q.includes("ngày 3") || (q.includes("tóm tắt") && q.includes("3"))) {
+      return "📚 TÓM TẮT BÀI HỌC NGÀY 3: KIẾN THỨC NỀN TẢNG & TƯ VẤN LAPTOP\n\n" +
+        "• Phân loại: Văn phòng (đuôi U/V tiết kiệm điện, mỏng nhẹ, pin 6-8h) vs Gaming (đuôi H/HX bung hiệu năng, GPU RTX, màn hình 144Hz+) vs AI PC (NPU >= 40 TOPS).\n" +
+        "• RAM: Tối thiểu 16GB để không giật lag. Lưu ý phân biệt RAM hàn chết (onboard) không thể nâng cấp.\n" +
+        "• Ổ cứng: Chuẩn M.2 NVMe PCIe cho tốc độ mở máy thần tốc.\n" +
+        "• Tư vấn kèm: Chuột, balo chống sốc, phần mềm Microsoft 365 chính hãng.";
+    }
+
+    if (q.includes("ngày 4") || (q.includes("tóm tắt") && q.includes("4"))) {
+      return "📚 TÓM TẮT BÀI HỌC NGÀY 4: CẤU TẠO PC & 5 ĐIỂM ĐỎ TƯƠNG THÍCH\n\n" +
+        "1. Socket CPU khớp Chipset Mainboard (Intel: LGA1700/LGA1851; AMD: AM4/AM5).\n" +
+        "2. RAM đúng chuẩn bo mạch hỗ trợ (DDR4 vs DDR5).\n" +
+        "3. Cắm RAM theo cặp (2 thanh) để bật Dual Channel nhân đôi băng thông.\n" +
+        "4. Nguồn (PSU) chuẩn 80 Plus, dư tải an toàn 15-20%.\n" +
+        "5. Kích thước linh kiện lắp vừa Case (chiều dài VGA, chiều cao quạt tản nhiệt).\n" +
+        "• Phân bổ tiền: Bộ Gaming dồn 40-50% cho GPU; Bộ Đồ họa dồn cho CPU nhiều nhân thực + RAM 32GB+.";
+    }
+
+    if (q.includes("ngày 5") || (q.includes("tóm tắt") && q.includes("5"))) {
+      return "📚 TÓM TẮT BÀI HỌC NGÀY 5: QUẢN LÝ TIỀN MẶT & THANH TOÁN\n\n" +
+        "• Quy trình 7 bước thu ngân: Chuẩn bị tiền lẻ -> Thu tiền -> Lập phiếu thu 2 liên -> Kết ca -> Niêm phong két -> Nộp ngân hàng -> Lưu hồ sơ.\n" +
+        "• Quy tắc túi Zip & Dropbox: Bỏ tiền + hóa đơn vào túi zip, ghi tên MSNV, thả vào Dropbox dưới camera CCTV.\n" +
+        "• Thanh toán: Tiền mặt, POS ngân hàng, VNPay-QR, Trả góp thẻ tín dụng 0%, Trả góp qua cty tài chính (Home Credit/HD Saison).\n" +
+        "• Nghiêm cấm: Mang tiền ra khỏi showroom (sa thải ngay lập tức), không in phiếu thu phạt 50% thưởng.";
+    }
+
+    // 2. Kỹ thuật phần cứng
+    if ((q.includes("5600") || q.includes("am4")) && (q.includes("b650") || q.includes("am5"))) {
+      return "❌ KHÔNG TƯƠNG THÍCH: AMD Ryzen 5 5600 chạy Socket AM4 (RAM DDR4), trong khi Main Asus B650 chạy Socket AM5 (RAM DDR5) nên không thể cắm vừa.\n\n👉 Hướng xử lý: Đổi Main xuống B550 (ví dụ Asus B550M-K) hoặc đổi CPU lên Ryzen 5 7500F/7600 để dùng chung với Main B650.";
+    }
+
+    if (q.includes("nvidia") && q.includes("main")) {
+      return "💡 Card đồ họa NVIDIA (GeForce RTX/GTX) sử dụng khe cắm PCIe x16 tiêu chuẩn nên tương thích với TẤT CẢ các dòng Mainboard hiện nay của cả Intel và AMD. Bạn chỉ cần chú ý: (1) Công suất nguồn PSU đủ chuẩn 80 Plus và (2) Thùng case đủ rộng để nhét vừa chiều dài card.";
+    }
+
+    if (q.includes("chào") || q.includes("golden")) {
+      return "👋 Nghi thức chào 4 điểm chạm chuẩn Phong Vũ: (1) Đứng thẳng hướng mắt về khách; (2) Đặt bàn tay lên ngực trái vị trí trái tim; (3) Cúi nhẹ 15 độ với nụ cười thân thiện; (4) Nói rõ: 'Dạ Phong Vũ xin chào!'.";
+    }
+
+    return "Dạ, về câu hỏi của bạn:\nBạn lưu ý luôn bám sát chuẩn phục vụ Golden Rule và 5 Điểm đỏ kỹ thuật khi tư vấn phần cứng nhé. Bạn có thể chọn xem nhanh nội dung ôn tập chi tiết trong tab 'Ôn Bài Học' phía trên!";
+  };
+
+  try {
+    const contents = (messages || []).map(m => ({
+      role: m.sender === 'user' ? 'user' : 'model',
+      parts: [{ text: m.text }]
+    }));
+
+    contents.unshift({
+      role: 'user',
+      parts: [{ text: `[HƯỚNG DẪN HỆ THỐNG]: Bạn là AI Coach Đào tạo của Phong Vũ (phongvu.vn). Trả lời ngắn gọn, chuẩn xác nghiệp vụ, ghi nhớ ngữ cảnh hội thoại.` }]
+    });
+
+    // Danh sách model ưu tiên từ nhẹ đến phổ thông
+    const CANDIDATE_MODELS = [
+      'gemini-2.0-flash-lite',
+      'gemini-2.0-flash',
+      'gemini-1.5-flash-8b',
+      'gemini-1.5-flash',
+      'gemini-2.5-flash'
+    ];
+
+    for (const model of CANDIDATE_MODELS) {
+      try {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ contents })
+        });
+
+        const data = await response.json();
+
+        // Nếu model không bị quá tải và trả về nội dung
+        if (!data.error && data.candidates?.[0]?.content?.parts?.[0]?.text) {
+          return res.status(200).json({ reply: data.candidates[0].content.parts[0].text });
+        }
+      } catch (e) {
+        // Nếu lỗi mạng của model này, tiếp tục thử model tiếp theo
+      }
+    }
+
+    // Nếu toàn bộ máy chủ Google đều bị quá tải, kích hoạt ngay bộ câu trả lời OJT nội bộ
+    return res.status(200).json({ reply: getFallbackReply(latestQuery) });
+
+  } catch (err) {
+    // Trả về câu trả lời nội bộ nếu gặp lỗi hệ thống bất kỳ
+    return res.status(200).json({ reply: getFallbackReply(latestQuery) });
+  }
+}
