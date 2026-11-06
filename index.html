@@ -113,12 +113,12 @@
       G: "G. CTKM (4)"
     };
 
-    // KHO TRI THỨC NỀN TẢNG ĐẦY ĐỦ (DỰ PHÒNG OFFLINE AN TOÀN)
-    const DEFAULT_KB_DATABASE = [
+    // KHO TRI THỨC NỀN TẢNG CỐ ĐỊNH (HOẠT ĐỘNG 100% KHÔNG BAO GIỜ LỖI)
+    const CORE_KNOWLEDGE = [
       {
         topic: "Kịch bản Tiếp cận Khách hàng",
         keywords: ["kich ban tiep can", "tiep can khach hang", "khach e de", "khach xem choi", "e de", "xem choi"],
-        answer: "🎯 KỊCH BẢN TIẾP CẬN KHÁCH HÀNG THỰC CHIẾN:\n\n1. Khách e dè, né tránh: Giữ khoảng cách tôn trọng, mỉm cười chào nhẹ nhàng: 'Em chào anh/chị, mình cứ thoải mái tham khảo ạ, cần gì cứ gọi em hỗ trợ liền nhé ạ.' Sau đó lùi lại quan sát từ xa.\n2. Khách xem chơi: Mỉm cười hỏi: 'Em chào anh/chị, mình đang tìm máy công việc, học tập hay chỉ đang đi tham khảo ạ?' -> Nếu khách bảo coi thử: 'Dạ anh/chị cứ tham khảo ạ, bên em đang có nhiều ưu đãi rất tốt ở khu vực bên này mời anh/chị xem thử'."[cite: 305]
+        answer: "🎯 KỊCH BẢN TIẾP CẬN KHÁCH HÀNG (SỔ TAY BÁN HÀNG):\n\n1. Khách e dè, né tránh: Giữ khoảng cách tôn trọng, mỉm cười chào nhẹ nhàng: 'Em chào anh/chị, mình cứ thoải mái tham khảo ạ, cần gì cứ gọi em hỗ trợ liền nhé ạ.' Sau đó lùi lại quan sát từ xa.\n2. Khách xem chơi: Mỉm cười hỏi: 'Em chào anh/chị, mình đang tìm máy công việc, học tập hay chỉ đang đi tham khảo ạ?' -> Nếu khách bảo coi thử: 'Dạ anh/chị cứ tham khảo ạ, bên em đang có nhiều ưu đãi rất tốt ở khu vực bên này mời anh/chị xem thử'."[cite: 305]
       },
       {
         topic: "Kịch bản Khai thác Nhu cầu SPIN",
@@ -227,22 +227,28 @@
       const [activeNoteId, setActiveNoteId] = useState(null);
       const [isSendingSheet, setIsSendingSheet] = useState(false);
 
-      const [dynamicKB, setDynamicKB] = useState(DEFAULT_KB_DATABASE);
-      const [kbStatus, setKbStatus] = useState("Sẵn sàng");
+      const [dynamicKB, setDynamicKB] = useState(CORE_KNOWLEDGE);
+      const [kbStatus, setKbStatus] = useState("Kho nội bộ");
 
-      const fetchSheetKnowledge = async () => {
-        setKbStatus("Đang tải dữ liệu...");
+      // Đồng bộ an toàn từ Google Sheet
+      const fetchSheetKnowledge = () => {
+        setKbStatus("Đang kiểm tra...");
         try {
-          const res = await fetch(GOOGLE_SHEET_WEBAPP_URL);
-          const data = await res.json();
-          if (Array.isArray(data) && data.length > 0) {
-            setDynamicKB([...data, ...DEFAULT_KB_DATABASE]);
-            setKbStatus(`Đã nạp ${data.length} mục từ Sheet`);
-          } else {
-            setKbStatus("Đang dùng kho nội bộ");
-          }
+          fetch(GOOGLE_SHEET_WEBAPP_URL)
+            .then(res => res.json())
+            .then(data => {
+              if (Array.isArray(data) && data.length > 0) {
+                setDynamicKB([...data, ...CORE_KNOWLEDGE]);
+                setKbStatus("Đã kết nối Sheet");
+              } else {
+                setKbStatus("Kho nội bộ");
+              }
+            })
+            .catch(() => {
+              setKbStatus("Kho nội bộ");
+            });
         } catch (e) {
-          setKbStatus("Đang dùng kho nội bộ");
+          setKbStatus("Kho nội bộ");
         }
       };
 
@@ -418,7 +424,7 @@
           return `📌 TIÊU CHÍ OJT [${matchCriteria.id}]:\n• Nội dung: ${matchCriteria.title}\n• Thuộc nhóm: ${GROUP_NAMES[matchCriteria.group]}\n• Yêu cầu: Quan sát và thực hành đúng tiêu chuẩn tại showroom (Đạt tối thiểu 50/62 tiêu chí).`;
         }
 
-        return "Dạ, hiện chưa tìm thấy nội dung phù hợp trong kho tri thức.\n\n👉 Bạn hãy thử bấm vào các nút câu hỏi mẫu phía dưới hoặc gõ các từ khóa như: 'kịch bản tiếp cận', 'SPIN', 'xử lý phản bác', 'lỗi SHR', 'túi Zip', 'Ngày 1'... nhé!";
+        return "Dạ, hiện chưa tìm thấy nội dung phù hợp.\n\n👉 Bạn hãy thử bấm vào các nút câu hỏi mẫu phía dưới hoặc gõ các từ khóa như: 'kịch bản tiếp cận', 'SPIN', 'xử lý phản bác', 'lỗi SHR', 'túi Zip', 'Ngày 1'... nhé!";
       };
 
       const handleSend = (textToSend) => {
@@ -432,7 +438,7 @@
         setTimeout(() => {
           const answer = findAnswerFromDynamicKB(query);
           setMessages([...updatedMessages, { sender: "bot", text: answer }]);
-        }, 80);
+        }, 50);
       };
 
       return (
@@ -659,7 +665,7 @@
             </div>
           )}
 
-          {/* TAB 2: ÔN TẬP BÀI HỌC 5 NGÀY */}
+          {/* TAB 2: ÔN TẬP BÀI HỌC 5 NGÀY[cite: 14, 126, 191, 215, 259] */}
           {tab === "lessons" && (
             <div className="flex-1 p-3 pb-8">
               <div className="flex gap-1.5 overflow-x-auto pb-2 no-scrollbar">
@@ -703,13 +709,13 @@
             <div className="flex-1 flex flex-col h-[calc(100vh-170px)]">
               <div className="bg-slate-200/80 px-3 py-1.5 flex justify-between items-center text-[10px] text-slate-600 border-b border-slate-300">
                 <span className="flex items-center gap-1.5">
-                  <span className={`w-2 h-2 rounded-full ${kbStatus.includes("nạp") ? "bg-emerald-500" : "bg-blue-500"}`}></span>
-                  Trạng thái kho tri thức: <strong>{kbStatus}</strong>
+                  <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                  Trạng thái tri thức: <strong>{kbStatus}</strong>
                 </span>
                 <button
                   onClick={fetchSheetKnowledge}
                   className="text-blue-600 hover:text-blue-800 flex items-center gap-1 font-semibold"
-                  title="Tải lại dữ liệu mới nhất từ Sheet"
+                  title="Cập nhật thêm từ Sheet"
                 >
                   <Icons.Refresh /> Cập nhật
                 </button>
