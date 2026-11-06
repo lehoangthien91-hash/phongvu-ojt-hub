@@ -20,10 +20,7 @@
   <script type="text/babel">
     const { useState, useMemo, useEffect } = React;
 
-    // ==========================================
-    // 💡 LINK GOOGLE APPS SCRIPT WEB APP CỦA BẠN:
     const GOOGLE_SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyGDnbGzLVxEWJiyJ8DHhf6HoEDoXlTpd0Q4yrTZdCZgk1D2NIdN4BnbPKjq7zlPfmNnQ/exec";
-    // ==========================================
 
     const Icons = {
       BookOpen: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>,
@@ -33,11 +30,9 @@
       SendCloud: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>,
       Download: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>,
       Note: () => <svg className="w-3.5 h-3.5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>,
-      CheckDouble: () => <svg className="w-3.5 h-3.5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7m-14 4l4 4L19 7"/></svg>,
-      Refresh: () => <svg className="w-3 h-3 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+      CheckDouble: () => <svg className="w-3.5 h-3.5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7m-14 4l4 4L19 7"/></svg>
     };
 
-    // DANH MỤC 62 TIÊU CHÍ CHUẨN TỪ BIỂU MẪU COACHING OJT VER 2[cite: 5, 6]
     const OJT_CHECKLIST_62 = [
       { id: "A.1", group: "A", title: "Standee/cờ vỉa hè đặt vuông góc mặt tiền, cờ thẳng hàng không che lối đi" },
       { id: "A.2", group: "A", title: "Bảng hiệu/hộp đèn nguyên vẹn, sáng đủ đèn; vách kính và cửa ra vào sạch sẽ" },
@@ -113,34 +108,51 @@
       G: "G. CTKM (4)"
     };
 
-    // KHO TRI THỨC NỀN TẢNG CỐ ĐỊNH (HOẠT ĐỘNG 100% KHÔNG BAO GIỜ LỖI)
-    const CORE_KNOWLEDGE = [
-      {
-        topic: "Kịch bản Tiếp cận Khách hàng",
-        keywords: ["kich ban tiep can", "tiep can khach hang", "khach e de", "khach xem choi", "e de", "xem choi"],
-        answer: "🎯 KỊCH BẢN TIẾP CẬN KHÁCH HÀNG (SỔ TAY BÁN HÀNG):\n\n1. Khách e dè, né tránh: Giữ khoảng cách tôn trọng, mỉm cười chào nhẹ nhàng: 'Em chào anh/chị, mình cứ thoải mái tham khảo ạ, cần gì cứ gọi em hỗ trợ liền nhé ạ.' Sau đó lùi lại quan sát từ xa.\n2. Khách xem chơi: Mỉm cười hỏi: 'Em chào anh/chị, mình đang tìm máy công việc, học tập hay chỉ đang đi tham khảo ạ?' -> Nếu khách bảo coi thử: 'Dạ anh/chị cứ tham khảo ạ, bên em đang có nhiều ưu đãi rất tốt ở khu vực bên này mời anh/chị xem thử'."[cite: 305]
+    const LESSONS = {
+      1: {
+        title: "Ngày 1: Hội nhập & Tiêu chuẩn cửa hàng",
+        summary: [
+          "Lịch sử & Lãnh đạo: Khai trương CH đầu tiên 1997 tại TP.HCM. CEO: Chị Trần Phương Chi.",
+          "4 Giá trị cốt lõi: Khách hàng là số 1 - Chính trực - Quan tâm - Đồng đội.",
+          "Tiêu chuẩn mặt tiền: Standee vuông góc, cờ thẳng hàng, băng rôn phẳng phiu, loa phát đúng giờ.",
+          "Tiêu chuẩn bên trong: Bảng giá mica bên phải sản phẩm, laptop mở góc 110-120 độ, màn hình không để tầng sát sàn.",
+          "Golden Rule: Chào 4 điểm chạm (đứng thẳng, tay đặt ngực trái, cúi 15 độ, 'Dạ Phong Vũ xin chào!'). Thưởng 300k/tháng nếu phạm <= 3 lỗi."
+        ]
       },
-      {
-        topic: "Kịch bản Khai thác Nhu cầu SPIN",
-        keywords: ["kich ban spin", "spin pc do hoa", "spin laptop gaming", "spin ban phim co", "spin may in", "spin"],
-        answer: "🔍 KỊCH BẢN KHAI THÁC NHU CẦU SPIN:\n\n• PC Đồ họa: Hỏi phần mềm 2D/3D (S) -> Khai thác giật lag máy cũ (P) -> Hậu quả trễ deadline (I) -> Đề xuất cấu hình chuyên dụng tối ưu thời gian (N).\n• Laptop Gaming: Hỏi tựa game Valorant/AAA (S) -> FPS tụt không ổn định (P) -> Hụt hẫng khi giải trí (I) -> Đề xuất Nitro 5 RTX 4050 144Hz chiến mượt (N).\n• Gaming Gear: Hỏi game MOBA/FPS (S) -> Phím cũ ồn ban đêm (P) -> Phiền người xung quanh (I) -> Tư vấn switch Linear cực êm (N).\n• Máy in: Hỏi in trắng đen/màu (S) -> Thiếu in 2 mặt (P) -> Mất công lật tay (I) -> Đề xuất máy in Brother 2 mặt tự động (N)."[cite: 306, 307, 308, 309]
+      2: {
+        title: "Ngày 2: Kỹ năng & 6 Bước bán hàng",
+        summary: [
+          "Quy trình 6 bước: Chuẩn bị -> Tiếp cận -> Khai thác SPIN -> Giới thiệu FABE -> Xử lý phản bác LAST -> Chốt đơn.",
+          "Kịch bản tiếp cận: Khách e dè thì giữ khoảng cách, khách xem chơi thì mở lời tự nhiên.",
+          "SPIN thực chiến: Áp dụng cho PC Đồ họa, Laptop Gaming, Gaming Gear và Máy in.",
+          "4 Kỹ thuật chốt: Giả định, Cảm xúc, Chia nhỏ, Khan hiếm. Sau chốt: Mời quét Zalo OA, tải App."
+        ]
       },
-      {
-        topic: "Kịch bản Xử lý Phản bác",
-        keywords: ["kich ban xu ly phan bac", "che gia cao", "de suy nghi them", "so sanh gia re hon", "ngai tra gop", "phan bac"],
-        answer: "💡 KỊCH BẢN XỬ LÝ 4 TÌNH HUỐNG PHẢN BÁC:\n\n1. Khách chê giá cao: 'Dạ em hiểu ạ, dòng này giá nhỉnh hơn vì [tính năng vượt trội], mình đầu tư 1 lần sẽ dùng mượt 3-4 năm lợi hơn rất nhiều ạ. Hoặc em có mẫu nhẹ tiền hơn vẫn đáp ứng rất tốt nhu cầu của mình ạ.'\n2. Khách bảo để suy nghĩ thêm: 'Dạ vâng anh, cân nhắc kỹ là đúng rồi ạ. Em xin phép kết nối Zalo gửi thông tin máy và ưu đãi, khi cần anh cứ nhắn em hỗ trợ ngay nhé ạ.'\n3. Nơi khác rẻ hơn: 'Dạ tại Phong Vũ mình được hàng chính hãng 100% có VAT, bảo hành 1 đổi 1 tận nơi, kỹ thuật ủy quyền chuyên sâu và ưu đãi trả góp 3 KHÔNG an tâm tuyệt đối ạ.'\n4. Ngại thủ tục trả góp: 'Dạ hiện giờ chỉ cần CCCD gắn chip là duyệt hồ sơ 15-20 phút nhận máy luôn tại chỗ cực kỳ nhanh gọn anh nhé!'"[cite: 310, 311, 312]
+      3: {
+        title: "Ngày 3: Kiến thức nền tảng Laptop",
+        summary: [
+          "5 Nhóm Laptop: AI PC (NPU >= 40 TOPS), Văn phòng, Doanh nhân, Gaming, Đồ họa.",
+          "CPU: U (tiết kiệm điện), H (hiệu năng cao), HX/K (ép xung), V (tiết kiệm pin thế hệ mới).",
+          "RAM: Tối thiểu 16GB, chú ý RAM LPDDR hàn chết không nâng cấp được. SSD NVMe tốc độ cao.",
+          "Thương hiệu: HP (Omnibook/Victus), Lenovo (IdeaPad/Legion), Asus (Vivobook/ROG), Acer (Aspire/Nitro), Dell (Dell 15/Alienware)."
+        ]
       },
-      {
-        topic: "Danh mục 50 Mã lỗi Golden Rule (SHR1 - SHR50)",
-        keywords: ["cac loi can tranh", "cac ma loi shr", "danh sach loi", "loi shr", "thuong golden rule", "300.000", "50 ma loi"],
-        answer: "🚫 DANH MỤC 50 MÃ LỖI GOLDEN RULE (SHR1 – SHR50):\n\n• Diện mạo: SHR1 (sai đồng phục), SHR2 (giày sáng màu/dép), SHR3 (bảo vệ không nón), SHR4 (sai thắt lưng), SHR5 (áo bỏ ngoài quần), SHR6 (không bảng tên), SHR11 (nữ xõa tóc), SHR12 (nam tóc dài), SHR13 (nữ không/quá đậm trang điểm).\n• Kỷ luật: SHR7 (không trực mở cửa), SHR8 (tụ tập cười đùa), SHR9 (hút thuốc), SHR10 (tay túi quần), SHR14 (đứng dựa vách), SHR15 (ăn uống nơi làm việc), SHR17/SHR20 (đưa nhận đồ/bill 1 tay), SHR18 (làm việc riêng lướt mạng).\n• Phục vụ: SHR21/SHR22 (không dắt xe/đưa thẻ xe 1 tay), SHR23 (không chào đón), SHR25 (không che ô khi mưa), SHR26/SHR39 (không mở cửa cho khách), SHR27/SHR28 (không mời nước/ghế ngồi), SHR34/SHR36 (nhăn nhó, cau có), SHR38/SHR41 (chào sai động tác/không cúi chào), SHR42/SHR43 (không che/lau yên xe), SHR44/SHR45 (không hỗ trợ khiêng đồ nặng ra xe), SHR48-SHR50 (không cảm ơn, không tiễn khách).\n💰 Thưởng Golden Rule: 300.000 VNĐ/người/tháng nếu vi phạm <= 3 lỗi/tháng."[cite: 116, 117, 118, 126]
+      4: {
+        title: "Ngày 4: Xây dựng cấu hình PC",
+        summary: [
+          "5 Bước Build PC: Khớp Socket ('Bác 67 Ham Zui' cho Intel; 'Bác 50 Ăn Xài' cho AMD) -> RAM Dual Channel -> VGA -> SSD -> Nguồn 80 Plus dư tải 10-20%.",
+          "Phân bổ ngân sách: Văn phòng (CPU 50%), Gaming (GPU 50%), Đồ họa (SSD 30%, CPU 25%, GPU 20%, RAM 15% >= 32GB)."
+        ]
       },
-      {
-        topic: "Quy tắc túi Zip & Dropbox",
-        keywords: ["tui zip", "dropbox", "cctv", "nop tien", "thu ngan", "ket ca"],
-        answer: "📦 QUY TẮC TÚI ZIP & THÙNG DROPBOX:\n\n• Khi thu tiền mặt: Nhận tiền -> Đối chiếu bill -> Hoàn tiền thừa -> Cho toàn bộ tiền mặt và hóa đơn vào túi Zip -> Ghi tên, MSNV lên túi và kéo khóa cẩn thận -> Bàn giao ngay cho Thu ngân (CS) hoặc thả trực tiếp vào hòm Dropbox dưới sự giám sát của Camera an ninh CCTV.\n• Chế tài: Mang tiền ra khỏi showroom hoặc giữ tiền sai quy định sẽ bị SA THẢI NGAY LẬP TỨC."[cite: 268, 270, 272, 277]
+      5: {
+        title: "Ngày 5: Quản lý tiền mặt & Thanh toán",
+        summary: [
+          "7 Bước thu ngân: Chuẩn bị 500k tiền lẻ -> Thu tiền bỏ túi Zip thả Dropbox dưới CCTV -> Lập phiếu thu 2 liên -> Kết ca -> Niêm phong két -> Nộp ngân hàng -> Lưu hồ sơ.",
+          "Chế tài: Chiếm dụng/gian lận hoặc mang tiền ra ngoài bị SA THẢI NGAY LẬP TỨC.",
+          "10 Hình thức thanh toán: Tiền mặt, Thẻ, Trả góp 0% thẻ tín dụng (>= 3tr), VNPay-QR, MoMo, ShopeePay, COD, Công nợ..."
+        ]
       }
-    ];
+    };
 
     function removeVietnameseTones(str) {
       if (!str) return "";
@@ -153,70 +165,11 @@
         .trim();
     }
 
-    const LESSONS = {
-      1: {
-        title: "Ngày 1: Hội nhập, Tiêu chuẩn CH (HR_QĐ.01) & Golden Rule",
-        summary: [
-          "Lịch sử & Lãnh đạo: Khai trương CH đầu tiên năm 1997 tại TP.HCM -> 2000 (TTBH đầu tiên) -> 2007 (Thành lập Cty Phong Vũ) -> 2018 (Teko đầu tư mở rộng >30 CH) -> 2026 (Phát triển mạnh mẽ). CEO: Chị Trần Phương Chi.",
-          "Tầm nhìn & Sứ mệnh: Trở thành nhà bán lẻ đa kênh hàng đầu Việt Nam. Hiện đại hóa (Thương hiệu - Quy trình - Công nghệ), Số hóa (O2O) và tối ưu Trải nghiệm khách hàng.",
-          "4 Giá trị cốt lõi & Logo: Khách hàng là số 1 - Chính trực - Quan tâm - Đồng đội. Logo gồm Hình vuông (vững chắc, tin cậy), Hình tròn (ấm áp, sẻ chia), Hình tam giác (tham vọng, tiên phong).",
-          "Chế độ Phúc lợi & Hệ thống: BHBB 32% (NLĐ đóng 10.5%, Cty đóng 21.5%). Phép năm tăng theo thâm niên (Nhóm 1: 12-17 ngày; Nhóm 2: 14-18 ngày; Nhóm 3: 16-18 ngày). Nghỉ lễ 11 ngày/năm. Hệ thống: HRM, Elearning (daotao.phongvu.vn), SeaTalk. Tuyệt đối bảo mật lương thưởng.",
-          "Tiêu chuẩn Mặt tiền (HR_QĐ.01): 15 hạng mục POSM chuẩn MKT. Standee/cờ vuông góc mặt tiền; Băng rôn vách tường cách đất 1-1.2m; Poster cửa tối đa 2 tấm (ưu tiên bên phải); Loa phát sáng 8h30-11h, chiều 16h-19h; Bãi xe phủ bạt yên xe.",
-          "Tiêu chuẩn Bên trong & Bảng giá: Trưng bày từ ngoài vào trong, trái sang phải (giá tăng dần, nhỏ -> lớn, sáng -> tối). Bảng giá mica đặt BÊN PHẢI SP trên bàn/kệ & Tivi; dán GÓC PHẢI SP điện máy CE; ĐẦU MÓC TREO với phụ kiện; GIỮA DƯỚI SP với linh kiện. Bảng Đứng (ngang tầm mắt) vs Bảng Nằm (dưới tầm mắt).",
-          "Khu vực Laptop, Màn hình & Khác: Laptop cách mép bàn 10-15cm, mở góc 110°-120° (dưới tầm mắt), bọc nilon màn hình riêng - phím riêng. Màn hình KHÔNG để tầng sát sàn (kệ 50mm). Bàn thờ Ông Địa KHÔNG thắp nhang trong giờ hoạt động.",
-          "Golden Rule & 50 Mã lỗi (SHR1 - SHR50): Chào 4 điểm chạm (Đứng thẳng hướng mắt, tay đặt ngực trái, cúi 15°, nói 'Dạ Phong Vũ xin chào!'). Chỉ dẫn bằng cả bàn tay, giao nhận bằng 2 tay. Thưởng 300.000đ/tháng nếu vi phạm <= 3 lỗi/tháng."
-        ]
-      },
-      2: {
-        title: "Ngày 2: Kỹ năng & Quy trình 6 Bước Bán hàng (Kèm Sổ tay Bán hàng)",
-        summary: [
-          "Quy trình 6 bước chuẩn: (1) Chuẩn bị -> (2) Tiếp cận khách hàng -> (3) Khai thác nhu cầu (SPIN) -> (4) Giới thiệu sản phẩm (FABE) -> (5) Xử lý phản bác (LAST) -> (6) Chốt đơn & CSKH.",
-          "Kịch bản Tiếp cận khách hàng: (1) Khách e dè né tránh: Giữ khoảng cách, chào nhẹ nhàng 'Anh/chị cứ thoải mái tham khảo, cần gì cứ gọi em', lùi lại quan sát; (2) Khách xem chơi: Mỉm cười hỏi thăm nhu cầu, hướng dẫn khu vực ưu đãi và lùi lại không tạo áp lực.",
-          "Kịch bản Khai thác nhu cầu SPIN: Thực chiến theo 4 bước S (Tình hình) -> P (Vấn đề) -> I (Hậu quả) -> N (Giải pháp) cho PC Lắp ráp đồ họa, Laptop Gaming, Gaming Gear và Máy in.",
-          "Giới thiệu giải pháp FABE: Đề xuất đủ 3 phương án (Chuẩn - Tiết kiệm - Nâng cấp) theo Feature (Tính năng) -> Advantage (Điểm mạnh) -> Benefit (Lợi ích thực tế) -> Evidence (Bằng chứng).",
-          "Kịch bản Xử lý phản bác: (1) Khách chê giá cao: Giải thích giá trị đầu tư dài hạn hoặc gợi ý dòng máy nhẹ tiền hơn; (2) Khách bảo để suy nghĩ thêm: Đồng cảm, xin phép gửi thông tin ưu đãi qua Zalo; (3) So sánh giá nơi khác rẻ hơn: Khẳng định 100% chính hãng, kỹ thuật ủy quyền, trả góp 3 KHÔNG; (4) Ngại thủ tục trả góp: Giải tỏa tâm lý, chỉ cần CCCD gắn chip, duyệt 15-20 phút.",
-          "Dấu hiệu mua hàng & 4 Kỹ thuật chốt: Nhận diện cử chỉ gật gù, mân mê máy, hỏi giá bớt/bảo hành. Áp dụng: Chốt giả định, Chốt cảm xúc, Chốt chia nhỏ số tiền, Chốt khan hiếm.",
-          "3 Hành động bắt buộc sau chốt: (1) Mời khách quét Zalo OA Phong Vũ -> (2) Mời khách tải App Phong Vũ -> (3) Xin SĐT khách hàng để chăm sóc sau bán."
-        ]
-      },
-      3: {
-        title: "Ngày 3: Kiến thức Nền tảng & Kỹ năng Tư vấn Laptop",
-        summary: [
-          "5 Nhóm Laptop hiện nay: (1) AI PC / Copilot+ PC (NPU >= 40 TOPS, pin 12-18h) - (2) Văn phòng/HSSV (14-22tr, RAM 16GB) - (3) Doanh nhân Ultrabook (mỏng nhẹ, vỏ kim loại, OLED 2.8K) - (4) Gaming (CPU H/HX, RTX 40/50 series, màn 144Hz-240Hz) - (5) Đồ họa (màn 100% sRGB/DCI-P3, RTX Studio).",
-          "Đọc mã CPU Intel & AMD: Intel thế hệ mới (Arrow Lake) bỏ chữ 'i', chia thành Intel Core 3/5/7 và Core Ultra 5/7/9. Hậu tố: U (tiết kiệm điện), P (trung gian), V (mạnh mẽ & siêu tiết kiệm pin), H (hiệu năng cao), HX/K (ép xung), G1-G7 (GPU tích hợp), HS (AMD hiệu năng cao tiết kiệm điện).",
-          "Thông số RAM & Ổ cứng SSD: RAM DDR4 (2133-3200MHz), DDR5 (4800-6400MHz+), LPDDR (hàn chết trên main, không nâng cấp được); độ trễ CL càng thấp càng nhanh. SSD: SATA III (~550MB/s) vs M.2 NVMe PCIe (1500 - 7000+ MB/s).",
-          "GPU, Màn hình & Cổng kết nối: GPU Onboard (Intel Iris Xe, Radeon) vs GPU rời (NVIDIA RTX có Ray Tracing/DLSS, AMD RX có FSR, Intel Arc có XeSS). Tấm nền TN (1-3ms), IPS (góc 178°), OLED (tương phản 1,000,000:1). Cổng USB-A, USB-C, Thunderbolt (xuất 2 màn 4K/eGPU), HDMI, DisplayPort, RJ-45.",
-          "Phân dòng 5 Thương hiệu: HP (Omnibook vs Victus) | Lenovo (ThinkBook/IdeaPad vs Legion) | ASUS (Zenbook/Vivobook vs ROG/TUF) | Acer (Aspire/Swift vs Nitro/Predator) | Dell (Dell 15/Pro/XPS vs Alienware/G-series).",
-          "Nguyên tắc Tư vấn & Điều cần tránh: Văn phòng tránh tư vấn máy gaming dày nặng; Chơi game tránh bán card onboard; Đồ họa tránh bán màn 45% NTSC / 65% sRGB; Đa nhiệm/Code tránh bán máy 8GB RAM hoặc RAM hàn chết."
-        ]
-      },
-      4: {
-        title: "Ngày 4: Kiến thức Nền tảng & Xây dựng Cấu hình PC",
-        summary: [
-          "Cấu tạo tổng quan PC: 7 thành phần chính (CPU, RAM, VGA, Mainboard, SSD/HDD, PSU, Case & Tản nhiệt). Nắm rõ 11 bộ phận trên Thùng máy và 11 bộ phận trên Bo mạch chủ (Socket, DIMM, VRM, Chipset, PCIe, ATX 24-pin, SATA, M.2 NVMe, BIOS, Pin CMOS, I/O).",
-          "Bước 1 - CPU & Mainboard: Khớp Socket (Intel LGA1700/1851; AMD AM4/AM5). Thần chú: 'Bác 67 Ham Zui' (Intel đi với H, B đuôi 60/70, Z) và 'Bác 50 Ăn Xài' (AMD đi với A, B đuôi 50, X). Cân bằng i5/R5 với Main B, i9/R9 với Main Z/X.",
-          "Bước 2 & 3 - RAM & VGA: Chọn đúng RAM DDR4 hoặc DDR5 theo Main; luôn cắm 2 thanh (VD: 2x8GB) để kích hoạt Dual Channel tăng gấp đôi băng thông. Chọn VGA đúng nhu cầu (eSports -> AAA -> Render 3D) và tránh nghẽn cổ chai (không ghép i3 với RTX 4070).",
-          "Bước 4 & 5 - SSD & Nguồn (PSU): Ưu tiên SSD M.2 NVMe tốc độ cao. Nguồn là 'trái tim' của PC, chọn chuẩn 80 Plus (Bronze 85%, Silver 88%, Gold 90%, Platinum 92%, Titanium 94% ở 50% tải) và tính dư tải an toàn tối thiểu 10-20%.",
-          "Phân bổ ngân sách chuẩn theo nhu cầu: (1) PC Văn phòng 8-15tr (CPU 50%, RAM 20%, SSD 15%, Nguồn 15%) - (2) PC Gaming 15-35tr (GPU 50%, CPU 20%, RAM 10%, SSD 10%, Nguồn 10%) - (3) PC Đồ họa 25-50tr+ (SSD 30%, CPU 25%, GPU 20%, RAM 15% >= 32GB, Nguồn 10%)."
-        ]
-      },
-      5: {
-        title: "Ngày 5: Quy trình Quản lý Tiền mặt & Thanh toán",
-        summary: [
-          "Quy trình 7 bước quản lý tiền mặt: (1) Chuẩn bị (SA nhận 500.000đ tiền lẻ đầu ca, cuối ca hoàn lại) -> (2) Thu tiền -> (3) Lập phiếu thu 2 liên -> (4) Kết ca & Bàn giao -> (5) Cất tiền & Niêm phong két sắt -> (6) Nộp ngân hàng -> (7) Lưu hồ sơ.",
-          "Thao tác Túi Zip & Thùng Dropbox: Nhận tiền -> Đối chiếu bill -> Hoàn tiền thừa -> Bỏ cả tiền và bill vào túi Zip -> Ghi tên, MSNV và khóa túi -> Bàn giao ngay cho Thu ngân (CS) hoặc thả vào Dropbox dưới sự giám sát của camera CCTV.",
-          "Xử lý chênh lệch & 4 Chế tài xử lý: Lệch tiền phải báo ngay cho SM, lập biên bản, trích xuất CCTV. (1) Chiếm dụng/gian lận/mang tiền ra khỏi CH: Sa thải ngay lập tức; (2) Làm thất thoát: Bồi thường 100%; (3) Không in Đơn đặt hàng kiêm phiếu thu: Phạt 50% thưởng CIS/Golden Rule; (4) Kết ca thiếu không rõ nguyên nhân: Showroom bồi thường 100%.",
-          "10 Hình thức thanh toán tại cửa hàng: Tiền mặt, Chuyển khoản, Thẻ ngân hàng (in 3 liên ký nhận), Trả góp, ShopeePay, MoMo (nhập số tham chiếu trên POS), VNPay-QR (trên SPOS), Phiếu mua hàng (PMH), Thu COD, Công nợ.",
-          "Quy định Trả góp: Trả góp 0% thẻ tín dụng áp dụng đơn từ 3.000.000đ, kỳ hạn 3-6 tháng (qua MPOS, VNPay, Payoo; hỗ trợ trả 1 phần tiền mặt + 1 phần quẹt thẻ). Trả góp có lãi qua công ty tài chính: HD Saison, AEON, Mirae Asset, Home Credit."
-        ]
-      }
-    };
-
     function App() {
       const [tab, setTab] = useState("checklist");
       const [selectedDay, setSelectedDay] = useState(1);
       const [filterGroup, setFilterGroup] = useState("ALL");
-      
+
       const [staffName, setStaffName] = useState("");
       const [staffId, setStaffId] = useState("");
       const [storeName, setStoreName] = useState("");
@@ -227,37 +180,19 @@
       const [activeNoteId, setActiveNoteId] = useState(null);
       const [isSendingSheet, setIsSendingSheet] = useState(false);
 
-      const [dynamicKB, setDynamicKB] = useState(CORE_KNOWLEDGE);
-      const [kbStatus, setKbStatus] = useState("Kho nội bộ");
-
-      // Đồng bộ an toàn từ Google Sheet
-      const fetchSheetKnowledge = () => {
-        setKbStatus("Đang kiểm tra...");
-        try {
-          fetch(GOOGLE_SHEET_WEBAPP_URL)
-            .then(res => res.json())
-            .then(data => {
-              if (Array.isArray(data) && data.length > 0) {
-                setDynamicKB([...data, ...CORE_KNOWLEDGE]);
-                setKbStatus("Đã kết nối Sheet");
-              } else {
-                setKbStatus("Kho nội bộ");
-              }
-            })
-            .catch(() => {
-              setKbStatus("Kho nội bộ");
-            });
-        } catch (e) {
-          setKbStatus("Kho nội bộ");
-        }
-      };
+      const [kbList, setKbList] = useState([]);
 
       useEffect(() => {
-        fetchSheetKnowledge();
+        fetch("/knowledge_base.json")
+          .then(res => res.json())
+          .then(data => {
+            if (Array.isArray(data)) setKbList(data);
+          })
+          .catch(() => {});
       }, []);
 
       const [messages, setMessages] = useState([
-        { sender: "bot", text: "Xin chào bạn! Mình là Trợ lý Học tập OJT Phong Vũ. Toàn bộ giáo trình 5 ngày và Sổ tay Bán hàng thực chiến (kịch bản tiếp cận, SPIN, xử lý phản bác, 50 mã lỗi SHR) đã sẵn sàng. Bạn hãy chọn câu hỏi bên dưới hoặc gõ từ khóa để tra cứu nhé!" }
+        { sender: "bot", text: "Xin chào bạn! Mình là Trợ lý Học tập OJT Phong Vũ. Toàn bộ giáo trình 5 ngày và Sổ tay Bán hàng thực chiến đã sẵn sàng. Bạn hãy chọn câu hỏi bên dưới hoặc gõ từ khóa để tra cứu nhé!" }
       ]);
       const [inputQuery, setInputQuery] = useState("");
 
@@ -279,15 +214,11 @@
 
       const handleQuickCheckAllPass = () => {
         const count = filteredChecklist.length;
-        const confirmCheck = confirm(`Bạn có muốn đánh dấu 'ĐẠT' nhanh cho toàn bộ ${count} tiêu chí trong nhóm ${GROUP_NAMES[filterGroup]} không?`);
-        if (!confirmCheck) return;
-
+        if (!confirm(`Đánh dấu ĐẠT cho toàn bộ ${count} tiêu chí nhóm ${GROUP_NAMES[filterGroup]}?`)) return;
         setChecklistState(prev => {
-          const nextState = { ...prev };
-          filteredChecklist.forEach(item => {
-            nextState[item.id] = "pass";
-          });
-          return nextState;
+          const next = { ...prev };
+          filteredChecklist.forEach(i => { next[i.id] = "pass"; });
+          return next;
         });
       };
 
@@ -296,23 +227,17 @@
       }, [checklistState]);
 
       const progressPercent = Math.round((passedCount / OJT_CHECKLIST_62.length) * 100);
-      const isPassedGoal = passedCount >= 50;[cite: 5, 6]
+      const isPassedGoal = passedCount >= 50;
 
       const handleSendToGoogleSheet = async () => {
         if (!staffName.trim()) {
-          alert("⚠️ Vui lòng nhập Họ tên Nhân viên bán hàng trước khi gửi!");
+          alert("⚠️ Vui lòng nhập Họ tên Nhân viên bán hàng!");
           return;
         }
 
         const evaluatedCount = Object.keys(checklistState).length;
         if (evaluatedCount < OJT_CHECKLIST_62.length) {
-          const confirmSend = confirm(`Bạn mới đánh giá ${evaluatedCount}/${OJT_CHECKLIST_62.length} tiêu chí. Bạn có chắc chắn muốn gửi kết quả này không?`);
-          if (!confirmSend) return;
-        }
-
-        if (!GOOGLE_SHEET_WEBAPP_URL || GOOGLE_SHEET_WEBAPP_URL.includes("...")) {
-          alert("⚠️ Bạn chưa cấu hình đúng GOOGLE_SHEET_WEBAPP_URL!");
-          return;
+          if (!confirm(`Bạn mới đánh giá ${evaluatedCount}/${OJT_CHECKLIST_62.length} tiêu chí. Vẫn tiếp tục gửi?`)) return;
         }
 
         setIsSendingSheet(true);
@@ -345,10 +270,9 @@
             headers: { "Content-Type": "text/plain;charset=utf-8" },
             body: JSON.stringify(payload)
           });
-
-          alert("✅ ĐÃ GỬI THÀNH CÔNG!\nKết quả đánh giá 62 tiêu chí OJT đã được tách cột chi tiết vào Google Sheet của Giảng viên.");
+          alert("✅ ĐÃ GỬI THÀNH CÔNG!\nKết quả đã được ghi nhận vào Google Sheet của Giảng viên.");
         } catch (error) {
-          alert("❌ Có lỗi kết nối khi gửi dữ liệu. Vui lòng kiểm tra lại mạng!");
+          alert("❌ Lỗi mạng khi gửi dữ liệu. Vui lòng kiểm tra lại kết nối!");
         } finally {
           setIsSendingSheet(false);
         }
@@ -365,16 +289,11 @@
         content += `Người đánh giá    : ${evaluator || "(Chưa nhập)"}\n`;
         content += `Ngày xuất         : ${currentDate}\n`;
         content += `---------------------------------------------------------\n`;
-        content += `KẾT QUẢ ĐÁNH GIÁ:\n`;
-        content += `• Số mục Đạt      : ${passedCount}/${OJT_CHECKLIST_62.length} mục\n`;
-        content += `• Tỷ lệ hoàn thành: ${progressPercent}%\n`;
-        content += `• Kết luận        : ${isPassedGoal ? "ĐẠT CHUẨN NĂNG LỰC GĐ2 (>= 50/62 mục đạt)" : "CHƯA ĐẠT (Cần đào tạo & kèm cặp thêm)"}\n`;
-        content += `---------------------------------------------------------\n\n`;
-        content += `CHI TIẾT 62 TIÊU CHÍ ĐÁNH GIÁ:\n`;
+        content += `KẾT QUẢ: ${passedCount}/62 mục (${progressPercent}%) - ${isPassedGoal ? "ĐẠT CHUẨN (>=50/62)" : "CHƯA ĐẠT"}\n\n`;
 
         OJT_CHECKLIST_62.forEach((item, index) => {
           const status = checklistState[item.id] === "pass" ? "[ ĐẠT ]" : checklistState[item.id] === "fail" ? "[ CHƯA ĐẠT ]" : "[ CHƯA ĐÁNH GIÁ ]";
-          const note = notesState[item.id] ? ` (Ghi chú: ${notesState[item.id]})` : "";
+          const note = notesState[item.id] ? ` (${notesState[item.id]})` : "";
           content += `${index + 1}. [${item.id}] ${item.title}: ${status}${note}\n`;
         });
 
@@ -382,21 +301,21 @@
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
-        link.download = `OJT_DanhGia62_${evalRound}_${staffName ? staffName.replace(/\s+/g, '_') : 'NVBH'}.txt`;
+        link.download = `OJT_DanhGia62_${staffName || "NVBH"}.txt`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
         URL.revokeObjectURL(url);
       };
 
-      const findAnswerFromDynamicKB = (query) => {
+      const findAnswer = (query) => {
         if (!query || !query.trim()) return null;
         const cleanQ = removeVietnameseTones(query);
 
         let bestMatch = null;
         let maxScore = 0;
 
-        for (const item of dynamicKB) {
+        for (const item of kbList) {
           let score = 0;
           for (const kw of (item.keywords || [])) {
             const cleanKW = removeVietnameseTones(kw);
@@ -421,10 +340,10 @@
         });
 
         if (matchCriteria) {
-          return `📌 TIÊU CHÍ OJT [${matchCriteria.id}]:\n• Nội dung: ${matchCriteria.title}\n• Thuộc nhóm: ${GROUP_NAMES[matchCriteria.group]}\n• Yêu cầu: Quan sát và thực hành đúng tiêu chuẩn tại showroom (Đạt tối thiểu 50/62 tiêu chí).`;
+          return `📌 TIÊU CHÍ OJT [${matchCriteria.id}]:\n• Nội dung: ${matchCriteria.title}\n• Nhóm: ${GROUP_NAMES[matchCriteria.group]}\n• Chuẩn: Thực hiện đúng tiêu chuẩn tại showroom.`;
         }
 
-        return "Dạ, hiện chưa tìm thấy nội dung phù hợp.\n\n👉 Bạn hãy thử bấm vào các nút câu hỏi mẫu phía dưới hoặc gõ các từ khóa như: 'kịch bản tiếp cận', 'SPIN', 'xử lý phản bác', 'lỗi SHR', 'túi Zip', 'Ngày 1'... nhé!";
+        return "Dạ, hiện chưa tìm thấy nội dung phù hợp trong kho tri thức.\n\n👉 Bạn hãy bấm vào các nút câu hỏi mẫu phía dưới hoặc gõ các từ khóa: 'kịch bản tiếp cận', 'SPIN', 'xử lý phản bác', 'lỗi SHR', 'túi Zip', 'Ngày 1'... nhé!";
       };
 
       const handleSend = (textToSend) => {
@@ -436,7 +355,7 @@
         setInputQuery("");
 
         setTimeout(() => {
-          const answer = findAnswerFromDynamicKB(query);
+          const answer = findAnswer(query);
           setMessages([...updatedMessages, { sender: "bot", text: answer }]);
         }, 50);
       };
@@ -448,33 +367,33 @@
             <div className="flex justify-between items-center">
               <div>
                 <h1 className="text-base font-bold tracking-tight">PHONG VŨ OJT COACH</h1>
-                <p className="text-[11px] text-blue-100">Đánh giá Năng lực GĐ2 (62 tiêu chí)[cite: 5, 6]</p>
+                <p className="text-[11px] text-blue-100">Đánh giá Năng lực GĐ2 (62 tiêu chí)</p>
               </div>
               <div className="text-right flex items-center gap-1.5">
                 <button
                   onClick={handleSendToGoogleSheet}
                   disabled={isSendingSheet}
                   className="bg-amber-400 hover:bg-amber-500 text-slate-900 px-2.5 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 shadow-sm transition-all disabled:opacity-50"
-                  title="Gửi dữ liệu trực tiếp về Google Sheet cho Giảng viên"
+                  title="Gửi dữ liệu về Sheet"
                 >
                   <Icons.SendCloud /> {isSendingSheet ? "..." : "Gửi Sheet"}
                 </button>
                 <button
                   onClick={handleExportReport}
                   className="bg-emerald-500 hover:bg-emerald-600 text-white p-1.5 rounded-lg text-xs shadow-sm transition-all"
-                  title="Tải tệp báo cáo .txt về máy"
+                  title="Tải tệp .txt"
                 >
                   <Icons.Download />
                 </button>
               </div>
             </div>
 
-            {/* Thanh tiến độ OJT */}
+            {/* Thanh tiến độ */}
             <div className="mt-2.5 bg-blue-800/60 p-2 rounded-lg text-xs">
               <div className="flex justify-between items-center mb-1">
-                <span>Đạt: <strong>{passedCount}/62</strong> mục[cite: 5, 6]</span>
+                <span>Đạt: <strong>{passedCount}/62</strong> mục</span>
                 <span className={`font-bold ${isPassedGoal ? 'text-emerald-300' : 'text-amber-300'}`}>
-                  {progressPercent}% {isPassedGoal ? "✓ Đạt chuẩn (≥50)" : "(Chuẩn: ≥50 mục)"}[cite: 5, 6]
+                  {progressPercent}% {isPassedGoal ? "✓ Đạt chuẩn (≥50)" : "(Chuẩn: ≥50 mục)"}
                 </span>
               </div>
               <div className="w-full bg-blue-950 h-2 rounded-full overflow-hidden">
@@ -491,7 +410,7 @@
                 onClick={() => setTab("checklist")} 
                 className={`flex-1 py-1.5 rounded text-center transition-all ${tab === "checklist" ? "bg-white text-blue-700 shadow font-bold" : "text-white"}`}
               >
-                <Icons.CheckSquare /> Checklist (62)[cite: 5, 6]
+                <Icons.CheckSquare /> Checklist (62)
               </button>
               <button 
                 onClick={() => setTab("lessons")} 
@@ -508,7 +427,7 @@
             </div>
           </div>
 
-          {/* TAB 1: CHECKLIST 62 TIÊU CHÍ */}
+          {/* TAB 1: CHECKLIST */}
           {tab === "checklist" && (
             <div className="flex-1 p-2.5 space-y-2.5 pb-8">
               <div className="bg-white rounded-xl p-2.5 border border-slate-200 shadow-xs space-y-2 text-xs">
@@ -556,228 +475,4 @@
                   <select
                     value={evalRound}
                     onChange={(e) => setEvalRound(e.target.value)}
-                    className="flex-1 border border-slate-200 rounded p-1 text-xs bg-white text-slate-700 focus:outline-none focus:border-blue-500 font-medium"
-                  >
-                    <option value="Lần 1">Đánh giá Lần 1[cite: 5, 6]</option>
-                    <option value="Lần 2">Đánh giá Lần 2[cite: 5, 6]</option>
-                    <option value="Lần 3">Đánh giá Lần 3[cite: 5, 6]</option>
-                  </select>
-                </div>
-              </div>
-
-              <button
-                onClick={handleSendToGoogleSheet}
-                disabled={isSendingSheet}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-xl text-xs flex items-center justify-center gap-1.5 shadow transition-all disabled:opacity-50"
-              >
-                <Icons.SendCloud /> {isSendingSheet ? "Đang gửi dữ liệu về Google Sheet..." : "GỬI KẾT QUẢ ĐÁNH GIÁ VỀ CHO GIẢNG VIÊN"}
-              </button>
-
-              <div className="flex gap-1 overflow-x-auto pb-1 no-scrollbar text-xs">
-                {Object.keys(GROUP_NAMES).map(group => (
-                  <button
-                    key={group}
-                    onClick={() => setFilterGroup(group)}
-                    className={`px-2.5 py-1 rounded-full font-bold whitespace-nowrap transition-all ${filterGroup === group ? "bg-blue-600 text-white shadow-xs" : "bg-white text-slate-600 border border-slate-200"}`}
-                  >
-                    {GROUP_NAMES[group]}
-                  </button>
-                ))}
-              </div>
-
-              <div className="flex justify-between items-center px-1 text-xs">
-                <span className="text-slate-500 text-[11px]">
-                  Hiển thị: <strong>{filteredChecklist.length}</strong> tiêu chí
-                </span>
-                <button
-                  onClick={handleQuickCheckAllPass}
-                  className="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-300 font-semibold px-2 py-0.5 rounded text-[11px] flex items-center gap-1 transition-all"
-                >
-                  <Icons.CheckDouble /> Tick nhanh Đạt ({filteredChecklist.length})
-                </button>
-              </div>
-
-              <div className="space-y-1.5">
-                {filteredChecklist.map((item) => {
-                  const status = checklistState[item.id];
-                  const hasNote = Boolean(notesState[item.id]);
-                  const isNoteOpen = activeNoteId === item.id;
-
-                  return (
-                    <div 
-                      key={item.id} 
-                      className={`bg-white rounded-lg p-2 border transition-all text-xs ${status === 'pass' ? 'border-emerald-200 bg-emerald-50/20' : status === 'fail' ? 'border-rose-200 bg-rose-50/20' : 'border-slate-200'}`}
-                    >
-                      <div className="flex items-center justify-between gap-2">
-                        <div className="flex-1 flex items-start gap-1.5 min-w-0">
-                          <span className={`font-mono font-bold text-[11px] px-1.5 py-0.5 rounded shrink-0 ${status === 'pass' ? 'bg-emerald-100 text-emerald-800' : status === 'fail' ? 'bg-rose-100 text-rose-800' : 'bg-slate-100 text-slate-600'}`}>
-                            {item.id}
-                          </span>
-                          <span className="text-slate-800 leading-snug line-clamp-2">{item.title}</span>
-                        </div>
-
-                        <div className="flex items-center gap-1 shrink-0">
-                          <button
-                            onClick={() => handleCheck(item.id, "pass")}
-                            className={`px-2 py-1 rounded font-bold text-[11px] transition-all border ${status === "pass" ? "bg-emerald-600 text-white border-emerald-600 shadow-xs" : "bg-white text-emerald-600 border-emerald-200 hover:bg-emerald-50"}`}
-                          >
-                            Đạt
-                          </button>
-                          <button
-                            onClick={() => handleCheck(item.id, "fail")}
-                            className={`px-2 py-1 rounded font-bold text-[11px] transition-all border ${status === "fail" ? "bg-rose-600 text-white border-rose-600 shadow-xs" : "bg-white text-rose-600 border-rose-200 hover:bg-rose-50"}`}
-                          >
-                            Hỏng
-                          </button>
-                          <button
-                            onClick={() => setActiveNoteId(isNoteOpen ? null : item.id)}
-                            className={`p-1 rounded border transition-all ${hasNote ? "bg-blue-100 text-blue-700 border-blue-300" : "text-slate-400 border-slate-200 hover:text-slate-600"}`}
-                            title="Ghi chú minh chứng"
-                          >
-                            <Icons.Note />
-                          </button>
-                        </div>
-                      </div>
-
-                      {(isNoteOpen || hasNote) && (
-                        <div className="mt-1.5 pt-1.5 border-t border-slate-100">
-                          <input
-                            type="text"
-                            placeholder="Ghi chú minh chứng..."
-                            value={notesState[item.id] || ""}
-                            onChange={(e) => handleNoteChange(item.id, e.target.value)}
-                            className="w-full bg-slate-50 border border-slate-200 rounded px-2 py-1 text-[11px] text-slate-700 focus:outline-none focus:border-blue-400"
-                          />
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-
-              <button
-                onClick={handleSendToGoogleSheet}
-                disabled={isSendingSheet}
-                className="w-full mt-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-md transition-all disabled:opacity-50"
-              >
-                <Icons.SendCloud /> {isSendingSheet ? "Đang gửi về Sheet..." : "HOÀN TẤT & GỬI KẾT QUẢ ĐÁNH GIÁ (62 MỤC)"}
-              </button>
-            </div>
-          )}
-
-          {/* TAB 2: ÔN TẬP BÀI HỌC 5 NGÀY[cite: 14, 126, 191, 215, 259] */}
-          {tab === "lessons" && (
-            <div className="flex-1 p-3 pb-8">
-              <div className="flex gap-1.5 overflow-x-auto pb-2 no-scrollbar">
-                {[1, 2, 3, 4, 5].map((day) => (
-                  <button
-                    key={day}
-                    onClick={() => setSelectedDay(day)}
-                    className={`px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all ${selectedDay === day ? "bg-blue-600 text-white shadow" : "bg-white text-slate-600 border border-slate-200"}`}
-                  >
-                    Ngày {day}
-                  </button>
-                ))}
-              </div>
-
-              <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm mt-3">
-                <h2 className="font-bold text-blue-700 text-sm mb-3">{LESSONS[selectedDay].title}</h2>
-                <div className="space-y-2.5">
-                  {LESSONS[selectedDay].summary.map((point, index) => (
-                    <div key={index} className="flex gap-2 text-xs leading-relaxed text-slate-700">
-                      <span className="text-blue-500 font-bold">•</span>
-                      <span>{point}</span>
-                    </div>
-                  ))}
-                </div>
-
-                <button
-                  onClick={() => {
-                    setTab("chat");
-                    handleSend(`Bài học Ngày ${selectedDay}`);
-                  }}
-                  className="w-full mt-4 bg-blue-50 hover:bg-blue-100 text-blue-700 py-2 rounded-lg text-xs font-semibold text-center transition-all"
-                >
-                  Xem toàn bộ tài liệu gốc Ngày {selectedDay}
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* TAB 3: TRA CỨU TRI THỨC */}
-          {tab === "chat" && (
-            <div className="flex-1 flex flex-col h-[calc(100vh-170px)]">
-              <div className="bg-slate-200/80 px-3 py-1.5 flex justify-between items-center text-[10px] text-slate-600 border-b border-slate-300">
-                <span className="flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-                  Trạng thái tri thức: <strong>{kbStatus}</strong>
-                </span>
-                <button
-                  onClick={fetchSheetKnowledge}
-                  className="text-blue-600 hover:text-blue-800 flex items-center gap-1 font-semibold"
-                  title="Cập nhật thêm từ Sheet"
-                >
-                  <Icons.Refresh /> Cập nhật
-                </button>
-              </div>
-
-              <div className="flex-1 overflow-y-auto p-3 space-y-3 text-xs">
-                {messages.map((m, idx) => (
-                  <div key={idx} className={`flex ${m.sender === "user" ? "justify-end" : "justify-start"}`}>
-                    <div className={`max-w-[88%] rounded-2xl px-3.5 py-2.5 whitespace-pre-line leading-relaxed ${m.sender === "user" ? "bg-blue-600 text-white rounded-tr-none" : "bg-white border border-slate-200 text-slate-800 rounded-tl-none shadow-sm"}`}>
-                      {m.text}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="p-2 bg-slate-100 border-t border-slate-200 flex gap-2 overflow-x-auto no-scrollbar">
-                {[
-                  "Kịch bản tiếp cận khách hàng",
-                  "Kịch bản khai thác nhu cầu SPIN",
-                  "Kịch bản xử lý phản bác",
-                  "Quy tắc túi Zip & Dropbox",
-                  "List toàn bộ các lỗi cần tránh",
-                  "Bài học Ngày 1",
-                  "Bài học Ngày 2",
-                  "Bài học Ngày 3",
-                  "Bài học Ngày 4",
-                  "Bài học Ngày 5"
-                ].map((q, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => handleSend(q)}
-                    className="bg-white border border-slate-300 hover:border-blue-500 text-slate-700 px-2.5 py-1 rounded-full text-[11px] whitespace-nowrap shadow-xs"
-                  >
-                    {q}
-                  </button>
-                ))}
-              </div>
-
-              <div className="p-2 bg-white border-t border-slate-200 flex gap-2">
-                <input
-                  type="text"
-                  value={inputQuery}
-                  onChange={(e) => setInputQuery(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && handleSend()}
-                  placeholder="Gõ từ khóa bài học hoặc nội dung trên Google Sheet..."
-                  className="flex-1 border border-slate-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-blue-600"
-                />
-                <button
-                  onClick={() => handleSend()}
-                  className="bg-blue-600 text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center justify-center hover:bg-blue-700"
-                >
-                  <Icons.Send />
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      );
-    }
-
-    const root = ReactDOM.createRoot(document.getElementById("root"));
-    root.render(<App />);
-  </script>
-</body>
-</html>
+                    className="flex-1 border border-slate-200 rounded p-1 text-xs bg-white text-slate-700 focus:outline-none focus:border-blue-5
