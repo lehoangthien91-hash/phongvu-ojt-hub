@@ -18,7 +18,7 @@
   <div id="root"></div>
 
   <script type="text/babel">
-    const { useState, useMemo, useEffect } = React;
+    const { useState, useMemo } = React;
 
     // ==========================================
     // 💡 LINK GOOGLE APPS SCRIPT WEB APP CỦA BẠN:
@@ -33,7 +33,6 @@
       SendCloud: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>,
       Download: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>,
       Note: () => <svg className="w-3.5 h-3.5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>,
-      Trash: () => <svg className="w-3.5 h-3.5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>,
       CheckDouble: () => <svg className="w-3.5 h-3.5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7m-14 4l4 4L19 7"/></svg>
     };
 
@@ -114,9 +113,101 @@
     };
 
     // ========================================================
-    // 🧠 TOÀN BỘ CƠ SỞ TRI THỨC ĐẦY ĐỦ NGUYÊN BẢN TỪ 8 FILE PDF (5 NGÀY)
+    // 🧠 CƠ SỞ TRI THỨC TOÀN DIỆN (ĐÃ NẠP SỔ TAY BÁN HÀNG 01.2025)
     // ========================================================
     const KB_DATABASE = [
+      // 1. KỊCH BẢN TIẾP CẬN KHÁCH HÀNG (SỔ TAY BÁN HÀNG)
+      {
+        id: "kich_ban_tiep_can",
+        keywords: [
+          "kich ban tiep can", "tinh huong tiep can", "khach e de", "khach ne tranh",
+          "khach xem choi", "chua co muc tieu", "khach khong muon lam phien", "tiep can khach hang"
+        ],
+        topic: "Kịch bản Tình huống Tiếp cận Khách hàng (Sổ tay Bán hàng)",
+        answer: "🎯 KỊCH BẢN TÌNH HUỐNG TIẾP CẬN KHÁCH HÀNG THỰC CHIẾN:\n\n" +
+          "1. Tình huống 1: Khách hàng e dè, né tránh giao tiếp\n" +
+          "• Biểu hiện: Tránh ánh mắt nhân viên, đi nhanh qua các quầy, tỏ vẻ không muốn bị làm phiền.\n" +
+          "• Cách xử lý: Không vội vàng đi sát, giữ khoảng cách để tôn trọng không gian riêng của khách.\n" +
+          "• Kịch bản nói: Khi có cơ hội phù hợp, mỉm cười và chào nhẹ nhàng:\n" +
+          "  'Em chào anh/chị, anh/chị cứ thoải mái tham khảo ạ, nếu cần hỗ trợ thông tin gì mình cứ gọi em liền nhé ạ.'\n" +
+          "• Hành động tiếp theo: Lùi lại, đứng quan sát từ xa, sẵn sàng hỗ trợ ngay khi khách có biểu hiện cần giúp.\n\n" +
+          "2. Tình huống 2: Khách hàng có vẻ đang 'xem chơi', chưa có mục tiêu cụ thể\n" +
+          "• Biểu hiện: Đi dạo quanh các quầy, nhìn lướt sản phẩm, không dừng lại quá lâu ở một vị trí nào.\n" +
+          "• Kịch bản mở lời: Tiếp cận với nụ cười thân thiện:\n" +
+          "  'Em chào anh/chị, không biết mình đang tìm máy cho công việc, học tập hay chỉ đang đi tham khảo ạ?'\n" +
+          "• Nếu khách bảo: 'Chưa cần gì đâu, anh/chị chỉ coi thử thôi':\n" +
+          "  -> Nhân viên đối ứng: 'Dạ, anh/chị cứ thoải mái tham khảo trước để tìm ra sản phẩm phù hợp nhất ạ. Hiện tại Phong Vũ đang có nhiều chương trình ưu đãi rất tốt cho dòng Laptop/PC, mời anh/chị tham khảo khu vực bên này ạ.'\n" +
+          "• Hành động tiếp theo: Hướng tay mở lòng bàn tay về phía khu vực sản phẩm và chủ động lùi lại để không tạo áp lực cho khách."
+      },
+
+      // 2. KỊCH BẢN KHAI THÁC NHU CẦU SPIN THEO TỪNG NHÓM SẢN PHẨM
+      {
+        id: "kich_ban_spin",
+        keywords: [
+          "kich ban spin", "kich ban khai thac nhu cau", "spin pc do hoa", "spin laptop gaming",
+          "spin gaming gear", "spin ban phim co", "spin may in", "spin tra gop", "khai thac nhu cau"
+        ],
+        topic: "Kịch bản Khai thác Nhu cầu SPIN theo Nhóm Sản phẩm (Sổ tay Bán hàng)",
+        answer: "🔍 KỊCH BẢN KHAI THÁC NHU CẦU (SPIN) & TƯ VẤN (FABE) THEO TỪNG SẢN PHẨM:\n\n" +
+          "1. SẢN PHẨM PC LẮP RÁP ĐỒ HỌA:\n" +
+          "• S (Tình hình): 'Dạ, anh hay dùng phần mềm nào là chính ạ? Thiết kế 2D, dựng video hay 3D chuyên sâu luôn ạ?' (KH: 'Anh làm thiết kế với dựng video nhẹ thôi, chủ yếu Photoshop, Premiere.')\n" +
+          "• P (Vấn đề): 'Dạ, không biết máy cũ của anh có bị giật, lag khi render video hay mở nhiều layer không ạ?' (KH: 'Ừ, lâu lâu nó đơ luôn, xuất video cũng chậm.')\n" +
+          "• I (Hậu quả): 'Dạ, vậy chắc ảnh hưởng nhiều tới công việc, mất thời gian vậy thì dễ bị trễ deadline lắm anh nhỉ?' (KH: 'Đúng rồi, ảnh hưởng nhiều chứ.')\n" +
+          "• N (Giải pháp): 'Dạ, vậy em xin phép lên một cấu hình đủ tốt để làm nhanh hơn, giúp anh chủ động xử lý mọi việc nhé ạ.' -> FABE: Cấu hình chuyên dụng, thao tác mượt, xuất video thần tốc.\n\n" +
+          "2. SẢN PHẨM LAPTOP GAMING:\n" +
+          "• S: 'Không biết anh hay chơi những tựa game nào nhất ạ? Máy hiện tại của mình đáp ứng chơi các game này tốt không anh?' (KH: 'Anh chơi Valorant với muốn thử mấy game AAA mới, máy cũ hơi đuối, FPS không ổn định.')\n" +
+          "• P: 'Dạ, FPS không ổn định thì ảnh hưởng nhiều đến trải nghiệm khi leo rank lắm anh ạ.'\n" +
+          "• I: 'Dạ, máy yếu lag vậy vừa làm mình khó chịu, vừa mất hết hứng thú giải trí, bạn bè chơi game mới đồ họa đẹp mà mình không tham gia được cũng mất vui anh nhỉ?'\n" +
+          "• N: 'Dạ, vậy em xin giới thiệu dòng Laptop Gaming [Acer Nitro 5 / RTX 4050 / màn 144Hz] đảm bảo anh cày game với bạn bè siêu mượt luôn ạ!'\n\n" +
+          "3. SẢN PHẨM GAMING GEAR (BÀN PHÍM CƠ):\n" +
+          "• S: 'Dạ, anh đang tìm bàn phím cơ chơi dòng game nào nhiều: MOBA như Liên Minh hay FPS như CS2, Valorant ạ?'\n" +
+          "• P: 'Dạ, vậy bàn phím cũ của mình có bị delay phím hay gây khó chịu gì khi dùng không anh?' (KH: 'Xài cũng được nhưng ban đêm gõ hơi ồn.')\n" +
+          "• I: 'Dạ em hiểu, tiếng ồn từ bàn phím vừa làm anh phân tâm, vừa dễ gây phiền mọi người xung quanh nữa ạ.'\n" +
+          "• N: 'Dạ, em tư vấn mình chuyển sang bàn phím cơ switch Linear [Logitech G512 GX Linear], gõ cực êm ái ban đêm mà phản hồi vẫn cực chuẩn ạ!'\n\n" +
+          "4. SẢN PHẨM MÁY IN:\n" +
+          "• S: 'Dạ, không biết mình in chủ yếu là văn bản trắng đen hay có in màu luôn ạ?' (KH: 'Chủ yếu in hợp đồng trắng đen.')\n" +
+          "• P: 'Dạ, máy in hiện tại của mình có bị hạn chế chức năng nào khi dùng không anh?' (KH: 'Có, không có in 2 mặt em.')\n" +
+          "• I: 'Dạ, không có in 2 mặt tự động thì phải đứng lật tay rất tốn thời gian và dễ nhầm thứ tự trang, ảnh hưởng hiệu suất công việc anh nhỉ?'\n" +
+          "• N: 'Dạ, bên em đang có mẫu máy in Brother in 2 mặt tự động giá cực tốt, giúp mình tiết kiệm tối đa thời gian, em giới thiệu cho anh nhé ạ!'"
+      },
+
+      // 3. KỊCH BẢN XỬ LÝ PHẢN BÁC KHI TƯ VẤN (SỔ TAY BÁN HÀNG)
+      {
+        id: "kich_ban_xu_ly_phan_bac",
+        keywords: [
+          "kich ban xu ly phan bac", "xu ly phan bac", "khach che gia cao", "so sanh gia re hon",
+          "de suy nghi them", "ngai tra gop", "thu tuc phien phuc", "che gia dat", "phan bac"
+        ],
+        topic: "Kịch bản Xử lý 4 Tình huống Phản bác Thường gặp (Sổ tay Bán hàng)",
+        answer: "💡 KỊCH BẢN XỬ LÝ 4 TÌNH HUỐNG PHẢN BÁC TỪ KHÁCH HÀNG:\n\n" +
+          "1. Tình huống: Khách thấy giá cao ('Cái này giá hơi cao, anh nghĩ anh đi coi thêm')\n" +
+          "• Thái độ: Bình tĩnh - Giải thích giá trị - Đưa giải pháp linh hoạt.\n" +
+          "• Kịch bản nói:\n" +
+          "  'Dạ em hiểu ạ, giá của dòng này đúng là cao hơn một số mẫu khác, nhưng lý do là vì máy sở hữu [nêu cấu hình/tính năng vượt trội, màn chuẩn màu/tản nhiệt lớn]. Em nghĩ mình đầu tư một lần như vậy sẽ an tâm dùng mượt mà và bền bỉ trong 3-4 năm tới, tính ra lại kinh tế hơn rất nhiều ạ.\n" +
+          "  Hoặc nếu mình muốn mức giá nhẹ nhàng hơn ngay lúc này, em xin phép gợi ý thêm 1 mẫu khác vẫn đáp ứng rất tốt công việc của anh/chị ạ.'\n\n" +
+          "2. Tình huống: Khách bảo 'Để suy nghĩ thêm' ('Anh coi tạm vậy thôi, để suy nghĩ thêm')\n" +
+          "• Thái độ: Đồng cảm tôn trọng - Xin phép giữ mối liên hệ hỗ trợ.\n" +
+          "• Kịch bản nói:\n" +
+          "  'Dạ vâng anh ạ, một món đồ giá trị thế này mình cân nhắc kỹ là hoàn toàn đúng rồi ạ.\n" +
+          "  Dạ em xin phép gửi thông tin chi tiết của sản phẩm cũng như các chương trình ưu đãi hiện có qua Zalo của anh nhé ạ. Khi về nhà mình xem lại mà có bất kỳ thắc mắc nào, anh cứ nhắn em hỗ trợ ngay cho mình nhé ạ.'\n\n" +
+          "3. Tình huống: Khách so sánh với nơi khác bán rẻ hơn ('Anh thấy bên kia bán rẻ hơn')\n" +
+          "• Thái độ: Không đôi co, không hạ thấp đối thủ - Nêu bật thế mạnh độc quyền tại Phong Vũ.\n" +
+          "• Kịch bản nói:\n" +
+          "  'Dạ vâng anh, trên thị trường hiện nay có thể có một số nơi niêm yết mức giá chênh lệch đôi chút. Tuy nhiên, khi mua tại Phong Vũ thì mình nhận được trọn gói an tâm:\n" +
+          "  - 100% sản phẩm chính hãng, xuất đủ hóa đơn VAT chuẩn chỉnh.\n" +
+          "  - Chính sách bảo hành rõ ràng, lỗi phần cứng đổi mới nhanh chóng.\n" +
+          "  - Đội ngũ kỹ thuật viên giàu kinh nghiệm hỗ trợ lắp đặt, bảo dưỡng tận tâm suốt vòng đời máy.\n" +
+          "  - Cùng chương trình trả góp 3 KHÔNG và nhiều voucher độc quyền. Anh hoàn toàn an tâm khi đầu tư tại Phong Vũ ạ.'\n\n" +
+          "4. Tình huống: Khách ngại thủ tục trả góp phiền phức ('Anh ngại làm hồ sơ trả góp lắm, lâu và phiền')\n" +
+          "• Thái độ: Giải tỏa rào cản tâm lý, nhấn mạnh sự tiện lợi đơn giản.\n" +
+          "• Kịch bản nói:\n" +
+          "  'Dạ, trước đây đúng là thủ tục giấy tờ có hơi rườm rà, nhưng hiện nay quy trình làm trả góp cực kỳ nhanh gọn anh ạ:\n" +
+          "  - Mình chỉ cần có Căn cước công dân gắn chip là đủ điều kiện rồi ạ.\n" +
+          "  - Hồ sơ xét duyệt trực tiếp chỉ trong 15 - 20 phút là có kết quả và nhận máy về dùng ngay.\n" +
+          "  Em hỗ trợ làm thủ tục tại chỗ cho mình liền luôn anh nhé!'"
+      },
+
+      // 4. DANH MỤC 50 MÃ LỖI SHR NGUYÊN BẢN
       {
         id: "shr_errors",
         keywords: [
@@ -182,269 +273,99 @@
           "💰 CHÍNH SÁCH THƯỞNG GOLDEN RULE:\n" +
           "• Mức thưởng: 300.000 VNĐ/người/tháng.\n" +
           "• Điều kiện nhận thưởng: Vi phạm <= 3 lỗi/tháng (Nếu > 3 lỗi/tháng sẽ không được nhận thưởng).\n" +
-          "• Khấu trừ: Nếu đã chi thưởng nhưng sau đó có KH phàn nàn cá nhân nhân viên này, khoản thưởng đã chi sẽ bị khấu trừ.\n" +
-          "• Quy trình đánh giá: Đội kiểm soát quan sát & ghi nhận hàng ngày -> Tổng hợp gửi TP/TBP vào Thứ 3 hàng tuần -> Phản hồi trước Thứ 6, chốt lỗi vào Thứ 3 tuần kế tiếp -> Gửi C&B tính thưởng trước ngày 8 tháng sau."
+          "• Khấu trừ: Nếu đã chi thưởng nhưng sau đó có KH phàn nàn cá nhân nhân viên này, khoản thưởng đã chi sẽ bị khấu trừ."
       },
+
+      // 5. NỘI DUNG ĐẦY ĐỦ BÀI HỌC NGÀY 1
       {
         id: "day_1",
         keywords: [
           "ngay 1", "bai hoc ngay 1", "hoi nhap", "tieu chuan cua hang", "hr_qd.01", "golden rule",
           "lich su phong vu", "gia tri cot loi", "tam nhin", "su menh", "y nghia logo", "tran phuong chi",
-          "nghi phep nam", "bao hiem", "lich nghi le", "posm", "bang gia mica", "goc mo laptop",
-          "seatalk", "hrm", "daotao.phongvu.vn", "loa phat", "ban tho ong dia"
+          "nghi phep nam", "bao hiem", "lich nghi le", "posm", "bang gia mica", "goc mo laptop"
         ],
         topic: "Ngày 1: Hội nhập Văn hóa, Tiêu chuẩn Cửa hàng (HR_QĐ.01) & Phục vụ Khách hàng",
-        answer: "📖 TÀI LIỆU ĐẦY ĐỦ NGÀY 1 (3 HỌC PHẦN):\n\n" +
-          "PHẦN I: HỘI NHẬP VĂN HÓA CÔNG TY (ORIENTATION)\n" +
-          "1. Chặng đường phát triển:\n" +
-          "• 1997: Khai trương cửa hàng bán máy tính đầu tiên tại TP.HCM.\n" +
-          "• 2000: Thành lập Trung tâm bảo hành đầu tiên tại TP.HCM.\n" +
-          "• 2007: Thành lập Công ty Máy tính Phong Vũ.\n" +
-          "• 2013: Khai trương cửa hàng Bình Dương.\n" +
-          "• 2015: Mở rộng thêm một số cửa hàng các tỉnh phía Nam.\n" +
-          "• 2017: Mở thêm 5 cửa hàng tại TP.HCM.\n" +
-          "• 2018: Teko đầu tư vào Phong Vũ và mở rộng chuỗi mới hơn 30 cửa hàng toàn quốc.\n" +
-          "• 2019: Tối ưu hệ thống sẵn sàng cho phát triển tương lai.\n" +
-          "• 2026: Sẵn sàng cho bước phát triển nhanh - mạnh mẽ.\n" +
-          "• Giám đốc điều hành (CEO): Chị Trần Phương Chi.\n" +
-          "2. Tầm nhìn – Sứ mệnh – Giá trị cốt lõi – Ý nghĩa Logo:\n" +
-          "• Tầm nhìn: Trở thành nhà bán lẻ đa kênh hàng đầu tại Việt Nam ('To be a leading omni-channel player in Vietnam').\n" +
-          "• Sứ mệnh: Hiện đại hóa (Thương hiệu - Quy trình - Công nghệ), Số hóa (Truyền thống - Trực tuyến), mang lại Trải nghiệm khách hàng tốt nhất.\n" +
-          "• 4 Giá trị cốt lõi:\n" +
-          "  - Khách hàng là số 1 (Customer first and always).\n" +
-          "  - Chính trực: làm đúng với lương tâm (Integrity: We do the right thing).\n" +
-          "  - Quan tâm: quan tâm và tin tưởng (Caring: We care and trust each other).\n" +
-          "  - Đồng đội: chung tay để cùng tiến (Teamwork: We collaborate to process).\n" +
-          "• Ý nghĩa Logo (Vuông - Tròn - Tam giác):\n" +
-          "  - Hình vuông: Vững chắc, Ổn định, Đáng tin cậy, To lớn, Mạnh mẽ.\n" +
-          "  - Hình tròn: Ấm áp, Cá nhân, Chia sẻ, Quan tâm đồng đội, Thân thiện.\n" +
-          "  - Hình tam giác: Tham vọng, Thành tựu, Lãnh đạo, Vị thế độc đáo.\n" +
-          "  - 5 biểu tượng kết hợp: Cửa hàng hiện đại, Khách hàng là số 1, Gaming Corner, Giao hàng tận tâm, O2O.\n" +
-          "3. Lĩnh vực kinh doanh & Kênh bán hàng:\n" +
-          "• 4 Lĩnh vực: Máy tính & SP thông minh; Giải pháp CNTT cho Doanh nghiệp; SP điện máy - Điện gia dụng; Giải pháp chuyên dụng.\n" +
-          "• 5 Kênh bán hàng: Hệ thống Showroom toàn quốc (Store), Chat Sales (Web), Tele Sales (Phone), Kênh Doanh nghiệp (B2B), Social & Sàn TMĐT (Lazada, Shopee, Facebook, TikTok).\n" +
-          "4. Chính sách Nhân sự, Phúc lợi, Bảo mật & Hệ thống:\n" +
-          "• Bảo mật: Lương thưởng là thông tin bảo mật tuyệt đối (vi phạm xử lý kỷ luật). Không dùng USB/ổ cứng ngoài, không mang tài liệu nội bộ ra ngoài.\n" +
-          "• Bảo hiểm bắt buộc (tổng 32% khi ký HĐLĐ chính thức): NLĐ đóng 10.5% (BHXH 8%, BHYT 1.5%, BHTN 1%) - Công ty đóng 21.5% (BHXH 17.5%, BHYT 3%, BHTN 1%). Hưởng 6 chế độ: Ốm đau, Thai sản, Tử tuất, Dưỡng sức, Hưu trí, TNLĐ-BNN.\n" +
-          "• Nghỉ phép năm (theo thâm niên <2 năm | 2-<5 năm | 5-<10 năm | >=10 năm):\n" +
-          "  - Nhóm 1 (Trưởng ca, Chuyên viên, Nhân viên, Kiểm soát viên): 12 | 13 | 15 | 17 ngày.\n" +
-          "  - Nhóm 2 (Phó phòng, Trưởng BP, Quản lý vùng, CHT/CHP, Giám sát): 14 | 15 | 17 | 18 ngày.\n" +
-          "  - Nhóm 3 (BGĐ, Trưởng phòng, Quản lý miền, Kế toán trưởng): 16 | 16 | 18 | 18 ngày.\n" +
-          "  (Sử dụng đến hết tháng 03 năm tiếp theo, không tạm ứng phép).\n" +
-          "• Nghỉ lễ năm 2026 (11 ngày): Tết Dương lịch (1 ngày - 01/01), Tết Nguyên Đán (5 ngày - 16/02 đến 20/02), Giỗ Tổ Hùng Vương (1 ngày - 26/04, nghỉ bù 27/04), Lễ 30/04 (1 ngày), Quốc tế Lao động 01/05 (1 ngày), Quốc khánh 02/09 (2 ngày - 01/09 & 02/09).\n" +
-          "• Hệ thống nội bộ: HRM.PHONGVU.VN (Đơn bổ sung công, nghỉ phép), DAOTAO.PHONGVU.VN (Elearning), SeaTalk (Giao tiếp nội bộ bảo mật).\n\n" +
-          "PHẦN II: QUY ĐỊNH TIÊU CHUẨN CỬA HÀNG (Số hiệu: HR_QĐ.01 - V2.0)\n" +
-          "1. Nguyên tắc trưng bày bên trong:\n" +
-          "• 4 nguyên tắc Trật tự (Logic): (1) Từ ngoài vào trong theo hướng đi KH; (2) Nhìn từ trái sang phải (Giá tăng dần, Màu sáng bên trái - tối bên phải, Kích thước nhỏ bên trái - lớn bên phải); (3) Nguyên tắc 1 vị trí; (4) Đúng sơ đồ layout.\n" +
-          "• 3 nguyên tắc Thẩm mỹ: Mới - sạch - gọn; Đồng bộ khoảng cách; Đồng bộ giao diện.\n" +
-          "2. 15 hạng mục Mặt tiền cửa hàng:\n" +
-          "• Standee vỉa hè, Cờ Standee, Standee cỡ đại: Đặt vuông góc mặt tiền, thẳng hàng, không che lối đi, không dán đè CTKM cũ.\n" +
-          "• Băng rôn mặt tiền, Băng rôn phụ, Băng rôn vách tường (cách đất 1m - 1.2m): Căng đều 4 góc, không lộ dây rút.\n" +
-          "• Decal cổng chào, Sticker dán cửa, Poster cửa ra vào (tối đa 2 poster, ưu tiên bên phải), Decal toàn phần/bán phần (1m x 1.2m), Rối hơi.\n" +
-          "• Loa phát: Khung giờ Sáng 8h30 - 11h00, Chiều 16h00 - 19h00. Dù che nắng (tối đa 1 cây). Bãi xe có bảo vệ, phủ bạt yên xe che mưa/nắng.\n" +
-          "3. Quy tắc Bảng giá & Khu vực bên trong:\n" +
-          "• Vị trí bảng giá: SP trên bàn/kệ & Tivi đặt bảng giá lồng mica BÊN PHẢI SP; SP điện máy CE (trừ Tivi) dán GÓC PHẢI SP; SP trên móc treo đặt ở ĐẦU MÓC TREO; SP trên kệ chữ A/linh kiện đặt Ở GIỮA BÊN DƯỚI SP.\n" +
-          "• Loại bảng mica: Bảng ĐỨNG (SP ngang tầm mắt khi đứng) vs Bảng NẰM (SP trên bàn trải nghiệm, kệ ngang, dưới tầm mắt).\n" +
-          "• Khu vực Laptop: Máy dán tấm phủ đặt bên trái, máy live demo đặt bên phải. Cách mép bàn 10-15cm. Độ mở màn hình đồng bộ: Dưới tầm mắt 110°-120°, Ngang tầm mắt 90°-110°, Trên tầm mắt 85°-90°. Bọc nilon màn hình riêng, bàn phím riêng.\n" +
-          "• Khu vực Màn hình: KHÔNG trưng bày ở tầng sát mặt sàn (kệ chân cao 50mm), không dùng tấm phủ màn hình, luôn bật live demo, lề phải SP thẳng hàng với bảng giá.\n" +
-          "• Khu vực Thu ngân: Xếp bảng thông tin từ trái sang phải (Mã QR thanh toán -> Trả góp -> Chính sách/CTKM), kích thước nhỏ đến lớn.\n" +
-          "• Khu vực Bàn tư vấn: Có bình nước, cốc sạch, kẹo/bánh còn HSD, tờ rơi mới nhất, ghế xếp gọn.\n" +
-          "• Khu vực khác: Bảng tin nội bộ (cập nhật cuối mỗi quý); Bàn thờ Ông Địa (KHÔNG thắp nhang trong giờ hoạt động); PCCC & WC.\n\n" +
-          "PHẦN III: NGUYÊN TẮC VÀNG PHỤC VỤ KHÁCH HÀNG (GOLDEN RULE)\n" +
-          "• Áp dụng cho Khối trực tiếp (Cửa hàng, TTBH) và Khối gián tiếp (Chatsales, Telesales).\n" +
-          "• Hành trình 3 giai đoạn: Chào đón (Giữ xe đưa vé 2 tay, che yên xe; Mở cửa đón khách) -> Phục vụ (Chào 4 điểm chạm: Đứng thẳng hướng mắt, tay đặt ngực trái, cúi 15 độ, nói 'Dạ Phong Vũ xin chào!'; Chỉ dẫn bằng cả bàn tay; Giao nhận bằng 2 tay) -> Tiễn chân (Chủ động mang hàng nặng ra xe, buộc cố định, dắt xe và cúi chào cảm ơn)."
+        answer: "📖 TÀI LIỆU ĐẦY ĐỦ NGÀY 1:\n\n" +
+          "1. Lịch sử & Giá trị cốt lõi:\n" +
+          "• Cột mốc: 1997 (CH đầu tiên) -> 2000 (TTBH đầu tiên) -> 2007 (Cty Máy tính Phong Vũ) -> 2018 (Teko đầu tư mở rộng >30 CH) -> 2026 (Phát triển mạnh mẽ). CEO: Chị Trần Phương Chi.\n" +
+          "• Tầm nhìn: Nhà bán lẻ đa kênh hàng đầu Việt Nam. Sứ mệnh: Hiện đại hóa, Số hóa (O2O), Trải nghiệm khách hàng.\n" +
+          "• 4 Giá trị cốt lõi: Khách hàng là số 1 - Chính trực - Quan tâm - Đồng đội.\n" +
+          "• Ý nghĩa Logo: Hình vuông (vững chắc, tin cậy), Hình tròn (ấm áp, sẻ chia), Hình tam giác (tham vọng, tiên phong).\n" +
+          "2. Chính sách Phúc lợi & Bảo mật:\n" +
+          "• BHBB 32%: NLĐ 10.5% (BHXH 8%, BHYT 1.5%, BHTN 1%) - Cty 21.5% (BHXH 17.5%, BHYT 3%, BHTN 1%).\n" +
+          "• Phép năm: Nhóm 1 (12-17 ngày), Nhóm 2 (14-18 ngày), Nhóm 3 (16-18 ngày) theo thâm niên. Nghỉ lễ 11 ngày/năm. Bảo mật lương thưởng tuyệt đối.\n" +
+          "3. Tiêu chuẩn Mặt tiền & Trưng bày (HR_QĐ.01):\n" +
+          "• Mặt tiền: Standee/cờ vuông góc mặt tiền, cờ thẳng hàng. Băng rôn căng phẳng không trùng nhăn. Poster dán cửa tối đa 2 tấm (ưu tiên bên phải). Loa phát sáng 8h30-11h, chiều 16h-19h.\n" +
+          "• Bảng giá mica: Bảng Đứng (ngang tầm mắt) vs Bảng Nằm (dưới tầm mắt). Đặt bên phải SP trên bàn/kệ & Tivi; dán góc phải SP điện máy CE; đầu móc treo với phụ kiện; ở giữa dưới SP với linh kiện.\n" +
+          "• Trưng bày Laptop: Bọc nilon màn hình riêng, phím riêng. Góc mở màn hình đồng bộ 110°-120° (dưới tầm mắt). Cách mép bàn 10-15cm. Màn hình KHÔNG để tầng sát sàn (kệ 50mm).\n" +
+          "4. Golden Rule: Chào 4 điểm chạm (Đứng thẳng hướng mắt, tay đặt ngực trái, cúi 15°, nói 'Dạ Phong Vũ xin chào!'). Chỉ dẫn bằng cả bàn tay, giao nhận bằng 2 tay."
       },
+
+      // 6. NỘI DUNG ĐẦY ĐỦ BÀI HỌC NGÀY 2
       {
         id: "day_2",
         keywords: [
           "ngay 2", "bai hoc ngay 2", "6 buoc ban hang", "ky nang ban hang", "fabe", "spin", "last",
-          "chot don", "xu ly phan bac", "dau hieu mua", "dau hieu canh bao", "chien gia", "tmdt",
-          "55%", "38%", "7%", "chot gia dinh", "chot cam xuc", "chot chia nho", "chot khan hiem",
-          "che gia cao", "gia cao hon san tmdt", "gia cao hon doi thu"
+          "chot don", "dau hieu mua", "dau hieu canh bao", "chot gia dinh", "chot cam xuc", "chot chia nho"
         ],
         topic: "Ngày 2: Kỹ năng & Quy trình 6 Bước Bán hàng",
-        answer: "📖 TÀI LIỆU ĐẦY ĐỦ NGÀY 2: KỸ NĂNG & 6 BƯỚC BÁN HÀNG TẠI PHONG VŨ\n\n" +
-          "1. BƯỚC 1: CHUẨN BỊ\n" +
-          "• Chuẩn bị bản thân: Trang phục gọn gàng, tâm thế tích cực sẵn sàng phục vụ.\n" +
-          "• Kiến thức sản phẩm: Hiểu rõ các dòng sản phẩm, hàng hóa, nắm CTKM, chính sách bảo hành.\n" +
-          "• Hiểu khách hàng & thị trường: Nắm rõ nhóm khách hàng phổ biến, biết đối thủ cạnh tranh và lợi thế của cửa hàng.\n\n" +
-          "2. BƯỚC 2: TIẾP CẬN KHÁCH HÀNG & TẠO THIỆN CẢM\n" +
-          "• Quy tắc tác động giao tiếp (7% - 38% - 55%):\n" +
-          "  - Ngôn từ: chỉ chiếm 7%.\n" +
-          "  - Giọng nói, ngữ điệu: chiếm 38%.\n" +
-          "  - Ngôn ngữ cơ thể: chiếm tới 55%.\n" +
-          "• 4 yếu tố tiếp cận: Ánh mắt (giao tiếp mắt, không lảng tránh) - Nụ cười (thân thiện, chân thành) - Ngôn ngữ cơ thể (đứng thẳng, hướng về khách, không khoanh tay) - Câu chào (ngắn gọn, rõ ràng, cá nhân hóa).\n\n" +
-          "3. BƯỚC 3: KHAI THÁC NHU CẦU (SPIN)\n" +
-          "• 4 nội dung cốt lõi cần hỏi: (1) Mục đích sử dụng - (2) Ngân sách - (3) Người sử dụng chính - (4) Trải nghiệm quá khứ.\n" +
-          "• Kết hợp 3 loại câu hỏi: Câu hỏi Mở (khai thác thông tin rộng), Câu hỏi Lựa chọn (định hướng phương án), Câu hỏi Đóng (xác nhận lại nhu cầu).\n\n" +
-          "4. BƯỚC 4: GIỚI THIỆU SẢN PHẨM THEO MÔ HÌNH FABE\n" +
-          "• F - Features (Tính năng): Đặc điểm kỹ thuật độc đáo của sản phẩm.\n" +
-          "• A - Advantages (Ưu điểm): Tính năng đó giúp sản phẩm vượt trội hơn như thế nào.\n" +
-          "• B - Benefits (Lợi ích): Giá trị thực tế khách hàng nhận được (VD: 'Với 16GB RAM này chị mở 30 tab trình duyệt cùng file Excel nặng không bị giật lag').\n" +
-          "• E - Evidence (Bằng chứng): Dẫn chứng thực tế, số liệu, mời khách hàng trải nghiệm trực tiếp trên máy demo.\n\n" +
-          "5. BƯỚC 5: XỬ LÝ PHẢN BÁC THEO CÔNG THỨC LAST\n" +
-          "• Công thức LAST: Listen (Lắng nghe) -> Apologize (Xin lỗi / Đồng cảm) -> Solve (Giải pháp) -> Thanks (Cảm ơn).\n" +
-          "• Tình huống 1 - Khách chê giá cao hơn đối thủ:\n" +
-          "  - TH1: Giá cao hơn chuỗi lớn (MWG, FPT, CPS) => Thực hiện 'chiến giá' theo quy định.\n" +
-          "  - TH2: Giá cao hơn cửa hàng nhỏ lẻ => Nêu bật lợi thế Phong Vũ được hãng ủy quyền nâng cấp trực tiếp không mất thời gian và không mất bảo hành. Nếu khách vẫn băn khoăn, liên hệ BQL xin hỗ trợ.\n" +
-          "• Tình huống 2 - Khách chê giá cao hơn sàn TMĐT nội bộ (Shopee/Lazada/TikTok của Phong Vũ):\n" +
-          "  - Lắng nghe, đồng cảm và bình tĩnh giải thích: Sàn TMĐT có trợ giá riêng theo chiến dịch Double-day của sàn, chính sách 2 kênh khác nhau.\n" +
-          "  - Nêu bật ưu điểm mua trực tiếp tại Showroom: Áp dụng đầy đủ chính sách bảo hành/đổi trả chuẩn Phong Vũ, lấy máy ngay tiết kiệm thời gian, được chính nhân viên tư vấn hỗ trợ trực tiếp.\n" +
-          "• Tình huống 3 - Khách đặt câu hỏi khó về kỹ thuật: Lắng nghe -> Ngợi khen câu hỏi hay của khách -> Xin phép tra cứu thông tin chính xác -> Nhờ bộ phận kỹ thuật hoặc đồng nghiệp chuyên sâu hỗ trợ.\n\n" +
-          "6. BƯỚC 6: CHỐT ĐƠN & CHĂM SÓC KHÁCH HÀNG (CSKH)\n" +
-          "• Nhận biết Dấu hiệu cảnh báo (chưa sẵn sàng): Nhìn đồng hồ, đi sang quầy khác, lắc đầu, im lặng, nói 'Anh chỉ xem thôi', 'Để anh đi 1 vòng đã'.\n" +
-          "• Nhận biết Dấu hiệu mua hàng: Gật gù khi nghe báo giá, chăm chú nhìn/mân mê thử máy, vô thức đặt đồ cá nhân cạnh SP; hỏi 'Giá còn bớt không?', 'Quà không lấy trừ tiền được không?', 'Bảo hành đổi trả sao em?'.\n" +
-          "• 4 Kỹ thuật chốt đơn:\n" +
-          "  1. Chốt giả định: 'Dạ, vậy để em lấy cái mới nguyên hộp cho anh chị nhé?', 'Anh chị thanh toán tiền mặt hay chuyển khoản ạ?'.\n" +
-          "  2. Chốt cảm xúc: 'Bé ở nhà chắc thích lắm khi có máy mới xịn như vậy, mình lấy máy này luôn nhé anh chị?'.\n" +
-          "  3. Chốt chia nhỏ: 'Tính ra mình đầu tư chưa tới 30.000đ mỗi ngày để có chiếc Laptop phục vụ tốt công việc lâu dài'.\n" +
-          "  4. Chốt khan hiếm: 'Chương trình ưu đãi này giới hạn số lượng, anh chị lấy luôn bây giờ sẽ tiết kiệm được X đồng ạ'.\n" +
-          "• 3 Hành động bắt buộc sau khi chốt đơn: (1) Mời khách quét Zalo OA Phong Vũ -> (2) Mời khách tải App Phong Vũ -> (3) Xin SĐT khách hàng để tiện chăm sóc sau bán."
+        answer: "📖 TÀI LIỆU ĐẦY ĐỦ NGÀY 2: QUY TRÌNH 6 BƯỚC BÁN HÀNG TẠI PHONG VŨ\n\n" +
+          "• Bước 1 - Chuẩn bị: Diện mạo tươm tất, nắm vững tính năng/phân khúc giá, cập nhật CTKM/trả góp, vệ sinh quầy kệ.\n" +
+          "• Bước 2 - Tiếp cận khách hàng: Quy tắc tác động giao tiếp 7% ngôn từ - 38% giọng nói/ngữ điệu - 55% ngôn ngữ cơ thể. Ánh mắt chân thành, nụ cười niềm nở, chào đón tự nhiên.\n" +
+          "• Bước 3 - Khai thác nhu cầu (SPIN): Hỏi Mục đích dùng, Ngân sách, Người dùng chính, Trải nghiệm máy cũ bằng bộ câu hỏi Mở - Lựa chọn - Đóng.\n" +
+          "• Bước 4 - Tư vấn giải pháp (FABE): Đề xuất đủ 3 phương án (Chuẩn - Tiết kiệm - Nâng cấp). Thuyết trình theo Feature (Tính năng) -> Advantage (Điểm mạnh) -> Benefit (Lợi ích thực tế) -> Evidence (Bằng chứng/Mời thử máy).\n" +
+          "• Bước 5 - Xử lý phản bác (LAST): Listen (Lắng nghe) -> Apologize (Đồng cảm) -> Solve (Giải pháp) -> Thanks (Cảm ơn).\n" +
+          "• Bước 6 - Chốt đơn & CSKH: Nhận biết dấu hiệu mua hàng (gật gù, mân mê máy, hỏi giá bớt/bảo hành). Áp dụng 4 kỹ thuật chốt (Giả định, Cảm xúc, Chia nhỏ, Khan hiếm). Thực hiện 3 hành động sau chốt: Quét Zalo OA, Tải App Phong Vũ, Xin SĐT chăm sóc."
       },
+
+      // 7. NỘI DUNG ĐẦY ĐỦ BÀI HỌC NGÀY 3
       {
         id: "day_3",
         keywords: [
-          "ngay 3", "bai hoc ngay 3", "kien thuc laptop", "tu van laptop", "hau to cpu", "core ultra",
-          "arrow lake", "ram lpddr", "do tre cl", "ssd nvme", "ssd u.2", "tam nen oled", "ips", "tn",
-          "tan so quet", "thunderbolt", "displayport", "copilot+ pc", "npu", "40 tops", "omnibook", "victus"
+          "ngay 3", "bai hoc ngay 3", "thong so laptop", "tu van laptop", "hau to cpu", "core ultra",
+          "ram lpddr", "ssd nvme", "oled", "ips", "copilot+", "npu", "omnibook", "victus"
         ],
         topic: "Ngày 3: Kiến thức Nền tảng & Kỹ năng Tư vấn Laptop",
-        answer: "📖 TÀI LIỆU ĐẦY ĐỦ NGÀY 3: KIẾN THỨC NỀN TẢNG & KỸ NĂNG TƯ VẤN LAPTOP\n\n" +
-          "PHẦN I: NHẬN BIẾT 5 NHÓM LAPTOP TRÊN THỊ TRƯỜNG\n" +
-          "1. AI PC / Copilot+ PC: Tích hợp phần cứng NPU >= 40 TOPS; xử lý AI cục bộ offline (Live Captions, Recall, lọc ồn, xóa phông) siêu tiết kiệm điện, pin thực tế 12 - 18 tiếng.\n" +
-          "2. Văn phòng / HSSV phổ thông (14 – 22 triệu): Vỏ nhựa/nhôm cơ bản, màn FHD/FHD+, CPU Intel Core i3/i5 hoặc Core Series 1 (1xxU), Ryzen 3/5, RAM 16GB tiêu chuẩn.\n" +
-          "3. Doanh nhân Ultrabook: Siêu mỏng nhẹ (~0.9 - 1.3kg), vỏ kim loại nguyên khối, bảo mật vân tay/IR camera, màn OLED/2.8K 120Hz (Intel Core Ultra, AMD Ryzen AI, MacBook Air/Pro).\n" +
-          "4. Gaming: Thân dày, tản nhiệt 2 quạt hầm hố, LED RGB, CPU đuôi H/HX + GPU rời NVIDIA RTX 40/50 Series, màn hình 144Hz - 240Hz.\n" +
-          "5. Đồ họa: Cấu hình cực mạnh, màn hình chuẩn màu 100% sRGB / DCI-P3, CPU Core Ultra đuôi H / Ryzen 7/9 HS + Card rời RTX Studio để render 4K, AutoCAD, 3D.\n\n" +
-          "PHẦN II: CHI TIẾT 6 THÀNH PHẦN PHẦN CỨNG LAPTOP\n" +
-          "1. CPU (Bộ xử lý trung tâm - Intel & AMD):\n" +
-          "• Công thức đọc mã: [Thương hiệu] + [Dòng CPU] + [Số thế hệ] + [SKU] + [Hậu tố]. (Từ thế hệ Arrow Lake, Intel bỏ chữ 'i', chia thành Intel Core 3/5/7 và Intel Core Ultra 5/7/9, VD: Core Ultra 7-255V).\n" +
-          "• Ý nghĩa hậu tố CPU Intel:\n" +
-          "  - U: Tiết kiệm điện cho laptop văn phòng.\n" +
-          "  - P: Trung gian giữa dòng U và H.\n" +
-          "  - V: Mới (Lunar Lake), hiệu suất mạnh mẽ, mỏng nhẹ nhưng cực kỳ tiết kiệm pin.\n" +
-          "  - H: Hiệu năng cao cho laptop gaming/đồ họa.\n" +
-          "  - HX: Dòng laptop hiệu suất cao nhất (ép xung).\n" +
-          "  - K: Mở khóa hệ số nhân (ép xung).\n" +
-          "  - G1 - G7: Mức GPU tích hợp (số càng lớn càng mạnh).\n" +
-          "• Ý nghĩa hậu tố CPU AMD:\n" +
-          "  - U: Tiết kiệm điện | H: Hiệu năng cao | HS: Hiệu năng cao nhưng tiết kiệm điện hơn H | HX: Mạnh hơn H, mở khóa ép xung | G: Có GPU tích hợp mạnh | X/XT: Hiệu năng cao | E: Tiết kiệm điện hơn X.\n" +
-          "2. RAM (Bộ nhớ truy xuất ngẫu nhiên):\n" +
-          "• Công thức: [Dung lượng] + [Loại RAM] + [Tốc độ MHz] + [Độ trễ CL] + [Điện áp]. (VD: Kingston 16GB DDR4 3200MHz CL22 1.2V; CL càng thấp phản hồi càng nhanh).\n" +
-          "• Các thế hệ: DDR3 (1.5V, 1066-1866MHz), DDR3L (1.35V), DDR4 (1.2V, 2133-3200MHz), DDR5 (4800-6400MHz+), LPDDR3/4/5 (RAM hàn chết trên bo mạch cho laptop mỏng nhẹ, không nâng cấp được).\n" +
-          "3. Ổ cứng SSD:\n" +
-          "• SSD SATA 2.5\" & M.2 SATA (SATA III 6Gbps): Đọc/ghi ~550/500 MB/s, giá rẻ.\n" +
-          "• SSD M.2 NVMe (PCIe 3.0/4.0): Đọc/ghi 1500 – 7000+ MB/s, tốc độ cực nhanh cho gaming/đồ họa.\n" +
-          "• SSD PCIe (AIC) & SSD U.2: 3000 – 7000+ MB/s, dùng cho máy trạm chuyên nghiệp.\n" +
-          "4. GPU (Card đồ họa):\n" +
-          "• GPU tích hợp (Onboard - dùng chung RAM hệ thống): Intel UHD, Iris Xe, AMD Radeon Vega.\n" +
-          "• GPU rời (Dedicated - có VRAM riêng): NVIDIA GeForce GTX/RTX (có Ray Tracing, DLSS), AMD Radeon RX (có FSR), Intel Arc (có XeSS).\n" +
-          "5. Màn hình & Cổng kết nối:\n" +
-          "• Kích thước: 11-13\" (siêu di động), 14-15.6\" (cân bằng phổ biến nhất), 16-17.3\"-18\" (gaming/đồ họa).\n" +
-          "• Tấm nền: TN (giá rẻ, phản hồi 1-3ms, góc nhìn hẹp) | IPS (góc nhìn 178°, màu chuẩn cho văn phòng/đồ họa) | OLED (tương phản vô hạn 1,000,000:1, màu đen tuyệt đối, HDR xuất sắc).\n" +
-          "• Tần số quét: 60Hz (văn phòng), 120Hz (mượt mà, giải trí), 144Hz (chuẩn eSports FPS), 240Hz-360Hz (gaming chuyên nghiệp AAA).\n" +
-          "• Cổng kết nối: USB-A, USB-C (truyền dữ liệu, sạc PD, xuất hình DisplayPort), Thunderbolt (băng thông siêu cao, xuất 2 màn 4K/eGPU), HDMI, DisplayPort, LAN RJ-45, Jack 3.5mm.\n\n" +
-          "PHẦN III: PHÂN DÒNG 5 THƯƠNG HIỆU & NGUYÊN TẮC TƯ VẤN\n" +
-          "• HP: Văn phòng (HP Omnibook 3, 5, 7, 9) vs Gaming (HP Victus).\n" +
-          "• Lenovo: Văn phòng (ThinkBook, IdeaPad) vs Gaming (Lenovo Legion).\n" +
-          "• ASUS: Văn phòng (Zenbook, Vivobook) vs Gaming (ROG, TUF Gaming).\n" +
-          "• Acer: Văn phòng (Aspire, Swift) vs Gaming (Nitro, Predator).\n" +
-          "• Dell: Văn phòng (Dell 15, Dell Pro, Dell XPS) vs Gaming (Alienware, Dell Gaming G-series).\n" +
-          "• 4 ĐIỀU TUYỆT ĐỐI TRÁNH KHI TƯ VẤN:\n" +
-          "  1. Khách Office: Không tư vấn máy gaming dày nặng, ăn pin (Ưu tiên CPU U/V, RAM 16GB, màn 16:10 WUXGA).\n" +
-          "  2. Khách Chơi Game: Không bán máy chỉ có card onboard để cày game nặng (Bắt buộc RTX 3050/4050+ TGP cao, màn 144Hz+).\n" +
-          "  3. Khách Đồ họa: Không bán màn hình 45% NTSC / 65% sRGB cho dân thiết kế in ấn (Bắt buộc màn 100% sRGB / DCI-P3, SSD 1TB).\n" +
-          "  4. Khách Đa nhiệm (Coder/Data/Ads): Không bán máy 8GB RAM hoặc RAM hàn chết không nâng cấp được (Ưu tiên CPU 8 nhân 16 luồng + RAM 32GB Dual Channel)."
+        answer: "📖 TÀI LIỆU ĐẦY ĐỦ NGÀY 3: KIẾN THỨC NỀN TẢNG & TƯ VẤN LAPTOP\n\n" +
+          "• 5 Nhóm Laptop: AI PC (NPU >= 40 TOPS, pin 12-18h) | Văn phòng/HSSV (14-22tr, RAM 16GB) | Doanh nhân Ultrabook (mỏng nhẹ, kim loại, OLED 2.8K) | Gaming (CPU H/HX, RTX rời, màn 144Hz+) | Đồ họa (100% sRGB/DCI-P3, RTX Studio).\n" +
+          "• Hậu tố CPU Intel: U (tiết kiệm điện), V (Core Ultra thế hệ mới mỏng nhẹ tiết kiệm pin), H (hiệu năng cao), HX/K (ép xung mạnh nhất). AMD: U (tiết kiệm), HS (hiệu năng cao tiết kiệm điện), H/HX (bung xung tối đa).\n" +
+          "• RAM & SSD: RAM tối thiểu 16GB. Phân biệt RAM hàn chết (LPDDR) không nâng cấp được. SSD M.2 NVMe PCIe đọc ghi 1500 - 7000+ MB/s.\n" +
+          "• Màn hình: TN (1-3ms), IPS (góc nhìn 178°), OLED (tương phản vô hạn 1,000,000:1). Tần số quét 60Hz, 120Hz, 144Hz, 240Hz-360Hz.\n" +
+          "• Phân dòng hãng: HP (Omnibook vs Victus) | Lenovo (IdeaPad vs Legion) | ASUS (Vivobook vs ROG/TUF) | Acer (Aspire vs Nitro) | Dell (Dell 15 vs Alienware)."
       },
+
+      // 8. NỘI DUNG ĐẦY ĐỦ BÀI HỌC NGÀY 4
       {
         id: "day_4",
         keywords: [
-          "ngay 4", "bai hoc ngay 4", "cau tao pc", "build pc", "xay dung cau hinh pc",
-          "bac 67 ham zui", "bac 50 an xai", "socket 1851", "socket 1700", "am4", "am5",
-          "dual channel", "80 plus", "phan bo chi phi", "phan bo ngan sach", "pcpartpicker",
-          "nghen co chai", "bottleneck", "vrm", "khe m.2"
+          "ngay 4", "bai hoc ngay 4", "cau tao pc", "build pc", "bac 67 ham zui", "bac 50 an xai",
+          "socket 1851", "socket 1700", "am4", "am5", "dual channel", "80 plus", "phan bo chi phi pc"
         ],
         topic: "Ngày 4: Kiến thức Nền tảng & Xây dựng Cấu hình PC",
-        answer: "📖 TÀI LIỆU ĐẦY ĐỦ NGÀY 4: KIẾN THỨC NỀN TẢNG & XÂY DỰNG CẤU HÌNH PC\n\n" +
-          "PHẦN I: TỔNG QUAN CẤU TẠO MÁY TÍNH BÀN (PC)\n" +
-          "1. 7 Thành phần chính: (1) CPU - (2) RAM - (3) VGA - (4) Mainboard - (5) Storage (SSD/HDD) - (6) Power (PSU) - (7) Case & Tản nhiệt.\n" +
-          "2. 11 Bộ phận của Thùng máy (Case): Nắp bên, Mặt trước, Nút nguồn, Cổng I/O mặt trước, Khay Bo mạch chủ, Khay ổ đĩa/Giá gắn SSD, Vỏ che nguồn (PSU Shroud), Khe cắm mở rộng, Giá gắn quạt thùng máy, Lưới lọc bụi, Chân đế thùng máy.\n" +
-          "3. 11 Bộ phận trên Bo mạch chủ (Mainboard): (1) Ổ cắm CPU (Socket), (2) Khe cắm RAM (DIMM), (3) Chipset, (4) Khe mở rộng PCIe, (5) Đầu nối nguồn ATX 24 chân, (6) Cổng SATA, (7) Khe cắm M.2 NVMe, (8) Chip BIOS/UEFI, (9) Pin CMOS, (10) Cổng I/O phía sau, (11) Bộ tản nhiệt VRM.\n" +
-          "4. Phân khúc CPU: Đầu 3, 5 (phân khúc rẻ đến tầm trung) | Đầu 7 (phân khúc cao cấp) | Đầu 9 (phân khúc siêu cao cấp High-end, VD: Intel Core Ultra 9-285K chạy Socket 1851, 24 nhân 24 luồng, PCIe 5.0).\n\n" +
-          "PHẦN II: 5 BƯỚC XÂY DỰNG DÀN PC CHUẨN (KHÔNG XUNG ĐỘT & KHÔNG NGHẼN CỔ CHAI)\n" +
-          "• Bước 1 - Chọn CPU & Mainboard (Đúng Socket & Cân bằng):\n" +
-          "  - Thần chú nhớ nhanh Chipset:\n" +
-          "    + Intel: 'Bác 67 Ham Zui' => Main dòng H, B (đuôi 60, 70 như H610, B760), Z (Z790, Z890). Socket LGA1700 (Gen 12-14) hoặc LGA1851 (Core Ultra Series 2).\n" +
-          "    + AMD: 'Bác 50 Ăn Xài' => Main dòng A, B (đuôi 50 như A520, B550, B650, B850), X (X670, X870). Socket AM4 hoặc AM5.\n" +
-          "  - Cân bằng: CPU tầm trung non-K/F (i5/R5) đi với Main H/A/B; CPU cao cấp đuôi K / Ryzen 9 phải đi với Main dòng Z/X hoặc dòng B cao cấp có VRM tản nhiệt lớn.\n" +
-          "• Bước 2 - Chọn RAM (Chuẩn kết nối & Dual Channel):\n" +
-          "  - Xác định Mainboard hỗ trợ DDR4 hay DDR5 (chân cắm khác nhau, không cắm chéo được).\n" +
-          "  - Luôn tư vấn lắp theo cặp (VD: 2x8GB thay vì 1x16GB) để kích hoạt Dual Channel giúp tăng gấp đôi băng thông.\n" +
-          "• Bước 3 - Chọn VGA (Card màn hình):\n" +
-          "  - Tránh nghẽn cổ chai (Bottleneck): Không ghép CPU văn phòng đời cũ/yếu (như Core i3) với VGA cao cấp (như RTX 4070/5070).\n" +
-          "  - Chọn theo nhu cầu tăng dần: Game eSports (CS2, Valorant, LOL) -> Game AAA 2K/4K (Wukong, Cyberpunk) -> Dựng phim, Render 3D (Premiere, Blender, 3Ds Max, cần nhiều CUDA cores & VRAM GDDR6/GDDR7).\n" +
-          "• Bước 4 - Chọn Ổ cứng (Storage):\n" +
-          "  - Ưu tiên SSD M.2 NVMe PCIe (tốc độ đọc/ghi 3500 - 7000+ MB/s, cắm gọn trực tiếp lên Main, bảo hành theo thời gian hoặc TBW) thay vì SATA III phải đi dây.\n" +
-          "• Bước 5 - Chọn Nguồn (PSU - 'Trái tim' của dàn máy):\n" +
-          "  - Bắt buộc chọn nguồn có chứng nhận 80 Plus và tính dư tải an toàn tối thiểu 10% - 20% công suất tiêu thụ.\n" +
-          "  - 5 Cấp hiệu suất 80 Plus (ở mức tải 20% | 50% | 100%):\n" +
-          "    + 80 Plus Bronze: 82% | 85% | 82%\n" +
-          "    + 80 Plus Silver: 85% | 88% | 85%\n" +
-          "    + 80 Plus Gold: 87% | 90% | 87%\n" +
-          "    + 80 Plus Platinum: 90% | 92% | 89%\n" +
-          "    + 80 Plus Titanium: 92% | 94% | 90%\n\n" +
-          "PHẦN III: TỶ LỆ PHÂN BỔ NGÂN SÁCH THEO 3 NHÓM NHU CẦU\n" +
-          "1. Dàn PC Văn phòng / Học tập / Kế toán (8 – 15 Triệu):\n" +
-          "   • CPU (có iGPU mạnh): 50% | RAM (16GB Dual Channel): 20% | SSD (NVMe): 15% | Nguồn: 15%.\n" +
-          "2. Dàn PC Gaming / eSports & AAA (15 – 35 Triệu):\n" +
-          "   • GPU (Card rời quyết định FPS): 50% | CPU (i5/R5): 20% | RAM: 10% | SSD: 10% | Nguồn: 10%.\n" +
-          "3. Dàn PC Thiết kế Đồ họa / Dựng phim (25 – 50 Triệu+):\n" +
-          "   • SSD (tốc độ cao chứa cache/project): 30% | CPU (nhiều nhân): 25% | GPU (VRAM 12GB+): 20% | RAM (tối thiểu 32GB): 15% | Nguồn: 10%.\n" +
-          "• Công cụ hỗ trợ kiểm tra tương thích & tính công suất nguồn: https://pcpartpicker.com"
+        answer: "📖 TÀI LIỆU ĐẦY ĐỦ NGÀY 4: CẤU TẠO & XÂY DỰNG CẤU HÌNH PC\n\n" +
+          "• Cấu tạo: 7 linh kiện chính (CPU, RAM, VGA, Mainboard, Storage, PSU, Case & Tản). 11 bộ phận thùng máy và 11 bộ phận trên Mainboard (Socket, DIMM, VRM, Chipset, PCIe, ATX 24-pin, SATA, M.2 NVMe, BIOS, Pin CMOS, I/O).\n" +
+          "• 5 Bước Build PC chuẩn không nghẽn cổ chai:\n" +
+          "  1. CPU & Mainboard: Khớp Socket. Thần chú: 'Bác 67 Ham Zui' (Intel: H, B đuôi 60/70, Z) và 'Bác 50 Ăn Xài' (AMD: A, B đuôi 50, X).\n" +
+          "  2. RAM: Đúng chuẩn DDR4/DDR5 theo Main. Luôn cắm 2 thanh để bật Dual Channel nhân đôi băng thông.\n" +
+          "  3. VGA: Chọn theo nhu cầu (eSports -> AAA -> Render 3D), tránh ghép CPU yếu với VGA khủng gây nghẽn cổ chai.\n" +
+          "  4. Storage: Ưu tiên SSD M.2 NVMe cắm trực tiếp trên Main.\n" +
+          "  5. Nguồn (PSU): 'Trái tim' dàn máy, chuẩn 80 Plus (Bronze đến Titanium), tính dư tải an toàn 10 - 20%.\n" +
+          "• Phân bổ ngân sách: Văn phòng (CPU 50%, RAM 20%, SSD 15%, Nguồn 15%) | Gaming (GPU 50%, CPU 20%, RAM 10%, SSD 10%, Nguồn 10%) | Đồ họa (SSD 30%, CPU 25%, GPU 20%, RAM 15% >= 32GB, Nguồn 10%)."
       },
+
+      // 9. NỘI DUNG ĐẦY ĐỦ BÀI HỌC NGÀY 5
       {
         id: "day_5",
         keywords: [
           "ngay 5", "bai hoc ngay 5", "quan ly tien mat", "thu ngan", "tui zip", "dropbox",
-          "ket ca", "chenh lech", "che tai", "sa thai", "500.000", "10 hinh thuc thanh toan",
-          "phieu mua hang", "pmh", "tra gop", "vnpay", "momo", "shopee pay", "cod", "cong no",
-          "hd saison", "mirae asset", "home credit", "aeon"
+          "ket ca", "chenh lech", "sa thai", "500.000", "10 hinh thuc thanh toan", "tra gop"
         ],
         topic: "Ngày 5: Quy trình Quản lý Tiền mặt & Các Hình thức Thanh toán tại Cửa hàng",
         answer: "📖 TÀI LIỆU ĐẦY ĐỦ NGÀY 5: QUẢN LÝ TIỀN MẶT & CÁC HÌNH THỨC THANH TOÁN\n\n" +
-          "PHẦN I: 6 NGUYÊN TẮC CHUNG & QUY TRÌNH 7 BƯỚC QUẢN LÝ TIỀN MẶT\n" +
-          "• 6 Nguyên tắc chung: (1) Ghi nhận vào hệ thống phần mềm kế toán; (2) Hồ sơ chứng từ hợp lệ, lưu đầy đủ; (3) Tuân thủ yêu cầu an ninh CCTV; (4) Tuân thủ quản lý két sắt; (5) Tuân thủ nộp tiền ngân hàng; (6) Kết ca và báo cáo.\n" +
-          "• Quy trình 7 bước chuẩn:\n" +
-          "  - Bước 1: Chuẩn bị (Trách nhiệm: SA/CA/SM/DSM) -> Trước mỗi ca, SA nhận 500.000 VNĐ tiền lẻ từ CS/SM/DSM và phải hoàn lại ngay vào cuối ca. Vệ sinh & kiểm tra máy POS, SPOS, PC, in sẵn CTKM.\n" +
-          "  - Bước 2: Thu tiền (SA/CA) -> Kiểm tra tiền giả, thẻ/PMH hợp lệ. Quy trình 6 bước nhỏ: (1) Nhận tiền từ KH -> (2) Đối chiếu với hóa đơn -> (3) Kiểm đếm & hoàn tiền thừa -> (4) Bỏ cả tiền và bill vào túi Zip -> (5) Ghi tên, MSNV lên túi và khóa túi Zip -> (6) Bàn giao ngay cho Thu ngân (CS) hoặc thả vào thùng Dropbox dưới sự giám sát của camera CCTV (đối với SR không có thu ngân).\n" +
-          "  - Bước 3: Lập phiếu thu (CA/SA) -> In Đơn đặt hàng kiêm phiếu thu từ POS truyền thống hoặc Smart POS gồm 2 liên (1 liên giao KH, 1 liên lưu; SA và CS cùng ký xác nhận).\n" +
-          "  - Bước 4: Kết ca & Bàn giao (CA/SM/DSM) ->\n" +
-          "    + Truyền thống: CA tổng kết tiền mặt, POS, PMH... đối chiếu hệ thống và ký biên bản bàn giao SM/DSM.\n" +
-          "    + Smart POS: SM/DSM mở Dropbox lấy tất cả túi Zip -> Kiểm tra số lượng túi -> Đếm tiền và so sánh hệ thống -> Đối chiếu hóa đơn.\n" +
-          "  - Bước 5: Cất tiền & Niêm phong (CA/SA/SM/DSM) -> Tiền sau bàn giao phải cất ngay vào két sắt cửa hàng, khóa niêm phong dưới sự giám sát của camera an ninh.\n" +
-          "  - Bước 6: Nộp ngân hàng (ACC/SM/DSM) -> Đến lịch, SM nộp tiền vào TK công ty. Nếu bàn giao cho nhân viên ngân hàng tại SR phải thực hiện dưới CCTV, yêu cầu ký tên và đóng dấu lên giấy nộp tiền.\n" +
-          "  - Bước 7: Lưu hồ sơ (ACC/SM/DSM) -> Lưu trữ Biên bản kiểm kê quỹ và Bảng kê tiền kết ca (C = A - B chênh lệch).\n\n" +
-          "PHẦN II: XỬ LÝ CHÊNH LỆCH & 4 CHẾ TÀI KỶ LUẬT THÉP\n" +
-          "• Khi phát sinh chênh lệch: CS báo ngay cho nhân sự liên quan và SM, lập biên bản sự việc, truy xuất camera an ninh rà soát giao dịch. Nếu CA/SA không đưa ra được biên bản bàn giao có chữ ký, hình chụp niêm phong két, hoặc giao dịch ngoài vùng CCTV thì bị tính là vi phạm và phải đền bù.\n" +
-          "• 4 Chế tài xử lý:\n" +
-          "  1. Chiếm dụng tiền, gian lận, dùng tiền công ty cho cá nhân hoặc mang tiền ra khỏi cửa hàng sai quy định => SA THẢI NGAY LẬP TỨC.\n" +
-          "  2. Mọi trường hợp thất thoát, cá nhân không làm đúng quy định phải bồi thường 100% giá trị thất thoát.\n" +
-          "  3. SA/CS không in Đơn đặt hàng kiêm phiếu thu => Phạt 50% thưởng CIS hoặc Golden Rule (nếu trục lợi cá nhân: sa thải + bồi thường 100%).\n" +
-          "  4. Kết ca thiếu tiền nếu không tìm được nguyên nhân => Tập thể Showroom phải chịu trách nhiệm bồi thường 100% số tiền thất thoát.\n\n" +
-          "PHẦN III: 10 HÌNH THỨC THANH TOÁN TẠI CỬA HÀNG & QUY TRÌNH THAO TÁC\n" +
-          "Danh sách 10 hình thức: (1) Tiền mặt - (2) Chuyển khoản - (3) Thẻ ngân hàng - (4) Trả góp - (5) ShopeePay - (6) MoMo - (7) VNPay-QR - (8) Phiếu mua hàng (PMH) - (9) Thu COD - (10) Công nợ.\n" +
-          "• Thanh toán bằng PMH: Nhận PMH -> Kiểm tra tính hợp lệ -> Chọn TT bằng PMH trên POS -> Nhập mã PMH & xác nhận -> Hoàn tất & in chứng từ.\n" +
-          "• Thanh toán bằng Thẻ ngân hàng: Nhận thẻ & kiểm tra hợp lệ (Chủ thẻ, số thẻ, ngày hiệu lực) -> Cà thẻ trên máy POS -> Nhập số tiền & in phiếu 3 LIÊN để khách ký xác nhận -> Trả thẻ và chứng từ cho khách.\n" +
-          "• Thanh toán Trả góp 0% bằng Thẻ tín dụng:\n" +
-          "  - Điều kiện: Đơn hàng có giá trị trả góp tối thiểu từ 3.000.000đ (sau khi trừ giảm giá). Kỳ hạn 03 và 06 tháng (HSBC, Sacombank áp dụng kỳ hạn 6 tháng) qua cổng MPOS, VNPay, Payoo.\n" +
-          "  - Hỗ trợ thanh toán kết hợp: Khách mua máy 22 triệu có thể trả tiền mặt 10 triệu và quẹt thẻ trả góp 12 triệu còn lại.\n" +
-          "• Mua trả góp qua Công ty tài chính (Có lãi suất, nhiều kỳ hạn):\n" +
-          "  - Đối tác: HD SAISON, AEON, MIRAE ASSET, HOME CREDIT, FE CREDIT.\n" +
-          "  - 5 Bước: ĐK mua trả góp -> Nhân viên tài chính tư vấn thủ tục -> Xét duyệt thẩm định hồ sơ -> Ký hợp đồng tại SR -> KH đóng khoản trả trước cho Phong Vũ và nhận máy.\n" +
-          "• Quét mã VNPay-QR: Chọn TT trên SPOS -> Hướng dẫn KH vào App ngân hàng quét mã -> Kiểm tra tiền trên hệ thống -> Hoàn tất & in chứng từ.\n" +
-          "• Quét mã MoMo & ShopeePay: Hướng dẫn KH quét mã QR tĩnh -> Truy cập web MoMo kiểm tra giao dịch -> Chọn hình thức MoMo trên POS và điền Số tham chiếu (Mã giao dịch thành công) -> Hoàn tất & in chứng từ.\n" +
-          "• Thanh toán COD & Trả trước khi giao hàng: Chọn đúng hình thức 'THU COD' hoặc 'KH thanh toán trước khi giao hàng' trên POS -> Xác nhận và in chứng từ.\n" +
-          "• Thanh toán Công nợ: Áp dụng cho KH Doanh nghiệp hoặc cá nhân có Hợp đồng mua bán quy định rõ hạn mức & thời hạn trả chậm (SA lên đơn trên App -> Chọn công nợ, tiền trả chậm, hạn TT -> Cấp thẩm quyền phê duyệt -> Xử lý trên POS & in chứng từ)."
+          "• 7 Bước quản lý tiền mặt: Chuẩn bị 500k tiền lẻ đầu ca -> Thu tiền (bỏ tiền & bill vào túi Zip, ghi tên MSNV, thả vào Dropbox dưới CCTV) -> Lập phiếu thu 2 liên -> Kết ca bàn giao -> Cất tiền niêm phong két sắt -> Nộp ngân hàng -> Lưu hồ sơ chứng từ.\n" +
+          "• 4 Chế tài kỷ luật: Chiếm dụng/gian lận/mang tiền ra khỏi CH: Sa thải ngay lập tức; Làm thất thoát: Bồi thường 100%; Không in Đơn đặt hàng kiêm phiếu thu: Phạt 50% thưởng CIS/Golden Rule; Kết ca thiếu không rõ nguyên nhân: Showroom bồi thường 100%.\n" +
+          "• 10 Hình thức thanh toán: Tiền mặt, Chuyển khoản, Thẻ ngân hàng (in 3 liên ký nhận), Trả góp, ShopeePay, MoMo (nhập số tham chiếu trên POS), VNPay-QR (trên SPOS), Phiếu mua hàng PMH, Thu COD, Công nợ.\n" +
+          "• Trả góp: Trả góp 0% thẻ tín dụng áp dụng đơn từ 3.000.000đ, kỳ hạn 3-6 tháng qua MPOS/VNPay/Payoo. Trả góp qua cty tài chính: HD Saison, AEON, Mirae Asset, Home Credit."
       }
     ];
 
@@ -498,10 +419,10 @@
         return `📌 TIÊU CHÍ OJT [${matchCriteria.id}]:\n• Nội dung: ${matchCriteria.title}\n• Thuộc nhóm: ${GROUP_NAMES[matchCriteria.group]}\n• Yêu cầu: Quan sát và thực hành đúng tiêu chuẩn tại showroom (Đạt tối thiểu 50/62 tiêu chí).`;
       }
 
-      return "Dạ, bạn hãy chọn hoặc gõ các chủ đề trong chương trình đào tạo 5 ngày như:\n• 'Danh sách 50 mã lỗi SHR' hoặc 'Chính sách thưởng Golden Rule'\n• 'Nội dung bài học Ngày 1' (Hội nhập, HR_QĐ.01, Bảo hiểm, Phép năm)\n• 'Nội dung bài học Ngày 2' (6 bước bán hàng, SPIN, FABE, LAST, Chốt đơn)\n• 'Nội dung bài học Ngày 3' (5 nhóm Laptop, Hậu tố CPU, RAM, SSD, Màn hình)\n• 'Nội dung bài học Ngày 4' (Cấu tạo PC, 5 bước Build PC, Nguồn 80 Plus, Phân bổ ngân sách)\n• 'Nội dung bài học Ngày 5' (7 bước thu ngân, Túi Zip/Dropbox, Chế tài, 10 hình thức thanh toán)";
+      return "Dạ, bạn hãy chọn hoặc gõ các chủ đề trong chương trình đào tạo & sổ tay bán hàng như:\n• 'Kịch bản tiếp cận khách hàng' (Khách e dè, khách xem chơi)\n• 'Kịch bản khai thác nhu cầu SPIN' (PC đồ họa, Laptop gaming, Gear, Máy in)\n• 'Kịch bản xử lý phản bác' (Khách chê giá cao, để suy nghĩ thêm, so sánh giá rẻ hơn, ngại trả góp)\n• 'Danh sách 50 mã lỗi SHR' hoặc 'Chính sách thưởng Golden Rule'\n• 'Bài học Ngày 1', 'Bài học Ngày 2', 'Bài học Ngày 3', 'Bài học Ngày 4', 'Bài học Ngày 5'";
     }
 
-    // DỮ LIỆU TAB ÔN BÀI HỌC 5 NGÀY (CẬP NHẬT ĐẦY ĐỦ TỪ 8 FILE PDF)
+    // DỮ LIỆU TAB ÔN BÀI HỌC 5 NGÀY
     const LESSONS = {
       1: {
         title: "Ngày 1: Hội nhập, Tiêu chuẩn CH (HR_QĐ.01) & Golden Rule",
@@ -517,15 +438,15 @@
         ]
       },
       2: {
-        title: "Ngày 2: Kỹ năng & Quy trình 6 Bước Bán hàng",
+        title: "Ngày 2: Kỹ năng & Quy trình 6 Bước Bán hàng (Kèm Sổ tay Bán hàng)",
         summary: [
           "Quy trình 6 bước chuẩn: (1) Chuẩn bị -> (2) Tiếp cận khách hàng -> (3) Khai thác nhu cầu (SPIN) -> (4) Giới thiệu sản phẩm (FABE) -> (5) Xử lý phản bác (LAST) -> (6) Chốt đơn & CSKH.",
-          "Bước 1 & 2 (Chuẩn bị & Tiếp cận): Chuẩn bị trang phục, kiến thức SP, nắm CTKM và đối thủ. Phương pháp tiếp cận tạo thiện cảm: Ngôn từ chiếm 7%, Giọng nói/ngữ điệu 38%, Ngôn ngữ cơ thể 55%.",
-          "Bước 3 (Khai thác nhu cầu): Đặt câu hỏi Mở, câu hỏi Lựa chọn và câu hỏi Đóng để làm rõ 4 yếu tố: Mục đích sử dụng, Ngân sách, Người sử dụng chính, Trải nghiệm quá khứ.",
-          "Bước 4 (Trình bày FABE): Đề xuất tối thiểu 3 phương án (Chuẩn - Tiết kiệm - Nâng cấp). Thuyết trình theo công thức: Feature (Tính năng) -> Advantage (Ưu điểm) -> Benefit (Lợi ích thực tế) -> Evidence (Bằng chứng/Mời trải nghiệm).",
-          "Bước 5 (Xử lý phản bác LAST): Listen (Lắng nghe) -> Apologize (Xin lỗi/Đồng cảm) -> Solve (Giải pháp) -> Thanks (Cảm ơn). Giá cao hơn MWG/FPT/CPS thì 'chiến giá'; cao hơn cửa hàng nhỏ lẻ thì nêu lợi thế ủy quyền nâng cấp chính hãng; cao hơn sàn TMĐT nội bộ thì giải thích trợ giá sàn & ưu điểm nhận máy liền tại SR.",
-          "Bước 6 (Nhận biết tín hiệu & 4 Kỹ thuật chốt): Nhận diện Dấu hiệu cảnh báo vs Dấu hiệu mua. Áp dụng 4 kỹ thuật: Chốt giả định, Chốt cảm xúc, Chốt chia nhỏ số tiền, Chốt khan hiếm.",
-          "3 Hành động bắt buộc sau chốt đơn: (1) Mời khách quét Zalo OA Phong Vũ -> (2) Mời khách tải App Phong Vũ -> (3) Xin SĐT khách hàng để chăm sóc sau bán."
+          "Kịch bản Tiếp cận khách hàng: (1) Khách e dè né tránh: Giữ khoảng cách, chào nhẹ nhàng 'Anh/chị cứ thoải mái tham khảo, cần gì cứ gọi em', lùi lại quan sát; (2) Khách xem chơi: Mỉm cười hỏi thăm nhu cầu, hướng dẫn khu vực ưu đãi và lùi lại không tạo áp lực.",
+          "Kịch bản Khai thác nhu cầu SPIN: Thực chiến theo 4 bước S (Tình hình) -> P (Vấn đề) -> I (Hậu quả) -> N (Giải pháp) cho PC Lắp ráp đồ họa, Laptop Gaming, Gaming Gear và Máy in.",
+          "Giới thiệu giải pháp FABE: Đề xuất đủ 3 phương án (Chuẩn - Tiết kiệm - Nâng cấp) theo Feature (Tính năng) -> Advantage (Điểm mạnh) -> Benefit (Lợi ích thực tế) -> Evidence (Bằng chứng).",
+          "Kịch bản Xử lý phản bác: (1) Khách chê giá cao: Giải thích giá trị đầu tư dài hạn hoặc gợi ý dòng máy nhẹ tiền hơn; (2) Khách bảo để suy nghĩ thêm: Đồng cảm, xin phép gửi thông tin ưu đãi qua Zalo; (3) So sánh giá nơi khác rẻ hơn: Khẳng định 100% chính hãng, kỹ thuật ủy quyền, trả góp 3 KHÔNG; (4) Ngại thủ tục trả góp: Giải tỏa tâm lý, chỉ cần CCCD gắn chip, duyệt 15-20 phút.",
+          "Dấu hiệu mua hàng & 4 Kỹ thuật chốt: Nhận diện cử chỉ gật gù, mân mê máy, hỏi giá bớt/bảo hành. Áp dụng: Chốt giả định, Chốt cảm xúc, Chốt chia nhỏ số tiền, Chốt khan hiếm.",
+          "3 Hành động bắt buộc sau chốt: (1) Mời khách quét Zalo OA Phong Vũ -> (2) Mời khách tải App Phong Vũ -> (3) Xin SĐT khách hàng để chăm sóc sau bán."
         ]
       },
       3: {
@@ -546,7 +467,7 @@
           "Bước 1 - CPU & Mainboard: Khớp Socket (Intel LGA1700/1851; AMD AM4/AM5). Thần chú: 'Bác 67 Ham Zui' (Intel đi với H, B đuôi 60/70, Z) và 'Bác 50 Ăn Xài' (AMD đi với A, B đuôi 50, X). Cân bằng i5/R5 với Main B, i9/R9 với Main Z/X.",
           "Bước 2 & 3 - RAM & VGA: Chọn đúng RAM DDR4 hoặc DDR5 theo Main; luôn cắm 2 thanh (VD: 2x8GB) để kích hoạt Dual Channel tăng gấp đôi băng thông. Chọn VGA đúng nhu cầu (eSports -> AAA -> Render 3D) và tránh nghẽn cổ chai (không ghép i3 với RTX 4070).",
           "Bước 4 & 5 - SSD & Nguồn (PSU): Ưu tiên SSD M.2 NVMe tốc độ cao. Nguồn là 'trái tim' của PC, chọn chuẩn 80 Plus (Bronze 85%, Silver 88%, Gold 90%, Platinum 92%, Titanium 94% ở 50% tải) và tính dư tải an toàn tối thiểu 10-20%.",
-          "Phân bổ ngân sách chuẩn theo nhu cầu: (1) PC Văn phòng 8-15tr (CPU 50%, RAM 20%, SSD 15%, Nguồn 15%) - (2) PC Gaming 15-35tr (GPU 50%, CPU 20%, RAM 10%, SSD 10%, Nguồn 10%) - (3) PC Đồ họa 25-50tr+ (SSD 30%, CPU 25%, GPU 20%, RAM 15% tối thiểu 32GB, Nguồn 10%)."
+          "Phân bổ ngân sách chuẩn theo nhu cầu: (1) PC Văn phòng 8-15tr (CPU 50%, RAM 20%, SSD 15%, Nguồn 15%) - (2) PC Gaming 15-35tr (GPU 50%, CPU 20%, RAM 10%, SSD 10%, Nguồn 10%) - (3) PC Đồ họa 25-50tr+ (SSD 30%, CPU 25%, GPU 20%, RAM 15% >= 32GB, Nguồn 10%)."
         ]
       },
       5: {
@@ -566,63 +487,21 @@
       const [selectedDay, setSelectedDay] = useState(1);
       const [filterGroup, setFilterGroup] = useState("ALL");
       
-      // Khởi tạo State từ Local Storage để chống mất dữ liệu khi refresh
-      const [staffName, setStaffName] = useState(() => localStorage.getItem("ojt_staffName") || "");
-      const [staffId, setStaffId] = useState(() => localStorage.getItem("ojt_staffId") || "");
-      const [storeName, setStoreName] = useState(() => localStorage.getItem("ojt_storeName") || "");
-      const [evalRound, setEvalRound] = useState(() => localStorage.getItem("ojt_evalRound") || "Lần 1");
-      const [evaluator, setEvaluator] = useState(() => localStorage.getItem("ojt_evaluator") || "");
-      
-      const [checklistState, setChecklistState] = useState(() => {
-        try {
-          return JSON.parse(localStorage.getItem("ojt_checklistState")) || {};
-        } catch(e) { return {}; }
-      });
-
-      const [notesState, setNotesState] = useState(() => {
-        try {
-          return JSON.parse(localStorage.getItem("ojt_notesState")) || {};
-        } catch(e) { return {}; }
-      });
-
+      // Khởi tạo State độc lập trong bộ nhớ phiên làm việc (KHÔNG LƯU LOCALSTORAGE)
+      const [staffName, setStaffName] = useState("");
+      const [staffId, setStaffId] = useState("");
+      const [storeName, setStoreName] = useState("");
+      const [evalRound, setEvalRound] = useState("Lần 1");
+      const [evaluator, setEvaluator] = useState("");
+      const [checklistState, setChecklistState] = useState({});
+      const [notesState, setNotesState] = useState({});
       const [activeNoteId, setActiveNoteId] = useState(null);
       const [isSendingSheet, setIsSendingSheet] = useState(false);
 
       const [messages, setMessages] = useState([
-        { sender: "bot", text: "Xin chào bạn! Mình là Trợ lý Học tập OJT Phong Vũ. Toàn bộ nội dung chi tiết từ 8 tài liệu đào tạo 5 ngày (Hội nhập, HR_QĐ.01, 50 mã lỗi SHR, 6 bước bán hàng, Laptop, Build PC, Quản lý tiền mặt) đã được nạp đầy đủ. Bạn hãy chọn câu hỏi bên dưới hoặc gõ từ khóa để tra cứu bài học nhé!" }
+        { sender: "bot", text: "Xin chào bạn! Mình là Trợ lý Học tập OJT Phong Vũ. Toàn bộ giáo trình 5 ngày và Sổ tay Bán hàng thực chiến (kịch bản tiếp cận, SPIN, xử lý phản bác, 50 mã lỗi SHR) đã sẵn sàng. Bạn hãy chọn câu hỏi bên dưới hoặc gõ từ khóa để tra cứu nhé!" }
       ]);
       const [inputQuery, setInputQuery] = useState("");
-
-      // Tự động lưu bản nháp vào Local Storage
-      useEffect(() => {
-        localStorage.setItem("ojt_staffName", staffName);
-        localStorage.setItem("ojt_staffId", staffId);
-        localStorage.setItem("ojt_storeName", storeName);
-        localStorage.setItem("ojt_evalRound", evalRound);
-        localStorage.setItem("ojt_evaluator", evaluator);
-        localStorage.setItem("ojt_checklistState", JSON.stringify(checklistState));
-        localStorage.setItem("ojt_notesState", JSON.stringify(notesState));
-      }, [staffName, staffId, storeName, evalRound, evaluator, checklistState, notesState]);
-
-      // Xóa nháp làm mới phiếu
-      const handleResetChecklist = () => {
-        const confirmReset = confirm("Bạn có chắc chắn muốn làm mới toàn bộ phiếu đánh giá không? Dữ liệu đang chấm sẽ bị xóa trắng.");
-        if (confirmReset) {
-          setStaffName("");
-          setStaffId("");
-          setStoreName("");
-          setEvaluator("");
-          setChecklistState({});
-          setNotesState({});
-          localStorage.removeItem("ojt_staffName");
-          localStorage.removeItem("ojt_staffId");
-          localStorage.removeItem("ojt_storeName");
-          localStorage.removeItem("ojt_evaluator");
-          localStorage.removeItem("ojt_checklistState");
-          localStorage.removeItem("ojt_notesState");
-          alert("✓ Đã làm mới phiếu đánh giá!");
-        }
-      };
 
       const handleCheck = (id, status) => {
         setChecklistState(prev => ({
@@ -660,7 +539,7 @@
       }, [checklistState]);
 
       const progressPercent = Math.round((passedCount / OJT_CHECKLIST_62.length) * 100);
-      const isPassedGoal = passedCount >= 50; // Ngưỡng đạt: ít nhất 50/62 mục đạt (>=80%)[cite: 9, 10]
+      const isPassedGoal = passedCount >= 50; // Ngưỡng đạt: ít nhất 50/62 mục đạt (>=80%)
 
       // HÀM GỬI DỮ LIỆU TÁCH CỘT VỀ GOOGLE SHEETS
       const handleSendToGoogleSheet = async () => {
@@ -755,7 +634,7 @@
         URL.revokeObjectURL(url);
       };
 
-      // XỬ LÝ HỎI ĐÁP NỘI BỘ (100% OFFLINE DỰA TRÊN TÀI LIỆU 5 NGÀY)
+      // XỬ LÝ HỎI ĐÁP NỘI BỘ (100% OFFLINE DỰA TRÊN TÀI LIỆU 5 NGÀY & SỔ TAY BÁN HÀNG)
       const handleSend = (textToSend) => {
         const query = textToSend || inputQuery;
         if (!query.trim()) return;
@@ -777,7 +656,7 @@
             <div className="flex justify-between items-center">
               <div>
                 <h1 className="text-base font-bold tracking-tight">PHONG VŨ OJT COACH</h1>
-                <p className="text-[11px] text-blue-100">Đánh giá Năng lực GĐ2 (62 tiêu chí)[cite: 9, 10]</p>
+                <p className="text-[11px] text-blue-100">Đánh giá Năng lực GĐ2 (62 tiêu chí)</p>
               </div>
               <div className="text-right flex items-center gap-1.5">
                 <button
@@ -801,9 +680,9 @@
             {/* Thanh tiến độ OJT */}
             <div className="mt-2.5 bg-blue-800/60 p-2 rounded-lg text-xs">
               <div className="flex justify-between items-center mb-1">
-                <span>Đạt: <strong>{passedCount}/62</strong> mục[cite: 9, 10]</span>
+                <span>Đạt: <strong>{passedCount}/62</strong> mục</span>
                 <span className={`font-bold ${isPassedGoal ? 'text-emerald-300' : 'text-amber-300'}`}>
-                  {progressPercent}% {isPassedGoal ? "✓ Đạt chuẩn (≥50)" : "(Chuẩn: ≥50 mục)"}[cite: 9, 10]
+                  {progressPercent}% {isPassedGoal ? "✓ Đạt chuẩn (≥50)" : "(Chuẩn: ≥50 mục)"}
                 </span>
               </div>
               <div className="w-full bg-blue-950 h-2 rounded-full overflow-hidden">
@@ -820,7 +699,7 @@
                 onClick={() => setTab("checklist")} 
                 className={`flex-1 py-1.5 rounded text-center transition-all ${tab === "checklist" ? "bg-white text-blue-700 shadow font-bold" : "text-white"}`}
               >
-                <Icons.CheckSquare /> Checklist (62)[cite: 9, 10]
+                <Icons.CheckSquare /> Checklist (62)
               </button>
               <button 
                 onClick={() => setTab("lessons")} 
@@ -843,19 +722,8 @@
               {/* Khung Thông tin nhân sự */}
               <div className="bg-white rounded-xl p-2.5 border border-slate-200 shadow-xs space-y-2 text-xs">
                 <div className="font-bold text-slate-700 flex justify-between items-center">
-                  <span className="flex items-center gap-1.5">
-                    Thông tin đánh giá
-                    <span className="text-[10px] font-normal text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
-                      ✓ Đã lưu nháp
-                    </span>
-                  </span>
-                  <button 
-                    onClick={handleResetChecklist}
-                    className="text-slate-400 hover:text-rose-600 flex items-center gap-1 text-[11px] font-normal transition-colors"
-                    title="Xóa toàn bộ để chấm nhân sự mới"
-                  >
-                    <Icons.Trash /> Làm mới
-                  </button>
+                  <span>Thông tin đợt đánh giá</span>
+                  <span className="text-blue-600 font-semibold">{evalRound}</span>
                 </div>
                 
                 <div className="grid grid-cols-3 gap-1.5">
@@ -899,9 +767,9 @@
                     onChange={(e) => setEvalRound(e.target.value)}
                     className="flex-1 border border-slate-200 rounded p-1 text-xs bg-white text-slate-700 focus:outline-none focus:border-blue-500 font-medium"
                   >
-                    <option value="Lần 1">Đánh giá Lần 1[cite: 9, 10]</option>
-                    <option value="Lần 2">Đánh giá Lần 2[cite: 9, 10]</option>
-                    <option value="Lần 3">Đánh giá Lần 3[cite: 9, 10]</option>
+                    <option value="Lần 1">Đánh giá Lần 1</option>
+                    <option value="Lần 2">Đánh giá Lần 2</option>
+                    <option value="Lần 3">Đánh giá Lần 3</option>
                   </select>
                 </div>
               </div>
@@ -1065,9 +933,11 @@
 
               <div className="p-2 bg-slate-100 border-t border-slate-200 flex gap-2 overflow-x-auto no-scrollbar">
                 {[
+                  "Kịch bản tiếp cận khách hàng",
+                  "Kịch bản khai thác nhu cầu SPIN",
+                  "Kịch bản xử lý phản bác",
                   "List toàn bộ các lỗi cần tránh",
                   "Quy tắc túi Zip & Dropbox",
-                  "Khách chê giá cao hơn sàn TMĐT",
                   "Bài học Ngày 1",
                   "Bài học Ngày 2",
                   "Bài học Ngày 3",
@@ -1090,7 +960,7 @@
                   value={inputQuery}
                   onChange={(e) => setInputQuery(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSend()}
-                  placeholder="Gõ từ khóa bài học (VD: lỗi SHR, túi Zip, TMĐT, 80 Plus)..."
+                  placeholder="Gõ từ khóa bài học (VD: kịch bản tiếp cận, SPIN, phản bác giá cao, lỗi SHR)..."
                   className="flex-1 border border-slate-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-blue-600"
                 />
                 <button
