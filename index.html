@@ -18,7 +18,7 @@
   <div id="root"></div>
 
   <script type="text/babel">
-    const { useState, useMemo } = React;
+    const { useState, useMemo, useEffect } = React;
 
     // ==========================================
     // 💡 LINK GOOGLE APPS SCRIPT WEB APP CỦA BẠN:
@@ -27,16 +27,17 @@
 
     const Icons = {
       BookOpen: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>,
-      CheckSquare: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>,
+      CheckSquare: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>,
       Bot: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>,
       Send: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>,
       SendCloud: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>,
       Download: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>,
       Note: () => <svg className="w-3.5 h-3.5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>,
-      CheckDouble: () => <svg className="w-3.5 h-3.5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7m-14 4l4 4L19 7"/></svg>
+      CheckDouble: () => <svg className="w-3.5 h-3.5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7m-14 4l4 4L19 7"/></svg>,
+      Refresh: () => <svg className="w-3 h-3 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
     };
 
-    // DANH MỤC 62 TIÊU CHÍ CHUẨN TỪ BIỂU MẪU COACHING OJT VER 2
+    // DANH MỤC 62 TIÊU CHÍ CHUẨN TỪ BIỂU MẪU COACHING OJT VER 2[cite: 9, 10]
     const OJT_CHECKLIST_62 = [
       { id: "A.1", group: "A", title: "Standee/cờ vỉa hè đặt vuông góc mặt tiền, cờ thẳng hàng không che lối đi" },
       { id: "A.2", group: "A", title: "Bảng hiệu/hộp đèn nguyên vẹn, sáng đủ đèn; vách kính và cửa ra vào sạch sẽ" },
@@ -112,266 +113,35 @@
       G: "G. CTKM (4)"
     };
 
-    // ========================================================
-    // 🧠 CƠ SỞ TRI THỨC TOÀN DIỆN (ĐÃ NẠP SỔ TAY BÁN HÀNG 01.2025)
-    // ========================================================
-    const KB_DATABASE = [
-      // 1. KỊCH BẢN TIẾP CẬN KHÁCH HÀNG (SỔ TAY BÁN HÀNG)
+    // KHO TRI THỨC NỀN TẢNG (FALLBACK OFFLINE KHI CHƯA LOAD XONG SHEET)
+    const DEFAULT_KB_DATABASE = [
       {
-        id: "kich_ban_tiep_can",
-        keywords: [
-          "kich ban tiep can", "tinh huong tiep can", "khach e de", "khach ne tranh",
-          "khach xem choi", "chua co muc tieu", "khach khong muon lam phien", "tiep can khach hang"
-        ],
-        topic: "Kịch bản Tình huống Tiếp cận Khách hàng (Sổ tay Bán hàng)",
-        answer: "🎯 KỊCH BẢN TÌNH HUỐNG TIẾP CẬN KHÁCH HÀNG THỰC CHIẾN:\n\n" +
-          "1. Tình huống 1: Khách hàng e dè, né tránh giao tiếp\n" +
-          "• Biểu hiện: Tránh ánh mắt nhân viên, đi nhanh qua các quầy, tỏ vẻ không muốn bị làm phiền.\n" +
-          "• Cách xử lý: Không vội vàng đi sát, giữ khoảng cách để tôn trọng không gian riêng của khách.\n" +
-          "• Kịch bản nói: Khi có cơ hội phù hợp, mỉm cười và chào nhẹ nhàng:\n" +
-          "  'Em chào anh/chị, anh/chị cứ thoải mái tham khảo ạ, nếu cần hỗ trợ thông tin gì mình cứ gọi em liền nhé ạ.'\n" +
-          "• Hành động tiếp theo: Lùi lại, đứng quan sát từ xa, sẵn sàng hỗ trợ ngay khi khách có biểu hiện cần giúp.\n\n" +
-          "2. Tình huống 2: Khách hàng có vẻ đang 'xem chơi', chưa có mục tiêu cụ thể\n" +
-          "• Biểu hiện: Đi dạo quanh các quầy, nhìn lướt sản phẩm, không dừng lại quá lâu ở một vị trí nào.\n" +
-          "• Kịch bản mở lời: Tiếp cận với nụ cười thân thiện:\n" +
-          "  'Em chào anh/chị, không biết mình đang tìm máy cho công việc, học tập hay chỉ đang đi tham khảo ạ?'\n" +
-          "• Nếu khách bảo: 'Chưa cần gì đâu, anh/chị chỉ coi thử thôi':\n" +
-          "  -> Nhân viên đối ứng: 'Dạ, anh/chị cứ thoải mái tham khảo trước để tìm ra sản phẩm phù hợp nhất ạ. Hiện tại Phong Vũ đang có nhiều chương trình ưu đãi rất tốt cho dòng Laptop/PC, mời anh/chị tham khảo khu vực bên này ạ.'\n" +
-          "• Hành động tiếp theo: Hướng tay mở lòng bàn tay về phía khu vực sản phẩm và chủ động lùi lại để không tạo áp lực cho khách."
+        topic: "Kịch bản Tiếp cận Khách hàng",
+        keywords: ["kich ban tiep can", "tiep can khach hang", "khach e de", "khach xem choi"],
+        answer: "🎯 KỊCH BẢN TIẾP CẬN KHÁCH HÀNG THỰC CHIẾN:\n\n1. Khách e dè, né tránh: Giữ khoảng cách tôn trọng, mỉm cười chào nhẹ nhàng: 'Em chào anh/chị, mình cứ thoải mái tham khảo ạ, cần gì cứ gọi em hỗ trợ liền nhé ạ.' Sau đó lùi lại quan sát từ xa.\n2. Khách xem chơi: Mỉm cười hỏi: 'Em chào anh/chị, mình đang tìm máy công việc, học tập hay chỉ đang đi tham khảo ạ?' -> Nếu khách bảo coi thử: 'Dạ anh/chị cứ tham khảo ạ, bên em đang có nhiều ưu đãi rất tốt ở khu vực bên này mời anh/chị xem thử'."[cite: 305]
       },
-
-      // 2. KỊCH BẢN KHAI THÁC NHU CẦU SPIN THEO TỪNG NHÓM SẢN PHẨM
       {
-        id: "kich_ban_spin",
-        keywords: [
-          "kich ban spin", "kich ban khai thac nhu cau", "spin pc do hoa", "spin laptop gaming",
-          "spin gaming gear", "spin ban phim co", "spin may in", "spin tra gop", "khai thac nhu cau"
-        ],
-        topic: "Kịch bản Khai thác Nhu cầu SPIN theo Nhóm Sản phẩm (Sổ tay Bán hàng)",
-        answer: "🔍 KỊCH BẢN KHAI THÁC NHU CẦU (SPIN) & TƯ VẤN (FABE) THEO TỪNG SẢN PHẨM:\n\n" +
-          "1. SẢN PHẨM PC LẮP RÁP ĐỒ HỌA:\n" +
-          "• S (Tình hình): 'Dạ, anh hay dùng phần mềm nào là chính ạ? Thiết kế 2D, dựng video hay 3D chuyên sâu luôn ạ?' (KH: 'Anh làm thiết kế với dựng video nhẹ thôi, chủ yếu Photoshop, Premiere.')\n" +
-          "• P (Vấn đề): 'Dạ, không biết máy cũ của anh có bị giật, lag khi render video hay mở nhiều layer không ạ?' (KH: 'Ừ, lâu lâu nó đơ luôn, xuất video cũng chậm.')\n" +
-          "• I (Hậu quả): 'Dạ, vậy chắc ảnh hưởng nhiều tới công việc, mất thời gian vậy thì dễ bị trễ deadline lắm anh nhỉ?' (KH: 'Đúng rồi, ảnh hưởng nhiều chứ.')\n" +
-          "• N (Giải pháp): 'Dạ, vậy em xin phép lên một cấu hình đủ tốt để làm nhanh hơn, giúp anh chủ động xử lý mọi việc nhé ạ.' -> FABE: Cấu hình chuyên dụng, thao tác mượt, xuất video thần tốc.\n\n" +
-          "2. SẢN PHẨM LAPTOP GAMING:\n" +
-          "• S: 'Không biết anh hay chơi những tựa game nào nhất ạ? Máy hiện tại của mình đáp ứng chơi các game này tốt không anh?' (KH: 'Anh chơi Valorant với muốn thử mấy game AAA mới, máy cũ hơi đuối, FPS không ổn định.')\n" +
-          "• P: 'Dạ, FPS không ổn định thì ảnh hưởng nhiều đến trải nghiệm khi leo rank lắm anh ạ.'\n" +
-          "• I: 'Dạ, máy yếu lag vậy vừa làm mình khó chịu, vừa mất hết hứng thú giải trí, bạn bè chơi game mới đồ họa đẹp mà mình không tham gia được cũng mất vui anh nhỉ?'\n" +
-          "• N: 'Dạ, vậy em xin giới thiệu dòng Laptop Gaming [Acer Nitro 5 / RTX 4050 / màn 144Hz] đảm bảo anh cày game với bạn bè siêu mượt luôn ạ!'\n\n" +
-          "3. SẢN PHẨM GAMING GEAR (BÀN PHÍM CƠ):\n" +
-          "• S: 'Dạ, anh đang tìm bàn phím cơ chơi dòng game nào nhiều: MOBA như Liên Minh hay FPS như CS2, Valorant ạ?'\n" +
-          "• P: 'Dạ, vậy bàn phím cũ của mình có bị delay phím hay gây khó chịu gì khi dùng không anh?' (KH: 'Xài cũng được nhưng ban đêm gõ hơi ồn.')\n" +
-          "• I: 'Dạ em hiểu, tiếng ồn từ bàn phím vừa làm anh phân tâm, vừa dễ gây phiền mọi người xung quanh nữa ạ.'\n" +
-          "• N: 'Dạ, em tư vấn mình chuyển sang bàn phím cơ switch Linear [Logitech G512 GX Linear], gõ cực êm ái ban đêm mà phản hồi vẫn cực chuẩn ạ!'\n\n" +
-          "4. SẢN PHẨM MÁY IN:\n" +
-          "• S: 'Dạ, không biết mình in chủ yếu là văn bản trắng đen hay có in màu luôn ạ?' (KH: 'Chủ yếu in hợp đồng trắng đen.')\n" +
-          "• P: 'Dạ, máy in hiện tại của mình có bị hạn chế chức năng nào khi dùng không anh?' (KH: 'Có, không có in 2 mặt em.')\n" +
-          "• I: 'Dạ, không có in 2 mặt tự động thì phải đứng lật tay rất tốn thời gian và dễ nhầm thứ tự trang, ảnh hưởng hiệu suất công việc anh nhỉ?'\n" +
-          "• N: 'Dạ, bên em đang có mẫu máy in Brother in 2 mặt tự động giá cực tốt, giúp mình tiết kiệm tối đa thời gian, em giới thiệu cho anh nhé ạ!'"
+        topic: "Kịch bản Khai thác Nhu cầu SPIN",
+        keywords: ["kich ban spin", "spin pc do hoa", "spin laptop gaming", "spin ban phim co", "spin may in"],
+        answer: "🔍 KỊCH BẢN KHAI THÁC NHU CẦU SPIN:\n\n• PC Đồ họa: Hỏi phần mềm 2D/3D (S) -> Khai thác giật lag máy cũ (P) -> Hậu quả trễ deadline (I) -> Đề xuất cấu hình chuyên dụng tối ưu thời gian (N).\n• Laptop Gaming: Hỏi tựa game Valorant/AAA (S) -> FPS tụt không ổn định (P) -> Hụt hẫng khi giải trí (I) -> Đề xuất Nitro 5 RTX 4050 144Hz chiến mượt (N).\n• Gaming Gear: Hỏi game MOBA/FPS (S) -> Phím cũ ồn ban đêm (P) -> Phiền người xung quanh (I) -> Tư vấn switch Linear cực êm (N).\n• Máy in: Hỏi in trắng đen/màu (S) -> Thiếu in 2 mặt (P) -> Mất công lật tay (I) -> Đề xuất máy in Brother 2 mặt tự động (N)."[cite: 306, 307, 308, 309]
       },
-
-      // 3. KỊCH BẢN XỬ LÝ PHẢN BÁC KHI TƯ VẤN (SỔ TAY BÁN HÀNG)
       {
-        id: "kich_ban_xu_ly_phan_bac",
-        keywords: [
-          "kich ban xu ly phan bac", "xu ly phan bac", "khach che gia cao", "so sanh gia re hon",
-          "de suy nghi them", "ngai tra gop", "thu tuc phien phuc", "che gia dat", "phan bac"
-        ],
-        topic: "Kịch bản Xử lý 4 Tình huống Phản bác Thường gặp (Sổ tay Bán hàng)",
-        answer: "💡 KỊCH BẢN XỬ LÝ 4 TÌNH HUỐNG PHẢN BÁC TỪ KHÁCH HÀNG:\n\n" +
-          "1. Tình huống: Khách thấy giá cao ('Cái này giá hơi cao, anh nghĩ anh đi coi thêm')\n" +
-          "• Thái độ: Bình tĩnh - Giải thích giá trị - Đưa giải pháp linh hoạt.\n" +
-          "• Kịch bản nói:\n" +
-          "  'Dạ em hiểu ạ, giá của dòng này đúng là cao hơn một số mẫu khác, nhưng lý do là vì máy sở hữu [nêu cấu hình/tính năng vượt trội, màn chuẩn màu/tản nhiệt lớn]. Em nghĩ mình đầu tư một lần như vậy sẽ an tâm dùng mượt mà và bền bỉ trong 3-4 năm tới, tính ra lại kinh tế hơn rất nhiều ạ.\n" +
-          "  Hoặc nếu mình muốn mức giá nhẹ nhàng hơn ngay lúc này, em xin phép gợi ý thêm 1 mẫu khác vẫn đáp ứng rất tốt công việc của anh/chị ạ.'\n\n" +
-          "2. Tình huống: Khách bảo 'Để suy nghĩ thêm' ('Anh coi tạm vậy thôi, để suy nghĩ thêm')\n" +
-          "• Thái độ: Đồng cảm tôn trọng - Xin phép giữ mối liên hệ hỗ trợ.\n" +
-          "• Kịch bản nói:\n" +
-          "  'Dạ vâng anh ạ, một món đồ giá trị thế này mình cân nhắc kỹ là hoàn toàn đúng rồi ạ.\n" +
-          "  Dạ em xin phép gửi thông tin chi tiết của sản phẩm cũng như các chương trình ưu đãi hiện có qua Zalo của anh nhé ạ. Khi về nhà mình xem lại mà có bất kỳ thắc mắc nào, anh cứ nhắn em hỗ trợ ngay cho mình nhé ạ.'\n\n" +
-          "3. Tình huống: Khách so sánh với nơi khác bán rẻ hơn ('Anh thấy bên kia bán rẻ hơn')\n" +
-          "• Thái độ: Không đôi co, không hạ thấp đối thủ - Nêu bật thế mạnh độc quyền tại Phong Vũ.\n" +
-          "• Kịch bản nói:\n" +
-          "  'Dạ vâng anh, trên thị trường hiện nay có thể có một số nơi niêm yết mức giá chênh lệch đôi chút. Tuy nhiên, khi mua tại Phong Vũ thì mình nhận được trọn gói an tâm:\n" +
-          "  - 100% sản phẩm chính hãng, xuất đủ hóa đơn VAT chuẩn chỉnh.\n" +
-          "  - Chính sách bảo hành rõ ràng, lỗi phần cứng đổi mới nhanh chóng.\n" +
-          "  - Đội ngũ kỹ thuật viên giàu kinh nghiệm hỗ trợ lắp đặt, bảo dưỡng tận tâm suốt vòng đời máy.\n" +
-          "  - Cùng chương trình trả góp 3 KHÔNG và nhiều voucher độc quyền. Anh hoàn toàn an tâm khi đầu tư tại Phong Vũ ạ.'\n\n" +
-          "4. Tình huống: Khách ngại thủ tục trả góp phiền phức ('Anh ngại làm hồ sơ trả góp lắm, lâu và phiền')\n" +
-          "• Thái độ: Giải tỏa rào cản tâm lý, nhấn mạnh sự tiện lợi đơn giản.\n" +
-          "• Kịch bản nói:\n" +
-          "  'Dạ, trước đây đúng là thủ tục giấy tờ có hơi rườm rà, nhưng hiện nay quy trình làm trả góp cực kỳ nhanh gọn anh ạ:\n" +
-          "  - Mình chỉ cần có Căn cước công dân gắn chip là đủ điều kiện rồi ạ.\n" +
-          "  - Hồ sơ xét duyệt trực tiếp chỉ trong 15 - 20 phút là có kết quả và nhận máy về dùng ngay.\n" +
-          "  Em hỗ trợ làm thủ tục tại chỗ cho mình liền luôn anh nhé!'"
+        topic: "Kịch bản Xử lý Phản bác",
+        keywords: ["kich ban xu ly phan bac", "che gia cao", "de suy nghi them", "so sanh gia re hon", "ngai tra gop"],
+        answer: "💡 KỊCH BẢN XỬ LÝ 4 TÌNH HUỐNG PHẢN BÁC:\n\n1. Khách chê giá cao: 'Dạ em hiểu ạ, dòng này giá nhỉnh hơn vì [tính năng vượt trội], mình đầu tư 1 lần sẽ dùng mượt 3-4 năm lợi hơn rất nhiều ạ. Hoặc em có mẫu nhẹ tiền hơn vẫn đáp ứng rất tốt nhu cầu của mình ạ.'\n2. Khách bảo để suy nghĩ thêm: 'Dạ vâng anh, cân nhắc kỹ là đúng rồi ạ. Em xin phép kết nối Zalo gửi thông tin máy và ưu đãi, khi cần anh cứ nhắn em hỗ trợ ngay nhé ạ.'\n3. Nơi khác rẻ hơn: 'Dạ tại Phong Vũ mình được hàng chính hãng 100% có VAT, bảo hành 1 đổi 1 tận nơi, kỹ thuật ủy quyền chuyên sâu và ưu đãi trả góp 3 KHÔNG an tâm tuyệt đối ạ.'\n4. Ngại thủ tục trả góp: 'Dạ hiện giờ chỉ cần CCCD gắn chip là duyệt hồ sơ 15-20 phút nhận máy luôn tại chỗ cực kỳ nhanh gọn anh nhé!'"[cite: 310, 311, 312]
       },
-
-      // 4. DANH MỤC 50 MÃ LỖI SHR NGUYÊN BẢN
       {
-        id: "shr_errors",
-        keywords: [
-          "cac loi can tranh", "cac ma loi shr", "danh sach loi", "loi shr", "ma loi",
-          "vi pham", "cac loi khong duoc mac", "list loi", "list toan bo cac loi can tranh",
-          "shr1", "shr2", "shr50", "thuong golden rule", "chinh sach thuong", "300.000", "300k"
-        ],
-        topic: "Danh mục 50 Mã lỗi Golden Rule (SHR1 - SHR50) & Chính sách thưởng",
-        answer: "🚫 DANH MỤC ĐẦY ĐỦ 50 MÃ LỖI GOLDEN RULE (SHR1 – SHR50):\n\n" +
-          "1. Nhóm Đồng phục & Diện mạo (SHR1 - SHR6, SHR11 - SHR13):\n" +
-          "• SHR1: Đồng phục không đúng quy định được cấp phát.\n" +
-          "• SHR2: Mang giày màu sáng, đi dép (Màu tối hợp lệ: đen, nâu, tím than, xanh đen).\n" +
-          "• SHR3: Không đội nón (đối với bảo vệ).\n" +
-          "• SHR4: Không đeo thắt lưng / đeo thắt lưng sáng màu.\n" +
-          "• SHR5: Áo bỏ ngoài quần (khi giao tiếp KH hoặc > 5 phút khi không giao tiếp KH).\n" +
-          "• SHR6: Không đeo bảng tên, bảng tên đút trong túi áo (Nguyên tắc: KH phải nhìn thấy bảng tên).\n" +
-          "• SHR11: Nữ xõa tóc, không cột/búi tóc gọn gàng (Tóc dài qua vai cần buộc hết lên).\n" +
-          "• SHR12: Nam tóc quá dài (phía sau chạm cổ áo / tóc mái che mắt).\n" +
-          "• SHR13: Nữ không trang điểm / trang điểm quá đậm.\n\n" +
-          "2. Nhóm Tác phong & Kỷ luật tại nơi làm việc (SHR7 - SHR10, SHR14 - SHR20, SHR46):\n" +
-          "• SHR7: Tại nơi làm việc không có người đứng trực mở cửa khi rảnh rỗi.\n" +
-          "• SHR8: Tụ tập 1 chỗ nói chuyện, cười đùa không để ý đến KH.\n" +
-          "• SHR9: Hút thuốc trong giờ làm việc (tính cả khu vực bên ngoài cửa hàng).\n" +
-          "• SHR10: Cho tay vào túi quần khi nói chuyện với khách hàng.\n" +
-          "• SHR14: Dáng đứng xiêu vẹo, dựa vào kệ, tủ, vách khi có KH.\n" +
-          "• SHR15: Ăn uống trong khu vực làm việc gây mất vệ sinh hoặc ảnh hưởng tiếp khách.\n" +
-          "• SHR16: Sử dụng sản phẩm trải nghiệm sai mục đích.\n" +
-          "• SHR17: Giao nhận đồ bằng 1 tay với khách hàng.\n" +
-          "• SHR18: Làm việc riêng trong giờ (lướt Facebook, chơi game...).\n" +
-          "• SHR19: Sử dụng công cụ làm việc sai mục đích.\n" +
-          "• SHR20: Giao nhận chứng từ, hóa đơn cho KH bằng 1 tay, kẹp 2 ngón tay.\n" +
-          "• SHR46: Khu vực làm việc bừa bộn, dơ bẩn.\n\n" +
-          "3. Nhóm Giữ xe, Chào đón & Phục vụ (SHR21 - SHR34, SHR38 - SHR45, SHR47 - SHR50):\n" +
-          "• SHR21: Không chủ động dắt xe, quay xe cho khách hàng.\n" +
-          "• SHR22: Đưa thẻ xe bằng 1 tay, kẹp trong 2 ngón tay.\n" +
-          "• SHR23: Không có hành động chào đón khách hàng, không hướng dẫn khách hàng.\n" +
-          "• SHR24: Xe để lộn xộn, không ngăn nắp.\n" +
-          "• SHR25: Không dùng ô (dù) che cho khách hàng khi trời mưa.\n" +
-          "• SHR26: Nhân viên rảnh rỗi nhìn thấy KH vào/ra mà không chủ động mở cửa.\n" +
-          "• SHR27: Không có hành động mời nước khách hàng.\n" +
-          "• SHR28: Không mời khách hàng vào bàn tư vấn ngồi.\n" +
-          "• SHR29: Bỏ bê khách hàng.\n" +
-          "• SHR30: Để KH đứng khi ghế ngồi trống.\n" +
-          "• SHR31: Không chủ động mời khách hàng đến khu vực thanh toán.\n" +
-          "• SHR32: Không chủ động đón tiếp khách hàng.\n" +
-          "• SHR33: Không chủ động khiêng hàng hóa cho khách hàng.\n" +
-          "• SHR34: Thể hiện khuôn mặt nhăn nhó, khó chịu trong suốt quá trình tiếp xúc KH.\n" +
-          "• SHR35: Có những hành vi thiếu tôn trọng khách hàng.\n" +
-          "• SHR36: Cau có khi tiếp xúc với khách hàng.\n" +
-          "• SHR37: Không có thái độ niềm nở khi tiếp xúc với khách hàng.\n" +
-          "• SHR38: Không thực hiện động tác cúi chào khách hàng.\n" +
-          "• SHR39: Không có nhân viên đứng mở cửa chào đón khách hàng khi rảnh rỗi.\n" +
-          "• SHR40: Không có nhân viên tại vị trí làm việc khi khách hàng đến.\n" +
-          "• SHR41: Thực hiện sai động tác chào khách hàng.\n" +
-          "• SHR42: Không che mưa, che nắng yên xe của khách hàng.\n" +
-          "• SHR43: Không lau yên xe cho khách hàng khi ướt.\n" +
-          "• SHR44: Không hỗ trợ khách hàng cố định hàng hóa lên xe.\n" +
-          "• SHR45: Không có hành động mang vác giúp khách hàng (đặc biệt phụ nữ mang thai, người già).\n" +
-          "• SHR47: Không hướng dẫn khách hàng đến các khâu tiếp theo.\n" +
-          "• SHR48: Không có hành động chào cảm ơn khi khách hàng về.\n" +
-          "• SHR49: Không có hành động cúi chào cảm ơn khách hàng khi khách hàng ra về.\n" +
-          "• SHR50: Không tiễn khách hàng ra ngoài cửa hoặc bãi xe.\n\n" +
-          "💰 CHÍNH SÁCH THƯỞNG GOLDEN RULE:\n" +
-          "• Mức thưởng: 300.000 VNĐ/người/tháng.\n" +
-          "• Điều kiện nhận thưởng: Vi phạm <= 3 lỗi/tháng (Nếu > 3 lỗi/tháng sẽ không được nhận thưởng).\n" +
-          "• Khấu trừ: Nếu đã chi thưởng nhưng sau đó có KH phàn nàn cá nhân nhân viên này, khoản thưởng đã chi sẽ bị khấu trừ."
+        topic: "Danh mục 50 Mã lỗi Golden Rule (SHR1 - SHR50)",
+        keywords: ["cac loi can tranh", "cac ma loi shr", "danh sach loi", "loi shr", "thuong golden rule", "300.000"],
+        answer: "🚫 DANH MỤC 50 MÃ LỖI GOLDEN RULE (SHR1 – SHR50):\n\n• Diện mạo: SHR1 (sai đồng phục), SHR2 (giày sáng màu/dép), SHR3 (bảo vệ không nón), SHR4 (sai thắt lưng), SHR5 (áo bỏ ngoài quần), SHR6 (không bảng tên), SHR11 (nữ xõa tóc), SHR12 (nam tóc dài), SHR13 (nữ không/quá đậm trang điểm).\n• Kỷ luật: SHR7 (không trực mở cửa), SHR8 (tụ tập cười đùa), SHR9 (hút thuốc), SHR10 (tay túi quần), SHR14 (đứng dựa vách), SHR15 (ăn uống nơi làm việc), SHR17/SHR20 (đưa nhận đồ/bill 1 tay), SHR18 (làm việc riêng lướt mạng).\n• Phục vụ: SHR21/SHR22 (không dắt xe/đưa thẻ xe 1 tay), SHR23 (không chào đón), SHR25 (không che ô khi mưa), SHR26/SHR39 (không mở cửa cho khách), SHR27/SHR28 (không mời nước/ghế ngồi), SHR34/SHR36 (nhăn nhó, cau có), SHR38/SHR41 (chào sai động tác/không cúi chào), SHR42/SHR43 (không che/lau yên xe), SHR44/SHR45 (không hỗ trợ khiêng đồ nặng ra xe), SHR48-SHR50 (không cảm ơn, không tiễn khách).\n💰 Thưởng Golden Rule: 300.000 VNĐ/người/tháng nếu vi phạm <= 3 lỗi/tháng."[cite: 116, 117, 118, 126]
       },
-
-      // 5. NỘI DUNG ĐẦY ĐỦ BÀI HỌC NGÀY 1
       {
-        id: "day_1",
-        keywords: [
-          "ngay 1", "bai hoc ngay 1", "hoi nhap", "tieu chuan cua hang", "hr_qd.01", "golden rule",
-          "lich su phong vu", "gia tri cot loi", "tam nhin", "su menh", "y nghia logo", "tran phuong chi",
-          "nghi phep nam", "bao hiem", "lich nghi le", "posm", "bang gia mica", "goc mo laptop"
-        ],
-        topic: "Ngày 1: Hội nhập Văn hóa, Tiêu chuẩn Cửa hàng (HR_QĐ.01) & Phục vụ Khách hàng",
-        answer: "📖 TÀI LIỆU ĐẦY ĐỦ NGÀY 1:\n\n" +
-          "1. Lịch sử & Giá trị cốt lõi:\n" +
-          "• Cột mốc: 1997 (CH đầu tiên) -> 2000 (TTBH đầu tiên) -> 2007 (Cty Máy tính Phong Vũ) -> 2018 (Teko đầu tư mở rộng >30 CH) -> 2026 (Phát triển mạnh mẽ). CEO: Chị Trần Phương Chi.\n" +
-          "• Tầm nhìn: Nhà bán lẻ đa kênh hàng đầu Việt Nam. Sứ mệnh: Hiện đại hóa, Số hóa (O2O), Trải nghiệm khách hàng.\n" +
-          "• 4 Giá trị cốt lõi: Khách hàng là số 1 - Chính trực - Quan tâm - Đồng đội.\n" +
-          "• Ý nghĩa Logo: Hình vuông (vững chắc, tin cậy), Hình tròn (ấm áp, sẻ chia), Hình tam giác (tham vọng, tiên phong).\n" +
-          "2. Chính sách Phúc lợi & Bảo mật:\n" +
-          "• BHBB 32%: NLĐ 10.5% (BHXH 8%, BHYT 1.5%, BHTN 1%) - Cty 21.5% (BHXH 17.5%, BHYT 3%, BHTN 1%).\n" +
-          "• Phép năm: Nhóm 1 (12-17 ngày), Nhóm 2 (14-18 ngày), Nhóm 3 (16-18 ngày) theo thâm niên. Nghỉ lễ 11 ngày/năm. Bảo mật lương thưởng tuyệt đối.\n" +
-          "3. Tiêu chuẩn Mặt tiền & Trưng bày (HR_QĐ.01):\n" +
-          "• Mặt tiền: Standee/cờ vuông góc mặt tiền, cờ thẳng hàng. Băng rôn căng phẳng không trùng nhăn. Poster dán cửa tối đa 2 tấm (ưu tiên bên phải). Loa phát sáng 8h30-11h, chiều 16h-19h.\n" +
-          "• Bảng giá mica: Bảng Đứng (ngang tầm mắt) vs Bảng Nằm (dưới tầm mắt). Đặt bên phải SP trên bàn/kệ & Tivi; dán góc phải SP điện máy CE; đầu móc treo với phụ kiện; ở giữa dưới SP với linh kiện.\n" +
-          "• Trưng bày Laptop: Bọc nilon màn hình riêng, phím riêng. Góc mở màn hình đồng bộ 110°-120° (dưới tầm mắt). Cách mép bàn 10-15cm. Màn hình KHÔNG để tầng sát sàn (kệ 50mm).\n" +
-          "4. Golden Rule: Chào 4 điểm chạm (Đứng thẳng hướng mắt, tay đặt ngực trái, cúi 15°, nói 'Dạ Phong Vũ xin chào!'). Chỉ dẫn bằng cả bàn tay, giao nhận bằng 2 tay."
-      },
-
-      // 6. NỘI DUNG ĐẦY ĐỦ BÀI HỌC NGÀY 2
-      {
-        id: "day_2",
-        keywords: [
-          "ngay 2", "bai hoc ngay 2", "6 buoc ban hang", "ky nang ban hang", "fabe", "spin", "last",
-          "chot don", "dau hieu mua", "dau hieu canh bao", "chot gia dinh", "chot cam xuc", "chot chia nho"
-        ],
-        topic: "Ngày 2: Kỹ năng & Quy trình 6 Bước Bán hàng",
-        answer: "📖 TÀI LIỆU ĐẦY ĐỦ NGÀY 2: QUY TRÌNH 6 BƯỚC BÁN HÀNG TẠI PHONG VŨ\n\n" +
-          "• Bước 1 - Chuẩn bị: Diện mạo tươm tất, nắm vững tính năng/phân khúc giá, cập nhật CTKM/trả góp, vệ sinh quầy kệ.\n" +
-          "• Bước 2 - Tiếp cận khách hàng: Quy tắc tác động giao tiếp 7% ngôn từ - 38% giọng nói/ngữ điệu - 55% ngôn ngữ cơ thể. Ánh mắt chân thành, nụ cười niềm nở, chào đón tự nhiên.\n" +
-          "• Bước 3 - Khai thác nhu cầu (SPIN): Hỏi Mục đích dùng, Ngân sách, Người dùng chính, Trải nghiệm máy cũ bằng bộ câu hỏi Mở - Lựa chọn - Đóng.\n" +
-          "• Bước 4 - Tư vấn giải pháp (FABE): Đề xuất đủ 3 phương án (Chuẩn - Tiết kiệm - Nâng cấp). Thuyết trình theo Feature (Tính năng) -> Advantage (Điểm mạnh) -> Benefit (Lợi ích thực tế) -> Evidence (Bằng chứng/Mời thử máy).\n" +
-          "• Bước 5 - Xử lý phản bác (LAST): Listen (Lắng nghe) -> Apologize (Đồng cảm) -> Solve (Giải pháp) -> Thanks (Cảm ơn).\n" +
-          "• Bước 6 - Chốt đơn & CSKH: Nhận biết dấu hiệu mua hàng (gật gù, mân mê máy, hỏi giá bớt/bảo hành). Áp dụng 4 kỹ thuật chốt (Giả định, Cảm xúc, Chia nhỏ, Khan hiếm). Thực hiện 3 hành động sau chốt: Quét Zalo OA, Tải App Phong Vũ, Xin SĐT chăm sóc."
-      },
-
-      // 7. NỘI DUNG ĐẦY ĐỦ BÀI HỌC NGÀY 3
-      {
-        id: "day_3",
-        keywords: [
-          "ngay 3", "bai hoc ngay 3", "thong so laptop", "tu van laptop", "hau to cpu", "core ultra",
-          "ram lpddr", "ssd nvme", "oled", "ips", "copilot+", "npu", "omnibook", "victus"
-        ],
-        topic: "Ngày 3: Kiến thức Nền tảng & Kỹ năng Tư vấn Laptop",
-        answer: "📖 TÀI LIỆU ĐẦY ĐỦ NGÀY 3: KIẾN THỨC NỀN TẢNG & TƯ VẤN LAPTOP\n\n" +
-          "• 5 Nhóm Laptop: AI PC (NPU >= 40 TOPS, pin 12-18h) | Văn phòng/HSSV (14-22tr, RAM 16GB) | Doanh nhân Ultrabook (mỏng nhẹ, kim loại, OLED 2.8K) | Gaming (CPU H/HX, RTX rời, màn 144Hz+) | Đồ họa (100% sRGB/DCI-P3, RTX Studio).\n" +
-          "• Hậu tố CPU Intel: U (tiết kiệm điện), V (Core Ultra thế hệ mới mỏng nhẹ tiết kiệm pin), H (hiệu năng cao), HX/K (ép xung mạnh nhất). AMD: U (tiết kiệm), HS (hiệu năng cao tiết kiệm điện), H/HX (bung xung tối đa).\n" +
-          "• RAM & SSD: RAM tối thiểu 16GB. Phân biệt RAM hàn chết (LPDDR) không nâng cấp được. SSD M.2 NVMe PCIe đọc ghi 1500 - 7000+ MB/s.\n" +
-          "• Màn hình: TN (1-3ms), IPS (góc nhìn 178°), OLED (tương phản vô hạn 1,000,000:1). Tần số quét 60Hz, 120Hz, 144Hz, 240Hz-360Hz.\n" +
-          "• Phân dòng hãng: HP (Omnibook vs Victus) | Lenovo (IdeaPad vs Legion) | ASUS (Vivobook vs ROG/TUF) | Acer (Aspire vs Nitro) | Dell (Dell 15 vs Alienware)."
-      },
-
-      // 8. NỘI DUNG ĐẦY ĐỦ BÀI HỌC NGÀY 4
-      {
-        id: "day_4",
-        keywords: [
-          "ngay 4", "bai hoc ngay 4", "cau tao pc", "build pc", "bac 67 ham zui", "bac 50 an xai",
-          "socket 1851", "socket 1700", "am4", "am5", "dual channel", "80 plus", "phan bo chi phi pc"
-        ],
-        topic: "Ngày 4: Kiến thức Nền tảng & Xây dựng Cấu hình PC",
-        answer: "📖 TÀI LIỆU ĐẦY ĐỦ NGÀY 4: CẤU TẠO & XÂY DỰNG CẤU HÌNH PC\n\n" +
-          "• Cấu tạo: 7 linh kiện chính (CPU, RAM, VGA, Mainboard, Storage, PSU, Case & Tản). 11 bộ phận thùng máy và 11 bộ phận trên Mainboard (Socket, DIMM, VRM, Chipset, PCIe, ATX 24-pin, SATA, M.2 NVMe, BIOS, Pin CMOS, I/O).\n" +
-          "• 5 Bước Build PC chuẩn không nghẽn cổ chai:\n" +
-          "  1. CPU & Mainboard: Khớp Socket. Thần chú: 'Bác 67 Ham Zui' (Intel: H, B đuôi 60/70, Z) và 'Bác 50 Ăn Xài' (AMD: A, B đuôi 50, X).\n" +
-          "  2. RAM: Đúng chuẩn DDR4/DDR5 theo Main. Luôn cắm 2 thanh để bật Dual Channel nhân đôi băng thông.\n" +
-          "  3. VGA: Chọn theo nhu cầu (eSports -> AAA -> Render 3D), tránh ghép CPU yếu với VGA khủng gây nghẽn cổ chai.\n" +
-          "  4. Storage: Ưu tiên SSD M.2 NVMe cắm trực tiếp trên Main.\n" +
-          "  5. Nguồn (PSU): 'Trái tim' dàn máy, chuẩn 80 Plus (Bronze đến Titanium), tính dư tải an toàn 10 - 20%.\n" +
-          "• Phân bổ ngân sách: Văn phòng (CPU 50%, RAM 20%, SSD 15%, Nguồn 15%) | Gaming (GPU 50%, CPU 20%, RAM 10%, SSD 10%, Nguồn 10%) | Đồ họa (SSD 30%, CPU 25%, GPU 20%, RAM 15% >= 32GB, Nguồn 10%)."
-      },
-
-      // 9. NỘI DUNG ĐẦY ĐỦ BÀI HỌC NGÀY 5
-      {
-        id: "day_5",
-        keywords: [
-          "ngay 5", "bai hoc ngay 5", "quan ly tien mat", "thu ngan", "tui zip", "dropbox",
-          "ket ca", "chenh lech", "sa thai", "500.000", "10 hinh thuc thanh toan", "tra gop"
-        ],
-        topic: "Ngày 5: Quy trình Quản lý Tiền mặt & Các Hình thức Thanh toán tại Cửa hàng",
-        answer: "📖 TÀI LIỆU ĐẦY ĐỦ NGÀY 5: QUẢN LÝ TIỀN MẶT & CÁC HÌNH THỨC THANH TOÁN\n\n" +
-          "• 7 Bước quản lý tiền mặt: Chuẩn bị 500k tiền lẻ đầu ca -> Thu tiền (bỏ tiền & bill vào túi Zip, ghi tên MSNV, thả vào Dropbox dưới CCTV) -> Lập phiếu thu 2 liên -> Kết ca bàn giao -> Cất tiền niêm phong két sắt -> Nộp ngân hàng -> Lưu hồ sơ chứng từ.\n" +
-          "• 4 Chế tài kỷ luật: Chiếm dụng/gian lận/mang tiền ra khỏi CH: Sa thải ngay lập tức; Làm thất thoát: Bồi thường 100%; Không in Đơn đặt hàng kiêm phiếu thu: Phạt 50% thưởng CIS/Golden Rule; Kết ca thiếu không rõ nguyên nhân: Showroom bồi thường 100%.\n" +
-          "• 10 Hình thức thanh toán: Tiền mặt, Chuyển khoản, Thẻ ngân hàng (in 3 liên ký nhận), Trả góp, ShopeePay, MoMo (nhập số tham chiếu trên POS), VNPay-QR (trên SPOS), Phiếu mua hàng PMH, Thu COD, Công nợ.\n" +
-          "• Trả góp: Trả góp 0% thẻ tín dụng áp dụng đơn từ 3.000.000đ, kỳ hạn 3-6 tháng qua MPOS/VNPay/Payoo. Trả góp qua cty tài chính: HD Saison, AEON, Mirae Asset, Home Credit."
+        topic: "Quy tắc túi Zip & Dropbox",
+        keywords: ["tui zip", "dropbox", "cctv", "nop tien", "thu ngan", "ket ca"],
+        answer: "📦 QUY TẮC TÚI ZIP & THÙNG DROPBOX:\n\n• Khi thu tiền mặt: Nhận tiền -> Đối chiếu bill -> Hoàn tiền thừa -> Cho toàn bộ tiền mặt và hóa đơn vào túi Zip -> Ghi tên, MSNV lên túi và kéo khóa cẩn thận -> Bàn giao ngay cho Thu ngân (CS) hoặc thả trực tiếp vào hòm Dropbox dưới sự giám sát của Camera an ninh CCTV.\n• Chế tài: Mang tiền ra khỏi showroom hoặc giữ tiền sai quy định sẽ bị SA THẢI NGAY LẬP TỨC."[cite: 268, 270, 272, 277]
       }
     ];
 
-    // ========================================================
-    // 🔍 THUẬT TOÁN TÌM KIẾM TOÀN VĂN TIẾNG VIỆT (KHÔNG CẦN DẤU)
-    // ========================================================
     function removeVietnameseTones(str) {
       if (!str) return "";
       return str.normalize("NFD")
@@ -383,46 +153,7 @@
         .trim();
     }
 
-    function findBestLocalAnswer(query) {
-      if (!query || !query.trim()) return null;
-      const cleanQ = removeVietnameseTones(query);
-
-      let bestMatch = null;
-      let maxScore = 0;
-
-      for (const item of KB_DATABASE) {
-        let score = 0;
-        for (const kw of item.keywords) {
-          const cleanKW = removeVietnameseTones(kw);
-          if (cleanQ.includes(cleanKW)) {
-            score += cleanKW.length * 3;
-          }
-        }
-        if (score > maxScore) {
-          maxScore = score;
-          bestMatch = item;
-        }
-      }
-
-      if (bestMatch && maxScore >= 6) {
-        return bestMatch.answer;
-      }
-
-      // Tra cứu trực tiếp theo mã hoặc tên trong 62 tiêu chí OJT
-      const matchCriteria = OJT_CHECKLIST_62.find(c => {
-        const cleanID = removeVietnameseTones(c.id);
-        const cleanTitle = removeVietnameseTones(c.title);
-        return cleanQ.includes(cleanID) || cleanQ.includes(cleanTitle);
-      });
-
-      if (matchCriteria) {
-        return `📌 TIÊU CHÍ OJT [${matchCriteria.id}]:\n• Nội dung: ${matchCriteria.title}\n• Thuộc nhóm: ${GROUP_NAMES[matchCriteria.group]}\n• Yêu cầu: Quan sát và thực hành đúng tiêu chuẩn tại showroom (Đạt tối thiểu 50/62 tiêu chí).`;
-      }
-
-      return "Dạ, bạn hãy chọn hoặc gõ các chủ đề trong chương trình đào tạo & sổ tay bán hàng như:\n• 'Kịch bản tiếp cận khách hàng' (Khách e dè, khách xem chơi)\n• 'Kịch bản khai thác nhu cầu SPIN' (PC đồ họa, Laptop gaming, Gear, Máy in)\n• 'Kịch bản xử lý phản bác' (Khách chê giá cao, để suy nghĩ thêm, so sánh giá rẻ hơn, ngại trả góp)\n• 'Danh sách 50 mã lỗi SHR' hoặc 'Chính sách thưởng Golden Rule'\n• 'Bài học Ngày 1', 'Bài học Ngày 2', 'Bài học Ngày 3', 'Bài học Ngày 4', 'Bài học Ngày 5'";
-    }
-
-    // DỮ LIỆU TAB ÔN BÀI HỌC 5 NGÀY
+    // DỮ LIỆU TAB ÔN BÀI HỌC 5 NGÀY[cite: 14, 126, 191, 215, 259]
     const LESSONS = {
       1: {
         title: "Ngày 1: Hội nhập, Tiêu chuẩn CH (HR_QĐ.01) & Golden Rule",
@@ -487,7 +218,7 @@
       const [selectedDay, setSelectedDay] = useState(1);
       const [filterGroup, setFilterGroup] = useState("ALL");
       
-      // Khởi tạo State độc lập trong bộ nhớ phiên làm việc (KHÔNG LƯU LOCALSTORAGE)
+      // Khởi tạo State độc lập (Không lưu localStorage để nhiều người dùng không bị xung đột)
       const [staffName, setStaffName] = useState("");
       const [staffId, setStaffId] = useState("");
       const [storeName, setStoreName] = useState("");
@@ -497,6 +228,31 @@
       const [notesState, setNotesState] = useState({});
       const [activeNoteId, setActiveNoteId] = useState(null);
       const [isSendingSheet, setIsSendingSheet] = useState(false);
+
+      // KHO TRI THỨC ĐỘNG (LẤY TỪ GOOGLE SHEET VÀ TỰ ĐỘNG GỘP VỚI KHO GỐC)
+      const [dynamicKB, setDynamicKB] = useState(DEFAULT_KB_DATABASE);
+      const [kbStatus, setKbStatus] = useState("Đang kết nối Sheet...");
+
+      // TỰ ĐỘNG LẤY TRI THỨC MỚI NHẤT TỪ GOOGLE SHEET KHI KHỞI CHẠY
+      const fetchSheetKnowledge = async () => {
+        setKbStatus("Đang tải dữ liệu Sheet...");
+        try {
+          const res = await fetch(GOOGLE_SHEET_WEBAPP_URL);
+          const data = await res.json();
+          if (Array.isArray(data) && data.length > 0) {
+            setDynamicKB([...data, ...DEFAULT_KB_DATABASE]);
+            setKbStatus(`Đã kết nối Sheet (${data.length} chủ đề mới)`);
+          } else {
+            setKbStatus("Đang dùng kho bài học gốc");
+          }
+        } catch (e) {
+          setKbStatus("Đang dùng kho bài học offline");
+        }
+      };
+
+      useEffect(() => {
+        fetchSheetKnowledge();
+      }, []);
 
       const [messages, setMessages] = useState([
         { sender: "bot", text: "Xin chào bạn! Mình là Trợ lý Học tập OJT Phong Vũ. Toàn bộ giáo trình 5 ngày và Sổ tay Bán hàng thực chiến (kịch bản tiếp cận, SPIN, xử lý phản bác, 50 mã lỗi SHR) đã sẵn sàng. Bạn hãy chọn câu hỏi bên dưới hoặc gõ từ khóa để tra cứu nhé!" }
@@ -539,7 +295,7 @@
       }, [checklistState]);
 
       const progressPercent = Math.round((passedCount / OJT_CHECKLIST_62.length) * 100);
-      const isPassedGoal = passedCount >= 50; // Ngưỡng đạt: ít nhất 50/62 mục đạt (>=80%)
+      const isPassedGoal = passedCount >= 50; // Ngưỡng đạt: ít nhất 50/62 mục đạt (>=80%)[cite: 9, 10]
 
       // HÀM GỬI DỮ LIỆU TÁCH CỘT VỀ GOOGLE SHEETS
       const handleSendToGoogleSheet = async () => {
@@ -634,7 +390,46 @@
         URL.revokeObjectURL(url);
       };
 
-      // XỬ LÝ HỎI ĐÁP NỘI BỘ (100% OFFLINE DỰA TRÊN TÀI LIỆU 5 NGÀY & SỔ TAY BÁN HÀNG)
+      // THUẬT TOÁN TÌM KIẾM ĐỐI SOÁT VỚI KHO DỮ LIỆU ĐỘNG TỪ GOOGLE SHEET
+      const findAnswerFromDynamicKB = (query) => {
+        if (!query || !query.trim()) return null;
+        const cleanQ = removeVietnameseTones(query);
+
+        let bestMatch = null;
+        let maxScore = 0;
+
+        for (const item of dynamicKB) {
+          let score = 0;
+          for (const kw of (item.keywords || [])) {
+            const cleanKW = removeVietnameseTones(kw);
+            if (cleanQ.includes(cleanKW)) {
+              score += cleanKW.length * 3;
+            }
+          }
+          if (score > maxScore) {
+            maxScore = score;
+            bestMatch = item;
+          }
+        }
+
+        if (bestMatch && maxScore >= 5) {
+          return `📚 [CHỦ ĐỀ: ${bestMatch.topic}]\n\n${bestMatch.answer}`;
+        }
+
+        // Tra cứu mã 62 tiêu chí OJT[cite: 9, 10]
+        const matchCriteria = OJT_CHECKLIST_62.find(c => {
+          const cleanID = removeVietnameseTones(c.id);
+          const cleanTitle = removeVietnameseTones(c.title);
+          return cleanQ.includes(cleanID) || cleanQ.includes(cleanTitle);
+        });
+
+        if (matchCriteria) {
+          return `📌 TIÊU CHÍ OJT [${matchCriteria.id}]:\n• Nội dung: ${matchCriteria.title}\n• Thuộc nhóm: ${GROUP_NAMES[matchCriteria.group]}\n• Yêu cầu: Quan sát và thực hành đúng tiêu chuẩn tại showroom (Đạt tối thiểu 50/62 tiêu chí).`;
+        }
+
+        return "Dạ, hiện chưa tìm thấy nội dung phù hợp trong kho tri thức Google Sheet.\n\n👉 Bạn hãy thử bấm vào các nút câu hỏi mẫu phía dưới hoặc gõ các từ khóa như: 'kịch bản tiếp cận', 'SPIN', 'xử lý phản bác', 'lỗi SHR', 'túi Zip', 'Ngày 1'... nhé!";
+      };
+
       const handleSend = (textToSend) => {
         const query = textToSend || inputQuery;
         if (!query.trim()) return;
@@ -644,9 +439,9 @@
         setInputQuery("");
 
         setTimeout(() => {
-          const answer = findBestLocalAnswer(query);
+          const answer = findAnswerFromDynamicKB(query);
           setMessages([...updatedMessages, { sender: "bot", text: answer }]);
-        }, 120);
+        }, 100);
       };
 
       return (
@@ -656,7 +451,7 @@
             <div className="flex justify-between items-center">
               <div>
                 <h1 className="text-base font-bold tracking-tight">PHONG VŨ OJT COACH</h1>
-                <p className="text-[11px] text-blue-100">Đánh giá Năng lực GĐ2 (62 tiêu chí)</p>
+                <p className="text-[11px] text-blue-100">Đánh giá Năng lực GĐ2 (62 tiêu chí)[cite: 9, 10]</p>
               </div>
               <div className="text-right flex items-center gap-1.5">
                 <button
@@ -680,9 +475,9 @@
             {/* Thanh tiến độ OJT */}
             <div className="mt-2.5 bg-blue-800/60 p-2 rounded-lg text-xs">
               <div className="flex justify-between items-center mb-1">
-                <span>Đạt: <strong>{passedCount}/62</strong> mục</span>
+                <span>Đạt: <strong>{passedCount}/62</strong> mục[cite: 9, 10]</span>
                 <span className={`font-bold ${isPassedGoal ? 'text-emerald-300' : 'text-amber-300'}`}>
-                  {progressPercent}% {isPassedGoal ? "✓ Đạt chuẩn (≥50)" : "(Chuẩn: ≥50 mục)"}
+                  {progressPercent}% {isPassedGoal ? "✓ Đạt chuẩn (≥50)" : "(Chuẩn: ≥50 mục)"}[cite: 9, 10]
                 </span>
               </div>
               <div className="w-full bg-blue-950 h-2 rounded-full overflow-hidden">
@@ -699,7 +494,7 @@
                 onClick={() => setTab("checklist")} 
                 className={`flex-1 py-1.5 rounded text-center transition-all ${tab === "checklist" ? "bg-white text-blue-700 shadow font-bold" : "text-white"}`}
               >
-                <Icons.CheckSquare /> Checklist (62)
+                <Icons.CheckSquare /> Checklist (62)[cite: 9, 10]
               </button>
               <button 
                 onClick={() => setTab("lessons")} 
@@ -711,7 +506,7 @@
                 onClick={() => setTab("chat")} 
                 className={`flex-1 py-1.5 rounded text-center transition-all ${tab === "chat" ? "bg-white text-blue-700 shadow font-bold" : "text-white"}`}
               >
-                <Icons.Bot /> Tra Cứu Bài Học
+                <Icons.Bot /> Tra Cứu Tri Thức
               </button>
             </div>
           </div>
@@ -719,7 +514,7 @@
           {/* TAB 1: CHECKLIST 62 TIÊU CHÍ */}
           {tab === "checklist" && (
             <div className="flex-1 p-2.5 space-y-2.5 pb-8">
-              {/* Khung Thông tin nhân sự */}
+              {/* Khung Thông tin nhân sự (Đã bỏ localStorage & nút làm mới) */}
               <div className="bg-white rounded-xl p-2.5 border border-slate-200 shadow-xs space-y-2 text-xs">
                 <div className="font-bold text-slate-700 flex justify-between items-center">
                   <span>Thông tin đợt đánh giá</span>
@@ -767,7 +562,7 @@
                     onChange={(e) => setEvalRound(e.target.value)}
                     className="flex-1 border border-slate-200 rounded p-1 text-xs bg-white text-slate-700 focus:outline-none focus:border-blue-500 font-medium"
                   >
-                    <option value="Lần 1">Tự Đánh Giá</option>
+                    <option value="Lần 1">Tự đánh giá</option>                   
                     <option value="Lần 1">Đánh giá Lần 1</option>
                     <option value="Lần 2">Đánh giá Lần 2</option>
                     <option value="Lần 3">Đánh giá Lần 3</option>
@@ -880,7 +675,7 @@
             </div>
           )}
 
-          {/* TAB 2: ÔN TẬP BÀI HỌC 5 NGÀY */}
+          {/* TAB 2: ÔN TẬP BÀI HỌC 5 NGÀY[cite: 14, 126, 191, 215, 259] */}
           {tab === "lessons" && (
             <div className="flex-1 p-3 pb-8">
               <div className="flex gap-1.5 overflow-x-auto pb-2 no-scrollbar">
@@ -919,9 +714,24 @@
             </div>
           )}
 
-          {/* TAB 3: TRA CỨU BÀI HỌC (LOCAL ENGINE) */}
+          {/* TAB 3: TRA CỨU TRI THỨC (KẾT NỐI TRỰC TIẾP TỪ GOOGLE SHEET) */}
           {tab === "chat" && (
             <div className="flex-1 flex flex-col h-[calc(100vh-170px)]">
+              {/* Thanh trạng thái kết nối Google Sheet */}
+              <div className="bg-slate-200/80 px-3 py-1.5 flex justify-between items-center text-[10px] text-slate-600 border-b border-slate-300">
+                <span className="flex items-center gap-1.5">
+                  <span className={`w-2 h-2 rounded-full ${kbStatus.includes("Đã kết nối") ? "bg-emerald-500" : "bg-amber-500 animate-pulse"}`}></span>
+                  Kho Tri Thức Trực Tuyến: <strong>{kbStatus}</strong>
+                </span>
+                <button
+                  onClick={fetchSheetKnowledge}
+                  className="text-blue-600 hover:text-blue-800 flex items-center gap-1 font-semibold"
+                  title="Tải lại dữ liệu mới nhất từ Sheet"
+                >
+                  <Icons.Refresh /> Cập nhật
+                </button>
+              </div>
+
               <div className="flex-1 overflow-y-auto p-3 space-y-3 text-xs">
                 {messages.map((m, idx) => (
                   <div key={idx} className={`flex ${m.sender === "user" ? "justify-end" : "justify-start"}`}>
@@ -932,15 +742,17 @@
                 ))}
               </div>
 
+              {/* Các câu hỏi mẫu thực chiến */}
               <div className="p-2 bg-slate-100 border-t border-slate-200 flex gap-2 overflow-x-auto no-scrollbar">
                 {[
-                  "Bài học Ngày 1",
-                  "Bài học Ngày 2",
-                  "Bài học Ngày 3",
                   "Kịch bản tiếp cận khách hàng",
                   "Kịch bản khai thác nhu cầu SPIN",
                   "Kịch bản xử lý phản bác",
+                  "Quy tắc túi Zip & Dropbox",
                   "List toàn bộ các lỗi cần tránh",
+                  "Bài học Ngày 1",
+                  "Bài học Ngày 2",
+                  "Bài học Ngày 3",
                   "Bài học Ngày 4",
                   "Bài học Ngày 5"
                 ].map((q, idx) => (
@@ -960,7 +772,7 @@
                   value={inputQuery}
                   onChange={(e) => setInputQuery(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSend()}
-                  placeholder="Gõ từ khóa bài học (VD: kịch bản tiếp cận, SPIN, phản bác giá cao, lỗi SHR)..."
+                  placeholder="Gõ từ khóa bài học hoặc nội dung trên Google Sheet..."
                   className="flex-1 border border-slate-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-blue-600"
                 />
                 <button
