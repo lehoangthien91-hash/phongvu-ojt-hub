@@ -416,7 +416,7 @@
       });
 
       if (matchCriteria) {
-        return `📌 TIÊU CHÍ OJT [${matchCriteria.id}]:\n• Nội dung: ${matchCriteria.title}\n• Thuộc nhóm: ${GROUP_NAMES[matchCriteria.group]}\n• Yêu cầu: Quan sát và thực hành đúng tiêu chuẩn tại showroom (Đạt tối thiểu 50/62 tiêu chí).`;
+        return `📌 TIÊU CHÍ OJT [${matchCriteria.id}]:\n• Nội dung: ${matchCriteria.title}\n• Thuộc nhóm: ${GROUP_NAMES[matchCriteria.group]}\n• Yêu cầu: Quan sát và thực hành đúng tiêu chuẩn tại showroom (Hoàn thành tối thiểu 50/62 tiêu chí).`;
       }
 
       return "Dạ, bạn hãy chọn hoặc gõ các chủ đề trong chương trình đào tạo & sổ tay bán hàng như:\n• 'Kịch bản tiếp cận khách hàng' (Khách e dè, khách xem chơi)\n• 'Kịch bản khai thác nhu cầu SPIN' (PC đồ họa, Laptop gaming, Gear, Máy in)\n• 'Kịch bản xử lý phản bác' (Khách chê giá cao, để suy nghĩ thêm, so sánh giá rẻ hơn, ngại trả góp)\n• 'Danh sách 50 mã lỗi SHR' hoặc 'Chính sách thưởng Golden Rule'\n• 'Bài học Ngày 1', 'Bài học Ngày 2', 'Bài học Ngày 3', 'Bài học Ngày 4', 'Bài học Ngày 5'";
@@ -519,10 +519,10 @@
         return OJT_NhiệmVụ_62.filter(item => item.group === filterGroup);
       }, [filterGroup]);
 
-      // Tick nhanh tất cả các mục trong nhóm hiện tại thành "Đạt"
+      // Tick nhanh tất cả các mục trong nhóm hiện tại thành "Hoàn thành"
       const handleQuickCheckAllPass = () => {
         const count = filteredNhiệmVụ.length;
-        const confirmCheck = confirm(`Bạn có muốn đánh dấu 'ĐẠT' nhanh cho toàn bộ ${count} tiêu chí trong nhóm ${GROUP_NAMES[filterGroup]} không?`);
+        const confirmCheck = confirm(`Bạn có muốn đánh dấu 'Hoàn thành' nhanh cho toàn bộ ${count} tiêu chí trong nhóm ${GROUP_NAMES[filterGroup]} không?`);
         if (!confirmCheck) return;
 
         setNhiệmVụState(prev => {
@@ -539,7 +539,7 @@
       }, [NhiệmVụState]);
 
       const progressPercent = Math.round((passedCount / OJT_NhiệmVụ_62.length) * 100);
-      const isPassedGoal = passedCount >= 50; // Ngưỡng đạt: ít nhất 50/62 mục đạt (>=80%)
+      const isPassedGoal = passedCount >= 50; // Ngưỡng Hoàn thành: ít nhất 50/62 mục Hoàn thành (>=80%)
 
       // HÀM GỬI DỮ LIỆU TÁCH CỘT VỀ GOOGLE SHEETS
       const handleSendToGoogleSheet = async () => {
@@ -564,7 +564,7 @@
         const itemsPayload = {};
         OJT_NhiệmVụ_62.forEach(item => {
           itemsPayload[item.id] = {
-            status: NhiệmVụState[item.id] === "pass" ? "ĐẠT" : NhiệmVụState[item.id] === "fail" ? "Cần cố gắng" : "Chưa đánh giá",
+            status: NhiệmVụState[item.id] === "pass" ? "Hoàn thành" : NhiệmVụState[item.id] === "fail" ? "Cần cố gắng" : "Chưa đánh giá",
             note: notesState[item.id] || ""
           };
         });
@@ -611,14 +611,14 @@
         content += `Ngày xuất         : ${currentDate}\n`;
         content += `---------------------------------------------------------\n`;
         content += `KẾT QUẢ ĐÁNH GIÁ:\n`;
-        content += `• Số mục Đạt      : ${passedCount}/${OJT_NhiệmVụ_62.length} mục\n`;
+        content += `• Số mục Hoàn thành      : ${passedCount}/${OJT_NhiệmVụ_62.length} mục\n`;
         content += `• Tỷ lệ hoàn thành: ${progressPercent}%\n`;
-        content += `• Kết luận        : ${isPassedGoal ? "ĐẠT CHUẨN NĂNG LỰC GĐ2 (>= 50/62 mục đạt)" : "Cần cố gắng (Cần đào tạo & kèm cặp thêm)"}\n`;
+        content += `• Kết luận        : ${isPassedGoal ? "Hoàn thành CHUẨN NĂNG LỰC GĐ2 (>= 50/62 mục Hoàn thành)" : "Cần cố gắng (Cần đào tạo & kèm cặp thêm)"}\n`;
         content += `---------------------------------------------------------\n\n`;
         content += `CHI TIẾT 62 TIÊU CHÍ ĐÁNH GIÁ:\n`;
 
         OJT_NhiệmVụ_62.forEach((item, index) => {
-          const status = NhiệmVụState[item.id] === "pass" ? "[ ĐẠT ]" : NhiệmVụState[item.id] === "fail" ? "[ Cần cố gắng ]" : "[ CHƯA ĐÁNH GIÁ ]";
+          const status = NhiệmVụState[item.id] === "pass" ? "[ Hoàn thành ]" : NhiệmVụState[item.id] === "fail" ? "[ Cần cố gắng ]" : "[ CHƯA ĐÁNH GIÁ ]";
           const note = notesState[item.id] ? ` (Ghi chú: ${notesState[item.id]})` : "";
           content += `${index + 1}. [${item.id}] ${item.title}: ${status}${note}\n`;
         });
@@ -680,9 +680,9 @@
             {/* Thanh tiến độ OJT */}
             <div className="mt-2.5 bg-blue-800/60 p-2 rounded-lg text-xs">
               <div className="flex justify-between items-center mb-1">
-                <span>Đạt: <strong>{passedCount}/62</strong> mục</span>
+                <span>Hoàn thành: <strong>{passedCount}/62</strong> mục</span>
                 <span className={`font-bold ${isPassedGoal ? 'text-emerald-300' : 'text-amber-300'}`}>
-                  {progressPercent}% {isPassedGoal ? "✓ Đạt chuẩn (≥50)" : "(Chuẩn: ≥50 mục)"}
+                  {progressPercent}% {isPassedGoal ? "✓ Hoàn thành chuẩn (≥50)" : "(Chuẩn: ≥50 mục)"}
                 </span>
               </div>
               <div className="w-full bg-blue-950 h-2 rounded-full overflow-hidden">
@@ -806,7 +806,7 @@
                   onClick={handleQuickCheckAllPass}
                   className="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-300 font-semibold px-2 py-0.5 rounded text-[11px] flex items-center gap-1 transition-all"
                 >
-                  <Icons.CheckDouble /> Tick nhanh Đạt ({filteredNhiệmVụ.length})
+                  <Icons.CheckDouble /> Tick nhanh Hoàn thành ({filteredNhiệmVụ.length})
                 </button>
               </div>
 
@@ -835,7 +835,7 @@
                             onClick={() => handleCheck(item.id, "pass")}
                             className={`px-2 py-1 rounded font-bold text-[11px] transition-all border ${status === "pass" ? "bg-emerald-600 text-white border-emerald-600 shadow-xs" : "bg-white text-emerald-600 border-emerald-200 hover:bg-emerald-50"}`}
                           >
-                            Đạt
+                            Hoàn thành
                           </button>
                           <button
                             onClick={() => handleCheck(item.id, "fail")}
