@@ -27,7 +27,7 @@
 
     const Icons = {
       BookOpen: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>,
-      CheckSquare: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>,
+      CheckSquare: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>,
       Bot: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>,
       Send: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>,
       SendCloud: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>,
@@ -37,7 +37,7 @@
       Refresh: () => <svg className="w-3 h-3 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
     };
 
-    // DANH MỤC 62 TIÊU CHÍ CHUẨN TỪ BIỂU MẪU COACHING OJT VER 2[cite: 9, 10]
+    // DANH MỤC 62 TIÊU CHÍ CHUẨN TỪ BIỂU MẪU COACHING OJT VER 2[cite: 5, 6]
     const OJT_CHECKLIST_62 = [
       { id: "A.1", group: "A", title: "Standee/cờ vỉa hè đặt vuông góc mặt tiền, cờ thẳng hàng không che lối đi" },
       { id: "A.2", group: "A", title: "Bảng hiệu/hộp đèn nguyên vẹn, sáng đủ đèn; vách kính và cửa ra vào sạch sẽ" },
@@ -113,26 +113,26 @@
       G: "G. CTKM (4)"
     };
 
-    // KHO TRI THỨC NỀN TẢNG (FALLBACK OFFLINE KHI CHƯA LOAD XONG SHEET)
+    // KHO TRI THỨC NỀN TẢNG ĐẦY ĐỦ (DỰ PHÒNG OFFLINE AN TOÀN)
     const DEFAULT_KB_DATABASE = [
       {
         topic: "Kịch bản Tiếp cận Khách hàng",
-        keywords: ["kich ban tiep can", "tiep can khach hang", "khach e de", "khach xem choi"],
+        keywords: ["kich ban tiep can", "tiep can khach hang", "khach e de", "khach xem choi", "e de", "xem choi"],
         answer: "🎯 KỊCH BẢN TIẾP CẬN KHÁCH HÀNG THỰC CHIẾN:\n\n1. Khách e dè, né tránh: Giữ khoảng cách tôn trọng, mỉm cười chào nhẹ nhàng: 'Em chào anh/chị, mình cứ thoải mái tham khảo ạ, cần gì cứ gọi em hỗ trợ liền nhé ạ.' Sau đó lùi lại quan sát từ xa.\n2. Khách xem chơi: Mỉm cười hỏi: 'Em chào anh/chị, mình đang tìm máy công việc, học tập hay chỉ đang đi tham khảo ạ?' -> Nếu khách bảo coi thử: 'Dạ anh/chị cứ tham khảo ạ, bên em đang có nhiều ưu đãi rất tốt ở khu vực bên này mời anh/chị xem thử'."[cite: 305]
       },
       {
         topic: "Kịch bản Khai thác Nhu cầu SPIN",
-        keywords: ["kich ban spin", "spin pc do hoa", "spin laptop gaming", "spin ban phim co", "spin may in"],
+        keywords: ["kich ban spin", "spin pc do hoa", "spin laptop gaming", "spin ban phim co", "spin may in", "spin"],
         answer: "🔍 KỊCH BẢN KHAI THÁC NHU CẦU SPIN:\n\n• PC Đồ họa: Hỏi phần mềm 2D/3D (S) -> Khai thác giật lag máy cũ (P) -> Hậu quả trễ deadline (I) -> Đề xuất cấu hình chuyên dụng tối ưu thời gian (N).\n• Laptop Gaming: Hỏi tựa game Valorant/AAA (S) -> FPS tụt không ổn định (P) -> Hụt hẫng khi giải trí (I) -> Đề xuất Nitro 5 RTX 4050 144Hz chiến mượt (N).\n• Gaming Gear: Hỏi game MOBA/FPS (S) -> Phím cũ ồn ban đêm (P) -> Phiền người xung quanh (I) -> Tư vấn switch Linear cực êm (N).\n• Máy in: Hỏi in trắng đen/màu (S) -> Thiếu in 2 mặt (P) -> Mất công lật tay (I) -> Đề xuất máy in Brother 2 mặt tự động (N)."[cite: 306, 307, 308, 309]
       },
       {
         topic: "Kịch bản Xử lý Phản bác",
-        keywords: ["kich ban xu ly phan bac", "che gia cao", "de suy nghi them", "so sanh gia re hon", "ngai tra gop"],
+        keywords: ["kich ban xu ly phan bac", "che gia cao", "de suy nghi them", "so sanh gia re hon", "ngai tra gop", "phan bac"],
         answer: "💡 KỊCH BẢN XỬ LÝ 4 TÌNH HUỐNG PHẢN BÁC:\n\n1. Khách chê giá cao: 'Dạ em hiểu ạ, dòng này giá nhỉnh hơn vì [tính năng vượt trội], mình đầu tư 1 lần sẽ dùng mượt 3-4 năm lợi hơn rất nhiều ạ. Hoặc em có mẫu nhẹ tiền hơn vẫn đáp ứng rất tốt nhu cầu của mình ạ.'\n2. Khách bảo để suy nghĩ thêm: 'Dạ vâng anh, cân nhắc kỹ là đúng rồi ạ. Em xin phép kết nối Zalo gửi thông tin máy và ưu đãi, khi cần anh cứ nhắn em hỗ trợ ngay nhé ạ.'\n3. Nơi khác rẻ hơn: 'Dạ tại Phong Vũ mình được hàng chính hãng 100% có VAT, bảo hành 1 đổi 1 tận nơi, kỹ thuật ủy quyền chuyên sâu và ưu đãi trả góp 3 KHÔNG an tâm tuyệt đối ạ.'\n4. Ngại thủ tục trả góp: 'Dạ hiện giờ chỉ cần CCCD gắn chip là duyệt hồ sơ 15-20 phút nhận máy luôn tại chỗ cực kỳ nhanh gọn anh nhé!'"[cite: 310, 311, 312]
       },
       {
         topic: "Danh mục 50 Mã lỗi Golden Rule (SHR1 - SHR50)",
-        keywords: ["cac loi can tranh", "cac ma loi shr", "danh sach loi", "loi shr", "thuong golden rule", "300.000"],
+        keywords: ["cac loi can tranh", "cac ma loi shr", "danh sach loi", "loi shr", "thuong golden rule", "300.000", "50 ma loi"],
         answer: "🚫 DANH MỤC 50 MÃ LỖI GOLDEN RULE (SHR1 – SHR50):\n\n• Diện mạo: SHR1 (sai đồng phục), SHR2 (giày sáng màu/dép), SHR3 (bảo vệ không nón), SHR4 (sai thắt lưng), SHR5 (áo bỏ ngoài quần), SHR6 (không bảng tên), SHR11 (nữ xõa tóc), SHR12 (nam tóc dài), SHR13 (nữ không/quá đậm trang điểm).\n• Kỷ luật: SHR7 (không trực mở cửa), SHR8 (tụ tập cười đùa), SHR9 (hút thuốc), SHR10 (tay túi quần), SHR14 (đứng dựa vách), SHR15 (ăn uống nơi làm việc), SHR17/SHR20 (đưa nhận đồ/bill 1 tay), SHR18 (làm việc riêng lướt mạng).\n• Phục vụ: SHR21/SHR22 (không dắt xe/đưa thẻ xe 1 tay), SHR23 (không chào đón), SHR25 (không che ô khi mưa), SHR26/SHR39 (không mở cửa cho khách), SHR27/SHR28 (không mời nước/ghế ngồi), SHR34/SHR36 (nhăn nhó, cau có), SHR38/SHR41 (chào sai động tác/không cúi chào), SHR42/SHR43 (không che/lau yên xe), SHR44/SHR45 (không hỗ trợ khiêng đồ nặng ra xe), SHR48-SHR50 (không cảm ơn, không tiễn khách).\n💰 Thưởng Golden Rule: 300.000 VNĐ/người/tháng nếu vi phạm <= 3 lỗi/tháng."[cite: 116, 117, 118, 126]
       },
       {
@@ -153,7 +153,6 @@
         .trim();
     }
 
-    // DỮ LIỆU TAB ÔN BÀI HỌC 5 NGÀY[cite: 14, 126, 191, 215, 259]
     const LESSONS = {
       1: {
         title: "Ngày 1: Hội nhập, Tiêu chuẩn CH (HR_QĐ.01) & Golden Rule",
@@ -218,7 +217,6 @@
       const [selectedDay, setSelectedDay] = useState(1);
       const [filterGroup, setFilterGroup] = useState("ALL");
       
-      // Khởi tạo State độc lập (Không lưu localStorage để nhiều người dùng không bị xung đột)
       const [staffName, setStaffName] = useState("");
       const [staffId, setStaffId] = useState("");
       const [storeName, setStoreName] = useState("");
@@ -229,24 +227,22 @@
       const [activeNoteId, setActiveNoteId] = useState(null);
       const [isSendingSheet, setIsSendingSheet] = useState(false);
 
-      // KHO TRI THỨC ĐỘNG (LẤY TỪ GOOGLE SHEET VÀ TỰ ĐỘNG GỘP VỚI KHO GỐC)
       const [dynamicKB, setDynamicKB] = useState(DEFAULT_KB_DATABASE);
-      const [kbStatus, setKbStatus] = useState("Đang kết nối Sheet...");
+      const [kbStatus, setKbStatus] = useState("Sẵn sàng");
 
-      // TỰ ĐỘNG LẤY TRI THỨC MỚI NHẤT TỪ GOOGLE SHEET KHI KHỞI CHẠY
       const fetchSheetKnowledge = async () => {
-        setKbStatus("Đang tải dữ liệu Sheet...");
+        setKbStatus("Đang tải dữ liệu...");
         try {
           const res = await fetch(GOOGLE_SHEET_WEBAPP_URL);
           const data = await res.json();
           if (Array.isArray(data) && data.length > 0) {
             setDynamicKB([...data, ...DEFAULT_KB_DATABASE]);
-            setKbStatus(`Đã kết nối Sheet (${data.length} chủ đề mới)`);
+            setKbStatus(`Đã nạp ${data.length} mục từ Sheet`);
           } else {
-            setKbStatus("Đang dùng kho bài học gốc");
+            setKbStatus("Đang dùng kho nội bộ");
           }
         } catch (e) {
-          setKbStatus("Đang dùng kho bài học offline");
+          setKbStatus("Đang dùng kho nội bộ");
         }
       };
 
@@ -275,7 +271,6 @@
         return OJT_CHECKLIST_62.filter(item => item.group === filterGroup);
       }, [filterGroup]);
 
-      // Tick nhanh tất cả các mục trong nhóm hiện tại thành "Đạt"
       const handleQuickCheckAllPass = () => {
         const count = filteredChecklist.length;
         const confirmCheck = confirm(`Bạn có muốn đánh dấu 'ĐẠT' nhanh cho toàn bộ ${count} tiêu chí trong nhóm ${GROUP_NAMES[filterGroup]} không?`);
@@ -295,9 +290,8 @@
       }, [checklistState]);
 
       const progressPercent = Math.round((passedCount / OJT_CHECKLIST_62.length) * 100);
-      const isPassedGoal = passedCount >= 50; // Ngưỡng đạt: ít nhất 50/62 mục đạt (>=80%)[cite: 9, 10]
+      const isPassedGoal = passedCount >= 50;[cite: 5, 6]
 
-      // HÀM GỬI DỮ LIỆU TÁCH CỘT VỀ GOOGLE SHEETS
       const handleSendToGoogleSheet = async () => {
         if (!staffName.trim()) {
           alert("⚠️ Vui lòng nhập Họ tên Nhân viên bán hàng trước khi gửi!");
@@ -354,7 +348,6 @@
         }
       };
 
-      // XUẤT BÁO CÁO DẠNG TXT
       const handleExportReport = () => {
         const currentDate = new Date().toLocaleDateString('vi-VN');
         let content = `PHIẾU CHECKLIST ĐÁNH GIÁ NĂNG LỰC – GIAI ĐOẠN 2 (62 TIÊU CHÍ)\n`;
@@ -390,7 +383,6 @@
         URL.revokeObjectURL(url);
       };
 
-      // THUẬT TOÁN TÌM KIẾM ĐỐI SOÁT VỚI KHO DỮ LIỆU ĐỘNG TỪ GOOGLE SHEET
       const findAnswerFromDynamicKB = (query) => {
         if (!query || !query.trim()) return null;
         const cleanQ = removeVietnameseTones(query);
@@ -416,7 +408,6 @@
           return `📚 [CHỦ ĐỀ: ${bestMatch.topic}]\n\n${bestMatch.answer}`;
         }
 
-        // Tra cứu mã 62 tiêu chí OJT[cite: 9, 10]
         const matchCriteria = OJT_CHECKLIST_62.find(c => {
           const cleanID = removeVietnameseTones(c.id);
           const cleanTitle = removeVietnameseTones(c.title);
@@ -427,7 +418,7 @@
           return `📌 TIÊU CHÍ OJT [${matchCriteria.id}]:\n• Nội dung: ${matchCriteria.title}\n• Thuộc nhóm: ${GROUP_NAMES[matchCriteria.group]}\n• Yêu cầu: Quan sát và thực hành đúng tiêu chuẩn tại showroom (Đạt tối thiểu 50/62 tiêu chí).`;
         }
 
-        return "Dạ, hiện chưa tìm thấy nội dung phù hợp trong kho tri thức Google Sheet.\n\n👉 Bạn hãy thử bấm vào các nút câu hỏi mẫu phía dưới hoặc gõ các từ khóa như: 'kịch bản tiếp cận', 'SPIN', 'xử lý phản bác', 'lỗi SHR', 'túi Zip', 'Ngày 1'... nhé!";
+        return "Dạ, hiện chưa tìm thấy nội dung phù hợp trong kho tri thức.\n\n👉 Bạn hãy thử bấm vào các nút câu hỏi mẫu phía dưới hoặc gõ các từ khóa như: 'kịch bản tiếp cận', 'SPIN', 'xử lý phản bác', 'lỗi SHR', 'túi Zip', 'Ngày 1'... nhé!";
       };
 
       const handleSend = (textToSend) => {
@@ -441,7 +432,7 @@
         setTimeout(() => {
           const answer = findAnswerFromDynamicKB(query);
           setMessages([...updatedMessages, { sender: "bot", text: answer }]);
-        }, 100);
+        }, 80);
       };
 
       return (
@@ -451,7 +442,7 @@
             <div className="flex justify-between items-center">
               <div>
                 <h1 className="text-base font-bold tracking-tight">PHONG VŨ OJT COACH</h1>
-                <p className="text-[11px] text-blue-100">Đánh giá Năng lực GĐ2 (62 tiêu chí)[cite: 9, 10]</p>
+                <p className="text-[11px] text-blue-100">Đánh giá Năng lực GĐ2 (62 tiêu chí)[cite: 5, 6]</p>
               </div>
               <div className="text-right flex items-center gap-1.5">
                 <button
@@ -475,9 +466,9 @@
             {/* Thanh tiến độ OJT */}
             <div className="mt-2.5 bg-blue-800/60 p-2 rounded-lg text-xs">
               <div className="flex justify-between items-center mb-1">
-                <span>Đạt: <strong>{passedCount}/62</strong> mục[cite: 9, 10]</span>
+                <span>Đạt: <strong>{passedCount}/62</strong> mục[cite: 5, 6]</span>
                 <span className={`font-bold ${isPassedGoal ? 'text-emerald-300' : 'text-amber-300'}`}>
-                  {progressPercent}% {isPassedGoal ? "✓ Đạt chuẩn (≥50)" : "(Chuẩn: ≥50 mục)"}[cite: 9, 10]
+                  {progressPercent}% {isPassedGoal ? "✓ Đạt chuẩn (≥50)" : "(Chuẩn: ≥50 mục)"}[cite: 5, 6]
                 </span>
               </div>
               <div className="w-full bg-blue-950 h-2 rounded-full overflow-hidden">
@@ -494,7 +485,7 @@
                 onClick={() => setTab("checklist")} 
                 className={`flex-1 py-1.5 rounded text-center transition-all ${tab === "checklist" ? "bg-white text-blue-700 shadow font-bold" : "text-white"}`}
               >
-                <Icons.CheckSquare /> Checklist (62)[cite: 9, 10]
+                <Icons.CheckSquare /> Checklist (62)[cite: 5, 6]
               </button>
               <button 
                 onClick={() => setTab("lessons")} 
@@ -514,7 +505,6 @@
           {/* TAB 1: CHECKLIST 62 TIÊU CHÍ */}
           {tab === "checklist" && (
             <div className="flex-1 p-2.5 space-y-2.5 pb-8">
-              {/* Khung Thông tin nhân sự (Đã bỏ localStorage & nút làm mới) */}
               <div className="bg-white rounded-xl p-2.5 border border-slate-200 shadow-xs space-y-2 text-xs">
                 <div className="font-bold text-slate-700 flex justify-between items-center">
                   <span>Thông tin đợt đánh giá</span>
@@ -562,14 +552,13 @@
                     onChange={(e) => setEvalRound(e.target.value)}
                     className="flex-1 border border-slate-200 rounded p-1 text-xs bg-white text-slate-700 focus:outline-none focus:border-blue-500 font-medium"
                   >
-                    <option value="Lần 1">Đánh giá Lần 1[cite: 9, 10]</option>
-                    <option value="Lần 2">Đánh giá Lần 2[cite: 9, 10]</option>
-                    <option value="Lần 3">Đánh giá Lần 3[cite: 9, 10]</option>
+                    <option value="Lần 1">Đánh giá Lần 1[cite: 5, 6]</option>
+                    <option value="Lần 2">Đánh giá Lần 2[cite: 5, 6]</option>
+                    <option value="Lần 3">Đánh giá Lần 3[cite: 5, 6]</option>
                   </select>
                 </div>
               </div>
 
-              {/* Nút gửi trên */}
               <button
                 onClick={handleSendToGoogleSheet}
                 disabled={isSendingSheet}
@@ -578,7 +567,6 @@
                 <Icons.SendCloud /> {isSendingSheet ? "Đang gửi dữ liệu về Google Sheet..." : "GỬI KẾT QUẢ ĐÁNH GIÁ VỀ CHO GIẢNG VIÊN"}
               </button>
 
-              {/* Bộ lọc nhóm tiêu chí */}
               <div className="flex gap-1 overflow-x-auto pb-1 no-scrollbar text-xs">
                 {Object.keys(GROUP_NAMES).map(group => (
                   <button
@@ -591,7 +579,6 @@
                 ))}
               </div>
 
-              {/* Thanh thao tác nhanh theo nhóm */}
               <div className="flex justify-between items-center px-1 text-xs">
                 <span className="text-slate-500 text-[11px]">
                   Hiển thị: <strong>{filteredChecklist.length}</strong> tiêu chí
@@ -604,7 +591,6 @@
                 </button>
               </div>
 
-              {/* Danh sách 62 tiêu chí dạng Card nén gọn */}
               <div className="space-y-1.5">
                 {filteredChecklist.map((item) => {
                   const status = checklistState[item.id];
@@ -663,7 +649,6 @@
                 })}
               </div>
 
-              {/* Nút gửi dưới */}
               <button
                 onClick={handleSendToGoogleSheet}
                 disabled={isSendingSheet}
@@ -674,7 +659,7 @@
             </div>
           )}
 
-          {/* TAB 2: ÔN TẬP BÀI HỌC 5 NGÀY[cite: 14, 126, 191, 215, 259] */}
+          {/* TAB 2: ÔN TẬP BÀI HỌC 5 NGÀY */}
           {tab === "lessons" && (
             <div className="flex-1 p-3 pb-8">
               <div className="flex gap-1.5 overflow-x-auto pb-2 no-scrollbar">
@@ -713,14 +698,13 @@
             </div>
           )}
 
-          {/* TAB 3: TRA CỨU TRI THỨC (KẾT NỐI TRỰC TIẾP TỪ GOOGLE SHEET) */}
+          {/* TAB 3: TRA CỨU TRI THỨC */}
           {tab === "chat" && (
             <div className="flex-1 flex flex-col h-[calc(100vh-170px)]">
-              {/* Thanh trạng thái kết nối Google Sheet */}
               <div className="bg-slate-200/80 px-3 py-1.5 flex justify-between items-center text-[10px] text-slate-600 border-b border-slate-300">
                 <span className="flex items-center gap-1.5">
-                  <span className={`w-2 h-2 rounded-full ${kbStatus.includes("Đã kết nối") ? "bg-emerald-500" : "bg-amber-500 animate-pulse"}`}></span>
-                  Kho Tri Thức Trực Tuyến: <strong>{kbStatus}</strong>
+                  <span className={`w-2 h-2 rounded-full ${kbStatus.includes("nạp") ? "bg-emerald-500" : "bg-blue-500"}`}></span>
+                  Trạng thái kho tri thức: <strong>{kbStatus}</strong>
                 </span>
                 <button
                   onClick={fetchSheetKnowledge}
@@ -741,7 +725,6 @@
                 ))}
               </div>
 
-              {/* Các câu hỏi mẫu thực chiến */}
               <div className="p-2 bg-slate-100 border-t border-slate-200 flex gap-2 overflow-x-auto no-scrollbar">
                 {[
                   "Kịch bản tiếp cận khách hàng",
