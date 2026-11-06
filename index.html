@@ -409,7 +409,7 @@
       }
 
       // Tra cứu trực tiếp theo mã hoặc tên trong 62 tiêu chí OJT
-      const matchCriteria = OJT_CHECKLIST_62.find(c => {
+      const matchCriteria = OJT_NhiệmVụ_62.find(c => {
         const cleanID = removeVietnameseTones(c.id);
         const cleanTitle = removeVietnameseTones(c.title);
         return cleanQ.includes(cleanID) || cleanQ.includes(cleanTitle);
@@ -483,7 +483,7 @@
     };
 
     function App() {
-      const [tab, setTab] = useState("checklist");
+      const [tab, setTab] = useState("NhiệmVụ");
       const [selectedDay, setSelectedDay] = useState(1);
       const [filterGroup, setFilterGroup] = useState("ALL");
       
@@ -493,7 +493,7 @@
       const [storeName, setStoreName] = useState("");
       const [evalRound, setEvalRound] = useState("Lần 1");
       const [evaluator, setEvaluator] = useState("");
-      const [checklistState, setChecklistState] = useState({});
+      const [NhiệmVụState, setNhiệmVụState] = useState({});
       const [notesState, setNotesState] = useState({});
       const [activeNoteId, setActiveNoteId] = useState(null);
       const [isSendingSheet, setIsSendingSheet] = useState(false);
@@ -504,7 +504,7 @@
       const [inputQuery, setInputQuery] = useState("");
 
       const handleCheck = (id, status) => {
-        setChecklistState(prev => ({
+        setNhiệmVụState(prev => ({
           ...prev,
           [id]: prev[id] === status ? undefined : status
         }));
@@ -514,20 +514,20 @@
         setNotesState(prev => ({ ...prev, [id]: text }));
       };
 
-      const filteredChecklist = useMemo(() => {
-        if (filterGroup === "ALL") return OJT_CHECKLIST_62;
-        return OJT_CHECKLIST_62.filter(item => item.group === filterGroup);
+      const filteredNhiệmVụ = useMemo(() => {
+        if (filterGroup === "ALL") return OJT_NhiệmVụ_62;
+        return OJT_NhiệmVụ_62.filter(item => item.group === filterGroup);
       }, [filterGroup]);
 
       // Tick nhanh tất cả các mục trong nhóm hiện tại thành "Đạt"
       const handleQuickCheckAllPass = () => {
-        const count = filteredChecklist.length;
+        const count = filteredNhiệmVụ.length;
         const confirmCheck = confirm(`Bạn có muốn đánh dấu 'ĐẠT' nhanh cho toàn bộ ${count} tiêu chí trong nhóm ${GROUP_NAMES[filterGroup]} không?`);
         if (!confirmCheck) return;
 
-        setChecklistState(prev => {
+        setNhiệmVụState(prev => {
           const nextState = { ...prev };
-          filteredChecklist.forEach(item => {
+          filteredNhiệmVụ.forEach(item => {
             nextState[item.id] = "pass";
           });
           return nextState;
@@ -535,10 +535,10 @@
       };
 
       const passedCount = useMemo(() => {
-        return Object.values(checklistState).filter(v => v === "pass").length;
-      }, [checklistState]);
+        return Object.values(NhiệmVụState).filter(v => v === "pass").length;
+      }, [NhiệmVụState]);
 
-      const progressPercent = Math.round((passedCount / OJT_CHECKLIST_62.length) * 100);
+      const progressPercent = Math.round((passedCount / OJT_NhiệmVụ_62.length) * 100);
       const isPassedGoal = passedCount >= 50; // Ngưỡng đạt: ít nhất 50/62 mục đạt (>=80%)
 
       // HÀM GỬI DỮ LIỆU TÁCH CỘT VỀ GOOGLE SHEETS
@@ -548,9 +548,9 @@
           return;
         }
 
-        const evaluatedCount = Object.keys(checklistState).length;
-        if (evaluatedCount < OJT_CHECKLIST_62.length) {
-          const confirmSend = confirm(`Bạn mới đánh giá ${evaluatedCount}/${OJT_CHECKLIST_62.length} tiêu chí. Bạn có chắc chắn muốn gửi kết quả này không?`);
+        const evaluatedCount = Object.keys(NhiệmVụState).length;
+        if (evaluatedCount < OJT_NhiệmVụ_62.length) {
+          const confirmSend = confirm(`Bạn mới đánh giá ${evaluatedCount}/${OJT_NhiệmVụ_62.length} tiêu chí. Bạn có chắc chắn muốn gửi kết quả này không?`);
           if (!confirmSend) return;
         }
 
@@ -562,9 +562,9 @@
         setIsSendingSheet(true);
 
         const itemsPayload = {};
-        OJT_CHECKLIST_62.forEach(item => {
+        OJT_NhiệmVụ_62.forEach(item => {
           itemsPayload[item.id] = {
-            status: checklistState[item.id] === "pass" ? "ĐẠT" : checklistState[item.id] === "fail" ? "CHƯA ĐẠT" : "Chưa đánh giá",
+            status: NhiệmVụState[item.id] === "pass" ? "ĐẠT" : NhiệmVụState[item.id] === "fail" ? "CHƯA ĐẠT" : "Chưa đánh giá",
             note: notesState[item.id] || ""
           };
         });
@@ -576,7 +576,7 @@
           evalRound: evalRound,
           evaluator: evaluator.trim() || "Chưa nhập",
           passedCount: passedCount,
-          totalCount: OJT_CHECKLIST_62.length,
+          totalCount: OJT_NhiệmVụ_62.length,
           progressPercent: progressPercent,
           isPassed: isPassedGoal,
           items: itemsPayload
@@ -601,7 +601,7 @@
       // XUẤT BÁO CÁO DẠNG TXT
       const handleExportReport = () => {
         const currentDate = new Date().toLocaleDateString('vi-VN');
-        let content = `PHIẾU CHECKLIST ĐÁNH GIÁ NĂNG LỰC – GIAI ĐOẠN 2 (62 TIÊU CHÍ)\n`;
+        let content = `PHIẾU NhiệmVụ ĐÁNH GIÁ NĂNG LỰC – GIAI ĐOẠN 2 (62 TIÊU CHÍ)\n`;
         content += `HỆ THỐNG CỬA HÀNG PHONG VŨ\n`;
         content += `---------------------------------------------------------\n`;
         content += `Họ tên NVBH       : ${staffName || "(Chưa nhập)"} ${staffId ? `[MSNV: ${staffId}]` : ""}\n`;
@@ -611,14 +611,14 @@
         content += `Ngày xuất         : ${currentDate}\n`;
         content += `---------------------------------------------------------\n`;
         content += `KẾT QUẢ ĐÁNH GIÁ:\n`;
-        content += `• Số mục Đạt      : ${passedCount}/${OJT_CHECKLIST_62.length} mục\n`;
+        content += `• Số mục Đạt      : ${passedCount}/${OJT_NhiệmVụ_62.length} mục\n`;
         content += `• Tỷ lệ hoàn thành: ${progressPercent}%\n`;
         content += `• Kết luận        : ${isPassedGoal ? "ĐẠT CHUẨN NĂNG LỰC GĐ2 (>= 50/62 mục đạt)" : "CHƯA ĐẠT (Cần đào tạo & kèm cặp thêm)"}\n`;
         content += `---------------------------------------------------------\n\n`;
         content += `CHI TIẾT 62 TIÊU CHÍ ĐÁNH GIÁ:\n`;
 
-        OJT_CHECKLIST_62.forEach((item, index) => {
-          const status = checklistState[item.id] === "pass" ? "[ ĐẠT ]" : checklistState[item.id] === "fail" ? "[ CHƯA ĐẠT ]" : "[ CHƯA ĐÁNH GIÁ ]";
+        OJT_NhiệmVụ_62.forEach((item, index) => {
+          const status = NhiệmVụState[item.id] === "pass" ? "[ ĐẠT ]" : NhiệmVụState[item.id] === "fail" ? "[ CHƯA ĐẠT ]" : "[ CHƯA ĐÁNH GIÁ ]";
           const note = notesState[item.id] ? ` (Ghi chú: ${notesState[item.id]})` : "";
           content += `${index + 1}. [${item.id}] ${item.title}: ${status}${note}\n`;
         });
@@ -696,10 +696,10 @@
             {/* Thanh Tab */}
             <div className="flex mt-2.5 bg-blue-700/50 p-1 rounded-lg text-xs font-medium">
               <button 
-                onClick={() => setTab("checklist")} 
-                className={`flex-1 py-1.5 rounded text-center transition-all ${tab === "checklist" ? "bg-white text-blue-700 shadow font-bold" : "text-white"}`}
+                onClick={() => setTab("NhiệmVụ")} 
+                className={`flex-1 py-1.5 rounded text-center transition-all ${tab === "NhiệmVụ" ? "bg-white text-blue-700 shadow font-bold" : "text-white"}`}
               >
-                <Icons.CheckSquare /> Checklist (62)
+                <Icons.CheckSquare /> NhiệmVụ (62)
               </button>
               <button 
                 onClick={() => setTab("lessons")} 
@@ -716,8 +716,8 @@
             </div>
           </div>
 
-          {/* TAB 1: CHECKLIST 62 TIÊU CHÍ */}
-          {tab === "checklist" && (
+          {/* TAB 1: NhiệmVụ 62 TIÊU CHÍ */}
+          {tab === "NhiệmVụ" && (
             <div className="flex-1 p-2.5 space-y-2.5 pb-8">
               {/* Khung Thông tin nhân sự */}
               <div className="bg-white rounded-xl p-2.5 border border-slate-200 shadow-xs space-y-2 text-xs">
@@ -800,20 +800,20 @@
               {/* Thanh thao tác nhanh theo nhóm */}
               <div className="flex justify-between items-center px-1 text-xs">
                 <span className="text-slate-500 text-[11px]">
-                  Hiển thị: <strong>{filteredChecklist.length}</strong> tiêu chí
+                  Hiển thị: <strong>{filteredNhiệmVụ.length}</strong> tiêu chí
                 </span>
                 <button
                   onClick={handleQuickCheckAllPass}
                   className="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-300 font-semibold px-2 py-0.5 rounded text-[11px] flex items-center gap-1 transition-all"
                 >
-                  <Icons.CheckDouble /> Tick nhanh Đạt ({filteredChecklist.length})
+                  <Icons.CheckDouble /> Tick nhanh Đạt ({filteredNhiệmVụ.length})
                 </button>
               </div>
 
               {/* Danh sách 62 tiêu chí dạng Card nén gọn */}
               <div className="space-y-1.5">
-                {filteredChecklist.map((item) => {
-                  const status = checklistState[item.id];
+                {filteredNhiệmVụ.map((item) => {
+                  const status = NhiệmVụState[item.id];
                   const hasNote = Boolean(notesState[item.id]);
                   const isNoteOpen = activeNoteId === item.id;
 
