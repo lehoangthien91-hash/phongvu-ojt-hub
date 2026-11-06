@@ -18,7 +18,7 @@
   <div id="root"></div>
 
   <script type="text/babel">
-    const { useState, useMemo } = React;
+    const { useState, useMemo, useEffect } = React;
 
     // ==========================================
     // 💡 LINK GOOGLE APPS SCRIPT WEB APP CỦA BẠN:
@@ -32,7 +32,9 @@
       Send: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>,
       SendCloud: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>,
       Download: () => <svg className="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>,
-      Note: () => <svg className="w-3.5 h-3.5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+      Note: () => <svg className="w-3.5 h-3.5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>,
+      Trash: () => <svg className="w-3.5 h-3.5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>,
+      CheckDouble: () => <svg className="w-3.5 h-3.5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7m-14 4l4 4L19 7"/></svg>
     };
 
     // DANH MỤC 62 TIÊU CHÍ CHUẨN TỪ BIỂU MẪU COACHING OJT VER 2
@@ -113,10 +115,8 @@
 
     // ========================================================
     // 🧠 TOÀN BỘ CƠ SỞ TRI THỨC ĐẦY ĐỦ NGUYÊN BẢN TỪ 8 FILE PDF (5 NGÀY)
-    // (Đã loại bỏ mục số 7 và số 8 theo yêu cầu)
     // ========================================================
     const KB_DATABASE = [
-      // MỤC 1: DANH MỤC 50 MÃ LỖI SHR NGUYÊN BẢN (SHR1 -> SHR50) & CHÍNH SÁCH THƯỞNG GOLDEN RULE
       {
         id: "shr_errors",
         keywords: [
@@ -185,8 +185,6 @@
           "• Khấu trừ: Nếu đã chi thưởng nhưng sau đó có KH phàn nàn cá nhân nhân viên này, khoản thưởng đã chi sẽ bị khấu trừ.\n" +
           "• Quy trình đánh giá: Đội kiểm soát quan sát & ghi nhận hàng ngày -> Tổng hợp gửi TP/TBP vào Thứ 3 hàng tuần -> Phản hồi trước Thứ 6, chốt lỗi vào Thứ 3 tuần kế tiếp -> Gửi C&B tính thưởng trước ngày 8 tháng sau."
       },
-
-      // MỤC 2: NỘI DUNG ĐẦY ĐỦ NGÀY 1 (HỘI NHẬP + TIÊU CHUẨN CỬA HÀNG HR_QĐ.01 + GOLDEN RULE)
       {
         id: "day_1",
         keywords: [
@@ -256,14 +254,13 @@
           "• Áp dụng cho Khối trực tiếp (Cửa hàng, TTBH) và Khối gián tiếp (Chatsales, Telesales).\n" +
           "• Hành trình 3 giai đoạn: Chào đón (Giữ xe đưa vé 2 tay, che yên xe; Mở cửa đón khách) -> Phục vụ (Chào 4 điểm chạm: Đứng thẳng hướng mắt, tay đặt ngực trái, cúi 15 độ, nói 'Dạ Phong Vũ xin chào!'; Chỉ dẫn bằng cả bàn tay; Giao nhận bằng 2 tay) -> Tiễn chân (Chủ động mang hàng nặng ra xe, buộc cố định, dắt xe và cúi chào cảm ơn)."
       },
-
-      // MỤC 3: NỘI DUNG ĐẦY ĐỦ NGÀY 2 (KỸ NĂNG & 6 BƯỚC BÁN HÀNG)
       {
         id: "day_2",
         keywords: [
           "ngay 2", "bai hoc ngay 2", "6 buoc ban hang", "ky nang ban hang", "fabe", "spin", "last",
           "chot don", "xu ly phan bac", "dau hieu mua", "dau hieu canh bao", "chien gia", "tmdt",
-          "55%", "38%", "7%", "chot gia dinh", "chot cam xuc", "chot chia nho", "chot khan hiem"
+          "55%", "38%", "7%", "chot gia dinh", "chot cam xuc", "chot chia nho", "chot khan hiem",
+          "che gia cao", "gia cao hon san tmdt", "gia cao hon doi thu"
         ],
         topic: "Ngày 2: Kỹ năng & Quy trình 6 Bước Bán hàng",
         answer: "📖 TÀI LIỆU ĐẦY ĐỦ NGÀY 2: KỸ NĂNG & 6 BƯỚC BÁN HÀNG TẠI PHONG VŨ\n\n" +
@@ -304,8 +301,6 @@
           "  4. Chốt khan hiếm: 'Chương trình ưu đãi này giới hạn số lượng, anh chị lấy luôn bây giờ sẽ tiết kiệm được X đồng ạ'.\n" +
           "• 3 Hành động bắt buộc sau khi chốt đơn: (1) Mời khách quét Zalo OA Phong Vũ -> (2) Mời khách tải App Phong Vũ -> (3) Xin SĐT khách hàng để tiện chăm sóc sau bán."
       },
-
-      // MỤC 4: NỘI DUNG ĐẦY ĐỦ NGÀY 3 (KIẾN THỨC NỀN TẢNG & KỸ NĂNG TƯ VẤN LAPTOP)
       {
         id: "day_3",
         keywords: [
@@ -361,8 +356,6 @@
           "  3. Khách Đồ họa: Không bán màn hình 45% NTSC / 65% sRGB cho dân thiết kế in ấn (Bắt buộc màn 100% sRGB / DCI-P3, SSD 1TB).\n" +
           "  4. Khách Đa nhiệm (Coder/Data/Ads): Không bán máy 8GB RAM hoặc RAM hàn chết không nâng cấp được (Ưu tiên CPU 8 nhân 16 luồng + RAM 32GB Dual Channel)."
       },
-
-      // MỤC 5: NỘI DUNG ĐẦY ĐỦ NGÀY 4 (KIẾN THỨC NỀN TẢNG & XÂY DỰNG CẤU HÌNH PC)
       {
         id: "day_4",
         keywords: [
@@ -409,8 +402,6 @@
           "   • SSD (tốc độ cao chứa cache/project): 30% | CPU (nhiều nhân): 25% | GPU (VRAM 12GB+): 20% | RAM (tối thiểu 32GB): 15% | Nguồn: 10%.\n" +
           "• Công cụ hỗ trợ kiểm tra tương thích & tính công suất nguồn: https://pcpartpicker.com"
       },
-
-      // MỤC 6: NỘI DUNG ĐẦY ĐỦ NGÀY 5 (QUY TRÌNH QUẢN LÝ TIỀN MẶT & 10 HÌNH THỨC THANH TOÁN)
       {
         id: "day_5",
         keywords: [
@@ -510,7 +501,7 @@
       return "Dạ, bạn hãy chọn hoặc gõ các chủ đề trong chương trình đào tạo 5 ngày như:\n• 'Danh sách 50 mã lỗi SHR' hoặc 'Chính sách thưởng Golden Rule'\n• 'Nội dung bài học Ngày 1' (Hội nhập, HR_QĐ.01, Bảo hiểm, Phép năm)\n• 'Nội dung bài học Ngày 2' (6 bước bán hàng, SPIN, FABE, LAST, Chốt đơn)\n• 'Nội dung bài học Ngày 3' (5 nhóm Laptop, Hậu tố CPU, RAM, SSD, Màn hình)\n• 'Nội dung bài học Ngày 4' (Cấu tạo PC, 5 bước Build PC, Nguồn 80 Plus, Phân bổ ngân sách)\n• 'Nội dung bài học Ngày 5' (7 bước thu ngân, Túi Zip/Dropbox, Chế tài, 10 hình thức thanh toán)";
     }
 
-    // DỮ LIỆU TAB Tóm tắt bài học 5 NGÀY (CẬP NHẬT ĐẦY ĐỦ TỪ 8 FILE PDF)
+    // DỮ LIỆU TAB ÔN BÀI HỌC 5 NGÀY (CẬP NHẬT ĐẦY ĐỦ TỪ 8 FILE PDF)
     const LESSONS = {
       1: {
         title: "Ngày 1: Hội nhập, Tiêu chuẩn CH (HR_QĐ.01) & Golden Rule",
@@ -575,19 +566,63 @@
       const [selectedDay, setSelectedDay] = useState(1);
       const [filterGroup, setFilterGroup] = useState("ALL");
       
-      const [staffName, setStaffName] = useState("");
-      const [storeName, setStoreName] = useState("");
-      const [evalRound, setEvalRound] = useState("Lần 1");
-      const [evaluator, setEvaluator] = useState("");
-      const [checklistState, setChecklistState] = useState({});
-      const [notesState, setNotesState] = useState({});
+      // Khởi tạo State từ Local Storage để chống mất dữ liệu khi refresh
+      const [staffName, setStaffName] = useState(() => localStorage.getItem("ojt_staffName") || "");
+      const [staffId, setStaffId] = useState(() => localStorage.getItem("ojt_staffId") || "");
+      const [storeName, setStoreName] = useState(() => localStorage.getItem("ojt_storeName") || "");
+      const [evalRound, setEvalRound] = useState(() => localStorage.getItem("ojt_evalRound") || "Lần 1");
+      const [evaluator, setEvaluator] = useState(() => localStorage.getItem("ojt_evaluator") || "");
+      
+      const [checklistState, setChecklistState] = useState(() => {
+        try {
+          return JSON.parse(localStorage.getItem("ojt_checklistState")) || {};
+        } catch(e) { return {}; }
+      });
+
+      const [notesState, setNotesState] = useState(() => {
+        try {
+          return JSON.parse(localStorage.getItem("ojt_notesState")) || {};
+        } catch(e) { return {}; }
+      });
+
       const [activeNoteId, setActiveNoteId] = useState(null);
       const [isSendingSheet, setIsSendingSheet] = useState(false);
 
       const [messages, setMessages] = useState([
-        { sender: "bot", text: "Xin chào bạn! Mình là Trợ lý Học tập OJT Phong Vũ. Toàn bộ nội dung chi tiết của 5 ngày đào tạo đã có ở đây, Bạn hãy chọn ngày bên dưới hoặc gõ từ khóa để tra cứu bài học nhé!" }
+        { sender: "bot", text: "Xin chào bạn! Mình là Trợ lý Học tập OJT Phong Vũ. Toàn bộ nội dung chi tiết từ 8 tài liệu đào tạo 5 ngày (Hội nhập, HR_QĐ.01, 50 mã lỗi SHR, 6 bước bán hàng, Laptop, Build PC, Quản lý tiền mặt) đã được nạp đầy đủ. Bạn hãy chọn câu hỏi bên dưới hoặc gõ từ khóa để tra cứu bài học nhé!" }
       ]);
       const [inputQuery, setInputQuery] = useState("");
+
+      // Tự động lưu bản nháp vào Local Storage
+      useEffect(() => {
+        localStorage.setItem("ojt_staffName", staffName);
+        localStorage.setItem("ojt_staffId", staffId);
+        localStorage.setItem("ojt_storeName", storeName);
+        localStorage.setItem("ojt_evalRound", evalRound);
+        localStorage.setItem("ojt_evaluator", evaluator);
+        localStorage.setItem("ojt_checklistState", JSON.stringify(checklistState));
+        localStorage.setItem("ojt_notesState", JSON.stringify(notesState));
+      }, [staffName, staffId, storeName, evalRound, evaluator, checklistState, notesState]);
+
+      // Xóa nháp làm mới phiếu
+      const handleResetChecklist = () => {
+        const confirmReset = confirm("Bạn có chắc chắn muốn làm mới toàn bộ phiếu đánh giá không? Dữ liệu đang chấm sẽ bị xóa trắng.");
+        if (confirmReset) {
+          setStaffName("");
+          setStaffId("");
+          setStoreName("");
+          setEvaluator("");
+          setChecklistState({});
+          setNotesState({});
+          localStorage.removeItem("ojt_staffName");
+          localStorage.removeItem("ojt_staffId");
+          localStorage.removeItem("ojt_storeName");
+          localStorage.removeItem("ojt_evaluator");
+          localStorage.removeItem("ojt_checklistState");
+          localStorage.removeItem("ojt_notesState");
+          alert("✓ Đã làm mới phiếu đánh giá!");
+        }
+      };
 
       const handleCheck = (id, status) => {
         setChecklistState(prev => ({
@@ -600,12 +635,32 @@
         setNotesState(prev => ({ ...prev, [id]: text }));
       };
 
+      const filteredChecklist = useMemo(() => {
+        if (filterGroup === "ALL") return OJT_CHECKLIST_62;
+        return OJT_CHECKLIST_62.filter(item => item.group === filterGroup);
+      }, [filterGroup]);
+
+      // Tick nhanh tất cả các mục trong nhóm hiện tại thành "Đạt"
+      const handleQuickCheckAllPass = () => {
+        const count = filteredChecklist.length;
+        const confirmCheck = confirm(`Bạn có muốn đánh dấu 'ĐẠT' nhanh cho toàn bộ ${count} tiêu chí trong nhóm ${GROUP_NAMES[filterGroup]} không?`);
+        if (!confirmCheck) return;
+
+        setChecklistState(prev => {
+          const nextState = { ...prev };
+          filteredChecklist.forEach(item => {
+            nextState[item.id] = "pass";
+          });
+          return nextState;
+        });
+      };
+
       const passedCount = useMemo(() => {
         return Object.values(checklistState).filter(v => v === "pass").length;
       }, [checklistState]);
 
       const progressPercent = Math.round((passedCount / OJT_CHECKLIST_62.length) * 100);
-      const isPassedGoal = passedCount >= 50; // Ngưỡng đạt: ít nhất 50/62 mục đạt (>=80%)
+      const isPassedGoal = passedCount >= 50; // Ngưỡng đạt: ít nhất 50/62 mục đạt (>=80%)[cite: 9, 10]
 
       // HÀM GỬI DỮ LIỆU TÁCH CỘT VỀ GOOGLE SHEETS
       const handleSendToGoogleSheet = async () => {
@@ -637,7 +692,7 @@
 
         const payload = {
           timestamp: new Date().toLocaleString("vi-VN"),
-          staffName: staffName.trim(),
+          staffName: staffName.trim() + (staffId.trim() ? ` (${staffId.trim()})` : ""),
           storeName: storeName.trim() || "Chưa nhập",
           evalRound: evalRound,
           evaluator: evaluator.trim() || "Chưa nhập",
@@ -670,7 +725,7 @@
         let content = `PHIẾU CHECKLIST ĐÁNH GIÁ NĂNG LỰC – GIAI ĐOẠN 2 (62 TIÊU CHÍ)\n`;
         content += `HỆ THỐNG CỬA HÀNG PHONG VŨ\n`;
         content += `---------------------------------------------------------\n`;
-        content += `Họ tên NVBH       : ${staffName || "(Chưa nhập)"}\n`;
+        content += `Họ tên NVBH       : ${staffName || "(Chưa nhập)"} ${staffId ? `[MSNV: ${staffId}]` : ""}\n`;
         content += `Cửa hàng/Showroom : ${storeName || "(Chưa nhập)"}\n`;
         content += `Đợt đánh giá      : ${evalRound}\n`;
         content += `Người đánh giá    : ${evaluator || "(Chưa nhập)"}\n`;
@@ -712,13 +767,8 @@
         setTimeout(() => {
           const answer = findBestLocalAnswer(query);
           setMessages([...updatedMessages, { sender: "bot", text: answer }]);
-        }, 150);
+        }, 120);
       };
-
-      const filteredChecklist = useMemo(() => {
-        if (filterGroup === "ALL") return OJT_CHECKLIST_62;
-        return OJT_CHECKLIST_62.filter(item => item.group === filterGroup);
-      }, [filterGroup]);
 
       return (
         <div className="max-w-md mx-auto min-h-screen bg-slate-50 flex flex-col shadow-lg">
@@ -727,7 +777,7 @@
             <div className="flex justify-between items-center">
               <div>
                 <h1 className="text-base font-bold tracking-tight">PHONG VŨ OJT COACH</h1>
-                <p className="text-[11px] text-blue-100">Đánh giá Năng lực GĐ2 (62 tiêu chí)</p>
+                <p className="text-[11px] text-blue-100">Đánh giá Năng lực GĐ2 (62 tiêu chí)[cite: 9, 10]</p>
               </div>
               <div className="text-right flex items-center gap-1.5">
                 <button
@@ -751,9 +801,9 @@
             {/* Thanh tiến độ OJT */}
             <div className="mt-2.5 bg-blue-800/60 p-2 rounded-lg text-xs">
               <div className="flex justify-between items-center mb-1">
-                <span>Đạt: <strong>{passedCount}/62</strong> mục</span>
+                <span>Đạt: <strong>{passedCount}/62</strong> mục[cite: 9, 10]</span>
                 <span className={`font-bold ${isPassedGoal ? 'text-emerald-300' : 'text-amber-300'}`}>
-                  {progressPercent}% {isPassedGoal ? "✓ Đạt chuẩn (≥50)" : "(Chuẩn: ≥50 mục)"}
+                  {progressPercent}% {isPassedGoal ? "✓ Đạt chuẩn (≥50)" : "(Chuẩn: ≥50 mục)"}[cite: 9, 10]
                 </span>
               </div>
               <div className="w-full bg-blue-950 h-2 rounded-full overflow-hidden">
@@ -770,19 +820,19 @@
                 onClick={() => setTab("checklist")} 
                 className={`flex-1 py-1.5 rounded text-center transition-all ${tab === "checklist" ? "bg-white text-blue-700 shadow font-bold" : "text-white"}`}
               >
-                <Icons.CheckSquare /> Checklist (62)
+                <Icons.CheckSquare /> Checklist (62)[cite: 9, 10]
               </button>
               <button 
                 onClick={() => setTab("lessons")} 
                 className={`flex-1 py-1.5 rounded text-center transition-all ${tab === "lessons" ? "bg-white text-blue-700 shadow font-bold" : "text-white"}`}
               >
-                <Icons.BookOpen /> Tóm tắt bài học
+                <Icons.BookOpen /> Ôn Bài Học
               </button>
               <button 
                 onClick={() => setTab("chat")} 
                 className={`flex-1 py-1.5 rounded text-center transition-all ${tab === "chat" ? "bg-white text-blue-700 shadow font-bold" : "text-white"}`}
               >
-                <Icons.Bot /> Bài Học Chi Tiết
+                <Icons.Bot /> Tra Cứu Bài Học
               </button>
             </div>
           </div>
@@ -792,18 +842,40 @@
             <div className="flex-1 p-2.5 space-y-2.5 pb-8">
               {/* Khung Thông tin nhân sự */}
               <div className="bg-white rounded-xl p-2.5 border border-slate-200 shadow-xs space-y-2 text-xs">
-                <div className="font-bold text-slate-700 flex justify-between">
-                  <span>Thông tin đợt đánh giá</span>
-                  <span className="text-blue-600 font-semibold">{evalRound}</span>
+                <div className="font-bold text-slate-700 flex justify-between items-center">
+                  <span className="flex items-center gap-1.5">
+                    Thông tin đánh giá
+                    <span className="text-[10px] font-normal text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
+                      ✓ Đã lưu nháp
+                    </span>
+                  </span>
+                  <button 
+                    onClick={handleResetChecklist}
+                    className="text-slate-400 hover:text-rose-600 flex items-center gap-1 text-[11px] font-normal transition-colors"
+                    title="Xóa toàn bộ để chấm nhân sự mới"
+                  >
+                    <Icons.Trash /> Làm mới
+                  </button>
                 </div>
-                <div className="grid grid-cols-2 gap-1.5">
+                
+                <div className="grid grid-cols-3 gap-1.5">
                   <input
                     type="text"
                     placeholder="Họ tên NVBH (*)..."
                     value={staffName}
                     onChange={(e) => setStaffName(e.target.value)}
-                    className="border border-slate-200 rounded p-1.5 text-xs focus:outline-none focus:border-blue-500"
+                    className="col-span-2 border border-slate-200 rounded p-1.5 text-xs focus:outline-none focus:border-blue-500"
                   />
+                  <input
+                    type="text"
+                    placeholder="MSNV..."
+                    value={staffId}
+                    onChange={(e) => setStaffId(e.target.value)}
+                    className="border border-slate-200 rounded p-1.5 text-xs focus:outline-none focus:border-blue-500 font-mono"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-1.5">
                   <input
                     type="text"
                     placeholder="Tên Showroom..."
@@ -811,8 +883,6 @@
                     onChange={(e) => setStoreName(e.target.value)}
                     className="border border-slate-200 rounded p-1.5 text-xs focus:outline-none focus:border-blue-500"
                   />
-                </div>
-                <div className="grid grid-cols-2 gap-1.5">
                   <input
                     type="text"
                     placeholder="Người đánh giá (Coach/SM)..."
@@ -820,14 +890,18 @@
                     onChange={(e) => setEvaluator(e.target.value)}
                     className="border border-slate-200 rounded p-1.5 text-xs focus:outline-none focus:border-blue-500"
                   />
+                </div>
+
+                <div className="flex gap-1.5 items-center">
+                  <span className="text-slate-500 shrink-0 text-[11px]">Đợt đánh giá:</span>
                   <select
                     value={evalRound}
                     onChange={(e) => setEvalRound(e.target.value)}
-                    className="border border-slate-200 rounded p-1.5 text-xs bg-white text-slate-700 focus:outline-none focus:border-blue-500"
+                    className="flex-1 border border-slate-200 rounded p-1 text-xs bg-white text-slate-700 focus:outline-none focus:border-blue-500 font-medium"
                   >
-                    <option value="Lần 1">Đánh giá Lần 1</option>
-                    <option value="Lần 2">Đánh giá Lần 2</option>
-                    <option value="Lần 3">Đánh giá Lần 3</option>
+                    <option value="Lần 1">Đánh giá Lần 1[cite: 9, 10]</option>
+                    <option value="Lần 2">Đánh giá Lần 2[cite: 9, 10]</option>
+                    <option value="Lần 3">Đánh giá Lần 3[cite: 9, 10]</option>
                   </select>
                 </div>
               </div>
@@ -852,6 +926,19 @@
                     {GROUP_NAMES[group]}
                   </button>
                 ))}
+              </div>
+
+              {/* Thanh thao tác nhanh theo nhóm */}
+              <div className="flex justify-between items-center px-1 text-xs">
+                <span className="text-slate-500 text-[11px]">
+                  Hiển thị: <strong>{filteredChecklist.length}</strong> tiêu chí
+                </span>
+                <button
+                  onClick={handleQuickCheckAllPass}
+                  className="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-300 font-semibold px-2 py-0.5 rounded text-[11px] flex items-center gap-1 transition-all"
+                >
+                  <Icons.CheckDouble /> Tick nhanh Đạt ({filteredChecklist.length})
+                </button>
               </div>
 
               {/* Danh sách 62 tiêu chí dạng Card nén gọn */}
@@ -885,7 +972,7 @@
                             onClick={() => handleCheck(item.id, "fail")}
                             className={`px-2 py-1 rounded font-bold text-[11px] transition-all border ${status === "fail" ? "bg-rose-600 text-white border-rose-600 shadow-xs" : "bg-white text-rose-600 border-rose-200 hover:bg-rose-50"}`}
                           >
-                            Chưa đạt
+                            Hỏng
                           </button>
                           <button
                             onClick={() => setActiveNoteId(isNoteOpen ? null : item.id)}
@@ -979,6 +1066,8 @@
               <div className="p-2 bg-slate-100 border-t border-slate-200 flex gap-2 overflow-x-auto no-scrollbar">
                 {[
                   "List toàn bộ các lỗi cần tránh",
+                  "Quy tắc túi Zip & Dropbox",
+                  "Khách chê giá cao hơn sàn TMĐT",
                   "Bài học Ngày 1",
                   "Bài học Ngày 2",
                   "Bài học Ngày 3",
@@ -1001,7 +1090,7 @@
                   value={inputQuery}
                   onChange={(e) => setInputQuery(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSend()}
-                  placeholder="Gõ từ khóa bài học (VD: lỗi SHR, Ngày 1, 80 Plus, trả góp)..."
+                  placeholder="Gõ từ khóa bài học (VD: lỗi SHR, túi Zip, TMĐT, 80 Plus)..."
                   className="flex-1 border border-slate-300 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-blue-600"
                 />
                 <button
